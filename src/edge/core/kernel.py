@@ -6,6 +6,7 @@ Core Kernel
 from edge.core.config import Config
 from edge.core.logger import Logger
 from edge.core.registry import ServiceRegistry
+from edge.core.events import EventBus
 
 
 class Kernel:
@@ -18,7 +19,10 @@ class Kernel:
 
         self.logger = Logger()
 
+        self.events = EventBus()
+
         self.registry = ServiceRegistry()
+
 
         self.registry.register(
             "config",
@@ -30,9 +34,16 @@ class Kernel:
             self.logger
         )
 
+        self.registry.register(
+            "events",
+            self.events
+        )
+
+
     @property
     def started(self) -> bool:
         return self._started
+
 
     def start(self) -> None:
 
@@ -44,6 +55,7 @@ class Kernel:
         self.logger.info(
             "Kernel started."
         )
+
 
     def stop(self) -> None:
 

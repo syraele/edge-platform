@@ -1,33 +1,36 @@
 from edge.core.kernel import Kernel
 
 
+def test_event(data):
+
+    print(
+        f"Evento ricevuto: {data}"
+    )
+
+
 def main():
 
     kernel = Kernel()
 
-    kernel.logger.info("EDGE started")
 
-    kernel.config.set(
-        "symbol",
-        "XAUUSD"
+    kernel.events.subscribe(
+        "market.price",
+        test_event
     )
 
-    kernel.config.set(
-        "risk",
-        0.01
+
+    kernel.events.publish(
+        "market.price",
+        {
+            "symbol": "XAUUSD",
+            "price": 3350
+        }
     )
+
 
     print(
-        kernel.config.get("symbol")
+        kernel.registry.has("events")
     )
-
-    print(
-        kernel.registry.has("logger")
-    )
-
-    kernel.start()
-
-    kernel.stop()
 
 
 if __name__ == "__main__":
