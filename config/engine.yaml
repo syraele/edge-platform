@@ -1,0 +1,9 @@
+engine:
+  name: EDGE_ENGINE
+  version: "1.0"
+
+mode:
+  type: BACKTEST
+
+logging:
+  level: INFO
