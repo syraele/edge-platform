@@ -6,6 +6,8 @@ Il Kernel rappresenta il cuore dell'intero framework.
 Da qui verranno inizializzati tutti i componenti del sistema.
 """
 
+from edge.core.config import Config
+
 
 class Kernel:
     """
@@ -14,21 +16,22 @@ class Kernel:
     Responsabilità:
     - avviare il sistema
     - mantenere lo stato
-    - registrare i moduli
+    - gestire la configurazione
     - coordinare tutti i servizi
     """
 
-    def __init__(self):
-
+    def __init__(self) -> None:
         self._started = False
         self._services = {}
+
+        # Configurazione centralizzata
+        self.config = Config()
 
     @property
     def started(self) -> bool:
         return self._started
 
     def start(self) -> None:
-
         if self._started:
             return
 
@@ -37,7 +40,6 @@ class Kernel:
         print("EDGE_ENGINE Kernel started")
 
     def stop(self) -> None:
-
         if not self._started:
             return
 

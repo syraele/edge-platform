@@ -1,19 +1,19 @@
-
-
-
-# Aggiunge la cartella "src" al percorso di ricerca dei moduli
-
-
 from edge.core.kernel import Kernel
 
-kernel = Kernel()
 
-print(kernel.started)
+def main():
+    kernel = Kernel()
 
-kernel.start()
+    kernel.config.set("symbol", "XAUUSD")
+    kernel.config.set("risk", 0.01)
 
-print(kernel.started)
+    print(kernel.config.get("symbol"))
+    print(kernel.config.get("risk"))
+    print(kernel.config.has("broker"))
 
-kernel.stop()
+    kernel.start()
+    kernel.stop()
 
-print(kernel.started)
+
+if __name__ == "__main__":
+    main()
