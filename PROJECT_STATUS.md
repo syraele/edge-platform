@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.0
+Version: 2.1
 
 Status: Active
 
-Last Updated: MDF-003
+Last Updated: RF-002
 
 ---
 
@@ -34,7 +34,7 @@ Foundation Blueprint
 
 # Current Milestone
 
-**RF-001 — Research Hypothesis**
+**RF-003 — Evidence**
 
 Status
 
@@ -42,7 +42,7 @@ Ready to Start
 
 Objective
 
-Implement the first Aggregate Root of the Research Framework responsible for representing falsifiable research hypotheses derived from a MarketDescription.
+Implement the Evidence model according to the approved Domain Model.
 
 ---
 
@@ -88,75 +88,47 @@ Approved documents:
 
 ---
 
-## Phase 2 — Market Description Framework (MDF)
+## Phase 2 — Market Description Framework
 
-### MDF-001 — Market Description Framework Baseline
-
-Status
+### MDF-001
 
 Completed
 
-Result
-
-Implemented the baseline of the Market Understanding bounded context.
-
-Completed components:
-
-- MarketDescription (Aggregate Root)
-- MarketDescriptor (Value Object)
-- DescriptorMetadata (Value Object)
-- MarketDescriptionBuilder (Domain Service)
-
-Validation:
-
-- Unit tests implemented
-- Full regression suite passed
+Market Description baseline.
 
 ---
 
-### MDF-002 — Descriptor Registry
-
-Status
+### MDF-002
 
 Completed
 
-Result
-
-Implemented the descriptor registration infrastructure.
-
-Completed components:
-
-- DescriptorDefinition (Value Object)
-- DescriptorRegistry (Domain Service)
-
-Validation:
-
-- Descriptor registry unit tests
-- Full regression suite passed
+Descriptor Registry.
 
 ---
 
-### MDF-003 — Descriptor Validation
-
-Status
+### MDF-003
 
 Completed
 
-Result
+Descriptor Validation.
 
-Implemented descriptor validation infrastructure.
+---
 
-Completed components:
+## Phase 3 — Research Framework
 
-- ValidationResult (Value Object)
-- DescriptorValidator (Domain Service)
-- DescriptorRegistry validation integration
+### RF-001
 
-Validation:
+Completed
 
-- Descriptor validator unit tests
-- Registry integration tests
-- Full regression suite passed
+ResearchHypothesis Aggregate.
+
+---
+
+### RF-002
+
+Completed
+
+Experiment Aggregate.
 
 ---
 
@@ -164,7 +136,7 @@ Validation:
 
 Priority 1
 
-Implement RF-001.
+Implement RF-003.
 
 Priority 2
 
@@ -172,51 +144,47 @@ Maintain architectural consistency.
 
 Priority 3
 
-Keep the test suite green.
+Keep the regression suite green.
 
 ---
 
 # Development Workflow
 
-Every milestone follows the same lifecycle.
+Every milestone follows:
 
 ```text
 Design
-    ↓
+        ↓
 Implementation
-    ↓
+        ↓
 Testing
-    ↓
+        ↓
 Review
-    ↓
+        ↓
 Commit
 ```
 
-No implementation starts before design approval.
-
-No milestone is complete until all tests pass.
+PROJECT_STATUS.md is updated when changing conversation and represents the official project checkpoint.
 
 ---
 
 # Architecture Policy
 
-Foundation v2 is considered the authoritative baseline of the project.
+Foundation v2 is the authoritative baseline.
 
-During normal development, the Foundation must not be redesigned.
+Do not redesign the Foundation during normal development.
 
-Changes to the Foundation are allowed only if:
+Architectural changes require:
 
-- a demonstrated architectural flaw is identified;
-- the business domain changes;
-- an Architecture Decision Record (ADR) is proposed, reviewed, and accepted.
-
-Otherwise, development proceeds by implementing the current milestone.
+- demonstrated defect;
+- business change;
+- approved ADR.
 
 ---
 
 # Next Action
 
-Start RF-001 by implementing the ResearchHypothesis Aggregate according to the approved Domain Model.
+Start RF-003 by implementing the Evidence model.
 
 ---
 
@@ -227,10 +195,8 @@ When starting a new conversation:
 1. Read PROJECT_STATUS.md.
 2. Read PROJECT_BOOTSTRAP.md.
 3. Read FOUNDATION_BLUEPRINT.md.
-4. Read the documentation related to the active milestone.
-5. Continue implementation from the current milestone without redesigning the Foundation unless explicitly requested.
-
-The default assumption is that Foundation v2 is the authoritative project baseline.
+4. Read only the documentation relevant to the active milestone.
+5. Continue implementation following the documented workflow.
 
 ---
 
@@ -238,8 +204,8 @@ The default assumption is that Foundation v2 is the authoritative project baseli
 
 Current objective:
 
-Implement RF-001.
+Implement RF-003.
 
-The Foundation is frozen.
+Foundation v2 is frozen.
 
-Discussion about alternative architectures is out of scope unless explicitly requested.
+Implementation takes precedence over architectural discussion unless explicitly requested.
