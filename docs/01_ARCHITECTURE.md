@@ -1,338 +1,246 @@
-
 # EDGE_ENGINE Architecture
 
----
-**Document ID:** ARCH-001  
-**Version:** 1.0.0  
-**Status:** Approved  
-**Owner:** EDGE_ENGINE Project  
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 00_MANIFESTO.md
-- 02_RESEARCH_MODEL.md
-- 03_ROADMAP.md
-- 04_DOMAIN_MODEL.md
----
-
-# 1. Purpose
-
-This document defines the official software architecture of EDGE_ENGINE.
-
-Its purpose is to describe how the platform is organized, how its components interact and which architectural rules govern its evolution.
-
-This document is the architectural reference for the entire project.
-
-Whenever implementation conflicts with this document, the architecture defined here takes precedence.
-
-The architecture is intentionally designed to support long-term evolution while preserving stability, maintainability and reproducibility of quantitative research.
-
-# 1.1 Scope
-
-This document defines the software architecture of EDGE_ENGINE.
-
-It specifies the architectural layers, dependency rules, responsibilities and structural principles governing the platform.
-
-This document does not describe:
-
-- the quantitative research methodology;
-- the domain model;
-- implementation details;
-- coding standards;
-- testing strategies.
-
-Those topics are covered by dedicated documents.
+Status: Foundation v2
 
 ---
 
-# 2. System Vision
+# Purpose
 
-EDGE_ENGINE is a quantitative research platform designed to discover, validate and continuously monitor statistically replicable market edges.
+This document defines the architectural structure of EDGE_ENGINE.
 
-Architecture exists to preserve research integrity.
+Its purpose is to describe how the system is organized in order to satisfy the principles defined in the Manifesto and the Foundation Blueprint.
 
-Every architectural decision is evaluated according to its ability to improve reproducibility, maintainability and long-term evolution of the platform.
+This document defines architectural decisions only.
 
-The platform does not exist to execute trades.
-
-Its purpose is to transform market data into validated quantitative knowledge through deterministic and reproducible research workflows.
-
-> **The output of EDGE_ENGINE is not a trade.  
-> The output of EDGE_ENGINE is a validated edge supported by quantitative evidence.**
+Business concepts, research methodology, and domain modelling are described in their dedicated documents.
 
 ---
 
-# 3. Architectural Principles
+# Architectural Drivers
 
-- Clean Architecture
-- Domain-Driven Design (lightweight)
-- SOLID
-- Separation of Concerns
-- Dependency Inversion
-- Immutable Domain Artifacts
-- Deterministic Research
-- Reproducible Experiments
-- Incremental Evolution
+The architecture is designed to satisfy the following primary drivers:
+
+* Domain Independence
+* Scientific Reproducibility
+* Extensibility
+* Determinism
+* Testability
+* Maintainability
+* Long-Term Evolution
+
+Every architectural decision must improve one or more of these qualities.
 
 ---
 
-# 4. High-Level Architecture
+# Architectural Style
+
+EDGE_ENGINE adopts a combination of well-established architectural patterns.
+
+## Clean Architecture
+
+Business rules are isolated from frameworks, infrastructure and external technologies.
+
+Dependencies always point toward the domain.
+
+---
+
+## Domain-Driven Design
+
+The business domain drives the structure of the system.
+
+The Domain Model represents the ubiquitous language of the project.
+
+---
+
+## Event-Driven Collaboration
+
+Components communicate through domain events whenever direct dependencies are unnecessary.
+
+This reduces coupling and improves extensibility.
+
+---
+
+# System Structure
+
+EDGE_ENGINE is organized into four primary layers.
 
 ```text
-                +----------------------+
-                |     Application      |
-                +----------------------+
-                          │
-                          ▼
-                +----------------------+
-                |        Domain        |
-                +----------------------+
-                          │
-                          ▼
-                +----------------------+
-                |         Core         |
-                +----------------------+
-
+Plugins
+    ↓
 Infrastructure
-(Database, CSV, APIs, Filesystem, External Services...)
-
-            │
-            └────────────► Application
+    ↓
+Application
+    ↓
+Domain
 ```
-
-The architecture follows a strict inward dependency model.
-
-Outer layers provide technical capabilities.
-
-Inner layers define business knowledge.
-
-Business knowledge must never depend on technology.
-
-Research is implemented as Application use cases built on top of the Domain Model.
-
----
-
-# 5. Layer Responsibilities
-
-## Package Dependencies
-
-```text
-src/edge/
-
-infrastructure
-        │
-        ▼
-application
-        │
-        ▼
-domain
-        │
-        ▼
-core
-```
-
-## Core
-
-### Owns
-
-- Runtime
-- Event Bus
-- Logging
-- Configuration
-- Exceptions
-
-### Does Not Own
-
-- Business logic
-- Research
-- Trading
-- AI
-- Infrastructure
 
 ## Domain
 
-### Owns
+Contains business rules, domain models and domain services.
 
-- Entities
-- Value Objects
-- Business Rules
-- Immutable Artifacts
+The Domain Layer has no dependency on external technologies.
 
-### Does Not Own
-
-- Databases
-- APIs
-- CSV
-- Pandas
-- Filesystem
+---
 
 ## Application
 
-### Owns
+Coordinates use cases.
 
-- Use Cases
-- Workflow orchestration
-- Research pipelines
+It orchestrates domain objects but does not implement business rules.
 
-### Does Not Own
-
-- Business rules
-- Persistence
+---
 
 ## Infrastructure
 
-### Owns
+Provides implementations for persistence, messaging, configuration, external APIs and other technical concerns.
 
-- Persistence
-- External APIs
-- CSV Readers
-- File Management
-
-### Does Not Own
-
-- Business decisions
-- Domain rules
+Infrastructure depends on the Domain, never the opposite.
 
 ---
 
-# 6. Dependency Rules
+## Plugins
 
-```text
-Infrastructure
-      │
-      ▼
-Application
-      │
-      ▼
-Domain
-      │
-      ▼
-Core
-```
+Plugins extend the capabilities of the platform without modifying the Core.
 
-The dependency direction is mandatory.
-
-Any reverse dependency represents an architectural violation.
-
-| Layer | Allowed Dependencies |
-|--------|----------------------|
-| Core | None |
-| Domain | Core |
-| Application | Domain, Core |
-| Infrastructure | Application, Domain (through abstractions), Core |
+Every plugin communicates through stable contracts.
 
 ---
 
-# 7. Official Research Pipeline
+# Dependency Rules
 
-```text
-Market Data
-    ↓
-HistoricalDataset
-    ↓
-Market Description Framework
-    ↓
-Market Vocabulary
-    ↓
-Configuration Generator
-    ↓
-Backtest Runner
-    ↓
-Scoring Engine
-    ↓
-Knowledge Base
-    ↓
-AI Research
-    ↓
-Validated Edge
-```
+The Dependency Rule is the fundamental architectural constraint.
+
+Dependencies may only point toward more stable layers.
+
+Allowed dependencies:
+
+* Plugins → Infrastructure
+* Infrastructure → Application
+* Application → Domain
+
+Forbidden dependencies:
+
+* Domain → Application
+* Domain → Infrastructure
+* Domain → Plugins
+* Application → Infrastructure implementation details
+
+Business rules must remain independent of frameworks.
 
 ---
 
-# 8. Project Structure
+# Bounded Contexts
 
-```text
-edge-platform/
+The system is organized around the following strategic contexts.
 
-docs/
-src/
-tests/
+## Market Understanding
 
-src/edge/
-    core/
-    domain/
-    application/
-    infrastructure/
-    plugins/
-```
+Responsible for transforming raw market data into meaningful market descriptions.
 
 ---
 
-# 9. Extension Strategy
+## Research
 
-EDGE_ENGINE evolves through extension rather than modification.
-
-Typical extension points include:
-
-- Data providers
-- Market descriptors
-- Vocabulary generators
-- Backtest engines
-- Scoring algorithms
-- AI modules
+Responsible for hypothesis definition, experimentation and evidence generation.
 
 ---
 
-# 10. Non-Goals
+## Knowledge
 
-EDGE_ENGINE is not:
-
-- a broker;
-- a trading platform;
-- an execution engine;
-- a charting application;
-- a technical indicator library.
-
-Its purpose is quantitative research.
+Responsible for organizing validated knowledge generated by research.
 
 ---
 
-# 11. Stability Rules
+## Edge Management
 
-- The Core is frozen.
-- The Domain must remain infrastructure-independent.
-- Business logic belongs to the Domain.
-- Documentation precedes implementation.
-- Every implementation is validated by tests.
-- Architectural decisions are documented.
+Responsible for managing validated trading edges and their lifecycle.
+
+The detailed domain model for each context is defined in `04_DOMAIN_MODEL.md`.
 
 ---
 
-# 12. Future Evolution
+# Integration Principles
 
-```text
-Core
- ↓
-Domain
- ↓
-Research Workflows
- ↓
-Knowledge Engine
- ↓
-AI Research
- ↓
-Continuous Edge Discovery
- ↓
-Validated Edge Repository
-```
+The following integration principles apply throughout the system.
+
+## Stable Contracts
+
+Communication between components occurs only through well-defined interfaces.
 
 ---
 
-# 13. Conclusion
+## Event-Based Collaboration
 
-EDGE_ENGINE is designed to outlive individual implementations.
+Components should communicate using events whenever synchronous dependencies are unnecessary.
 
-The architecture is optimized for correctness, reproducibility and long-term maintainability rather than short-term development speed.
+---
 
-Every future evolution of the platform should preserve these principles.
+## Plugin Isolation
+
+Plugins must never require modifications to the Core.
+
+New functionality should be added by extension rather than modification.
+
+---
+
+## Configuration over Hardcoding
+
+Behavior must be configurable whenever appropriate.
+
+Configuration must never replace business rules.
+
+---
+
+# Quality Attributes
+
+The architecture is optimized for the following qualities.
+
+## Domain Independence
+
+The business domain is independent from technical concerns.
+
+---
+
+## Reproducibility
+
+Research results must be reproducible under identical conditions.
+
+---
+
+## Determinism
+
+Equal inputs produce equal outputs.
+
+---
+
+## Extensibility
+
+New capabilities should be introduced through extension rather than modification.
+
+---
+
+## Testability
+
+Business logic must be testable without infrastructure.
+
+---
+
+## Maintainability
+
+The architecture should remain understandable and evolvable over many years.
+
+---
+
+# Architectural Constraints
+
+The following constraints are mandatory.
+
+* The Domain Layer must remain technology independent.
+* Business rules must never depend on infrastructure.
+* Cross-cutting concerns must not leak into the Domain.
+* Every architectural decision must respect the Manifesto.
+* Every implementation must remain consistent with the Foundation Blueprint.
+
+Architecture evolves through documented decisions rather than ad-hoc modifications.

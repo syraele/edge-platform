@@ -1,130 +1,181 @@
 # EDGE_ENGINE Coding Standard
 
----
-**Document ID:** CODE-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 00_MANIFESTO.md
-- 01_ARCHITECTURE.md
-- 04_DOMAIN_MODEL.md
----
-
-# 1. Purpose
-
-This document defines the official coding standards for EDGE_ENGINE.
-
-The objective is to produce code that is readable, maintainable, testable and aligned with the project architecture.
+Status: Foundation v2
 
 ---
 
-# 2. Core Principles
+# Purpose
 
-- Readability over cleverness.
-- Simplicity over complexity.
-- Explicit is better than implicit.
-- Domain first.
-- Infrastructure second.
-- Small, focused classes.
-- Deterministic behavior.
+This document defines the mandatory coding rules for EDGE_ENGINE.
+
+Its objective is to ensure consistency, maintainability, readability, and long-term evolution of the codebase.
+
+These rules apply to every source file in the project.
 
 ---
 
-# 3. Project Rules
+# General Principles
 
-- Never bypass the Domain.
-- Business rules belong only to the Domain.
-- Infrastructure never contains business logic.
-- Every public class has one responsibility.
-- Prefer composition over inheritance.
+## CS-001 — Domain First
 
----
+Business rules belong to the Domain Layer.
 
-# 4. Naming
-
-Classes:
-- PascalCase
-
-Functions:
-- snake_case
-
-Variables:
-- snake_case
-
-Constants:
-- UPPER_CASE
-
-Modules:
-- snake_case.py
-
-Names must express business meaning.
+No business logic may exist in Infrastructure or Plugins.
 
 ---
 
-# 5. Type Hints
+## CS-002 — Single Responsibility
 
-All public functions must use type hints.
+Every class must have one clearly defined responsibility.
 
-Example:
-
-```python
-def load_dataset(path: str) -> HistoricalDataset:
-    ...
-```
+If a class has multiple reasons to change, it should be split.
 
 ---
 
-# 6. Documentation
+## CS-003 — Explicit Code
 
-Every public module should contain a short docstring.
+Code must be explicit and readable.
 
-Complex business rules must be documented.
-
-Comments should explain *why*, not *what*.
+Avoid clever solutions when a simpler implementation exists.
 
 ---
 
-# 7. Error Handling
+## CS-004 — Immutability First
 
-- Fail fast.
-- Raise meaningful exceptions.
-- Never silently ignore errors.
-- Validate inputs at boundaries.
+Prefer immutable objects.
 
----
-
-# 8. Testing Expectations
-
-New business logic requires tests.
-
-Bug fixes should include regression tests.
-
-Code is considered complete only when tests pass.
+Mutability must be introduced only when required by the domain.
 
 ---
 
-# 9. Review Checklist
+## CS-005 — Composition Over Inheritance
 
-Before committing:
-
-- Architecture respected
-- Domain unchanged unless intended
-- Tests passing
-- Type hints present
-- Naming consistent
-- No duplicated logic
-- Documentation updated if required
+Favor composition instead of inheritance whenever possible.
 
 ---
 
-# 10. Conclusion
+# Domain Rules
 
-The coding standard exists to preserve long-term quality.
+## CS-006 — Protect the Domain
 
-Every implementation should make EDGE_ENGINE easier to evolve, test and understand.
+The Domain Layer must not depend on frameworks, databases, APIs, or infrastructure.
 
-End of Document
+---
+
+## CS-007 — Rich Domain Model
+
+Business rules belong inside the domain model.
+
+Avoid anemic domain objects.
+
+---
+
+## CS-008 — Value Objects
+
+Value Objects must be immutable.
+
+Equality is based on value.
+
+---
+
+## CS-009 — Aggregate Integrity
+
+Aggregate invariants must never be violated.
+
+Only Aggregate Roots expose public behavior.
+
+---
+
+# Application Rules
+
+## CS-010 — Thin Application Layer
+
+The Application Layer coordinates use cases.
+
+It does not implement business rules.
+
+---
+
+## CS-011 — Dependency Injection
+
+Dependencies must be injected.
+
+Avoid creating dependencies inside business classes.
+
+---
+
+# Infrastructure Rules
+
+## CS-012 — Replaceable Infrastructure
+
+Infrastructure components must be replaceable without modifying the Domain.
+
+---
+
+## CS-013 — External Isolation
+
+External libraries must remain isolated inside Infrastructure.
+
+---
+
+# Testing Rules
+
+## CS-014 — Testability
+
+Business logic must be testable without infrastructure.
+
+---
+
+## CS-015 — Determinism
+
+Tests must be deterministic.
+
+The same inputs must always produce the same outputs.
+
+---
+
+# Naming Rules
+
+## CS-016 — Ubiquitous Language
+
+Use names defined by the Domain Model and Glossary.
+
+Do not invent synonyms.
+
+---
+
+## CS-017 — Meaningful Names
+
+Names must describe business intent.
+
+Avoid abbreviations unless universally accepted.
+
+---
+
+# Complexity Rules
+
+## CS-018 — Small Functions
+
+Functions should perform one logical operation.
+
+---
+
+## CS-019 — No Premature Optimization
+
+Optimize only after measurement demonstrates a need.
+
+---
+
+## CS-020 — Simplicity
+
+Prefer the simplest solution that satisfies the domain requirements.
+
+---
+
+# Governance
+
+Every Pull Request must comply with this Coding Standard.
+
+Exceptions require an Architecture Decision Record (ADR).

@@ -1,306 +1,359 @@
 # EDGE_ENGINE Domain Model
 
----
-**Document ID:** DOMAIN-001
-**Version:** 0.9 (Draft)
-**Status:** Review
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 00_MANIFESTO.md
-- 01_ARCHITECTURE.md
-- 02_RESEARCH_MODEL.md
-- 03_ROADMAP.md
----
-
-# 1. Purpose
-
-This document defines the official Domain Model of EDGE_ENGINE.
-
-It establishes the business language used throughout the platform and specifies the core domain artifacts and their relationships.
-
-The Domain Model is technology-independent.
+Status: Foundation v2
 
 ---
 
-# 2. Domain Philosophy
+# Purpose
 
-EDGE_ENGINE is not centered around trading.
+This document defines the business domain of EDGE_ENGINE using Domain-Driven Design (DDD).
 
-Its domain is the discovery, validation and accumulation of market knowledge.
+Its purpose is to identify the concepts, responsibilities, relationships, and invariants that represent the business domain independently from software implementation.
 
-The domain models **how knowledge is created**, not how trades are executed.
-
----
-
-# 3. Domain Principles
-
-- The Domain is independent from Infrastructure.
-- Every artifact has a single responsibility.
-- Domain artifacts should be immutable whenever possible.
-- Business concepts must be explicit.
-- Research must be deterministic and reproducible.
+It does not describe architecture, research methodology, or implementation details.
 
 ---
 
-# 4. Knowledge Transformation
+# Domain Overview
 
-```text
-Market Data
-      │
-      ▼
-HistoricalDataset
-      │
-      ▼
-MarketDescription
-      │
-      ▼
-MarketVocabulary
-      │
-      ▼
-ResearchConfiguration
-      │
-      ▼
-Experiment
-      │
-      ▼
-ExperimentResult
-      │
-      ▼
-Evidence
-      │
-      ▼
-Knowledge
-      │
-      ▼
-ValidatedEdge
-```
+The purpose of the domain is to transform market observations into validated quantitative knowledge through a systematic and reproducible research process.
 
-Each artifact increases the information value produced by the previous one.
+The domain does not model trading execution.
+
+It models the discovery, validation, preservation, and evolution of quantitative knowledge.
 
 ---
 
-# 5. Domain Artifacts
+# Ubiquitous Language
 
-## Bar
+The following concepts form the ubiquitous language of EDGE_ENGINE.
 
-Represents one immutable market observation.
+* HistoricalDataset
+* MarketDescription
+* ResearchHypothesis
+* Experiment
+* Evidence
+* Knowledge
+* Edge
 
----
-
-## HistoricalDataset
-
-Purpose:
-Provide a normalized and immutable historical dataset.
-
-Owns:
-
-- Bars
-- DatasetMetadata
-
-Produces:
-
-- Input for MarketDescription
+These terms must be used consistently throughout the entire project.
 
 ---
 
-## MarketDescription
+# Strategic DDD
 
-Represents an objective description of market behaviour.
+## Core Domain
 
-Owns a collection of MarketDescriptor objects.
+The Core Domain is the systematic validation of research hypotheses in order to produce reliable quantitative knowledge.
 
----
+The Core Domain includes:
 
-## MarketDescriptor
-
-Represents one measurable market characteristic.
-
-Examples:
-
-- Trend
-- Volatility
-- Noise
-- Liquidity
-- Momentum
-- Efficiency
-- Compression
-- Expansion
+* MarketDescription
+* ResearchHypothesis
+* Experiment
+* Evidence
+* Knowledge
+* Edge
 
 ---
 
-## MarketVocabulary
+## Supporting Domain
 
-Transforms descriptions into a common research language.
+Supporting capabilities include:
 
----
-
-## VocabularyTerm
-
-Represents one standardized market concept.
-
----
-
-## ResearchConfiguration
-
-Defines one deterministic research experiment.
-
-Contains:
-
-- Dataset
-- Parameters
-- Constraints
+* HistoricalDataset
+* Configuration
+* Persistence
+* Reporting
 
 ---
 
-## Experiment
+## Generic Domain
 
-Represents one executable research hypothesis.
+Generic concerns include:
 
----
-
-## ExperimentResult
-
-Contains the raw output of an experiment.
-
-Examples:
-
-- trades
-- equity curve
-- drawdown
-- returns
+* Logging
+* Serialization
+* Configuration loading
+* Dependency Injection
+* Infrastructure adapters
 
 ---
 
-## Evidence
+# Bounded Contexts
 
-Represents statistical evidence extracted from an ExperimentResult.
+## Market Understanding
 
-Examples:
+Responsible for transforming historical market data into structured market descriptions.
 
-- Sharpe Ratio
-- Expectancy
-- Stability
-- Robustness
-- p-value
-- Confidence
+---
 
-Evidence supports or rejects a hypothesis.
+## Research
+
+Responsible for hypothesis definition, experimentation, and evidence generation.
 
 ---
 
 ## Knowledge
 
-Represents validated research knowledge.
+Responsible for preserving validated knowledge and making it reusable.
 
-Knowledge is independent from storage.
+---
 
-Persistence belongs to Infrastructure.
+## Edge Management
+
+Responsible for managing validated edges and their lifecycle.
+
+---
+
+# Domain Concepts
+
+## HistoricalDataset
+
+Represents immutable historical market data used as research input.
+
+---
+
+## MarketDescription
+
+Represents a structured description of market behaviour extracted from a dataset.
+
+---
+
+## ResearchHypothesis
+
+Represents a falsifiable statement about market behaviour.
+
+---
+
+## Experiment
+
+Represents the execution of a research hypothesis under controlled conditions.
+
+---
+
+## Evidence
+
+Represents objective measurements produced by an experiment.
+
+Evidence alone does not constitute knowledge.
+
+---
+
+## Knowledge
+
+Represents validated, reproducible, and reusable research conclusions.
+
+Knowledge is cumulative.
 
 ---
 
 ## Edge
 
-Represents one research hypothesis supported by evidence.
-
-Properties:
-
-- confidence
-- supporting evidence
-- creation date
-- status
-
-Status values:
-
-- Candidate
-- Validated
-- Active
-- Retired
-- Rejected
+Represents actionable quantitative knowledge with demonstrated value.
 
 ---
 
-## ValidatedEdge
+# Aggregate Roots
 
-Represents an edge approved for continuous monitoring.
+The Aggregate Roots of the domain are:
+
+* HistoricalDataset
+* MarketDescription
+* ResearchHypothesis
+* Experiment
+* Edge
+
+Each Aggregate protects its own business invariants.
+
+Knowledge and Evidence are treated as Value Objects representing validated outcomes.
 
 ---
 
-# 6. Artifact Relationships
+# Entities
 
-```text
+Entities possess stable identity and lifecycle.
+
+Current entities are limited to Aggregate Roots.
+
+Additional entities may emerge only when justified by domain complexity.
+
+---
+
+# Value Objects
+
+The primary Value Objects are:
+
+* Bar
+* MarketDescriptor
+* Evidence
+* Knowledge
+* ResearchConfiguration
+* DatasetMetadata
+* DescriptorMetadata
+
+Value Objects are immutable.
+
+Equality is based on value rather than identity.
+
+---
+
+# Domain Services
+
+The domain currently defines the following services:
+
+## MarketDescriptionBuilder
+
+Transforms historical datasets into market descriptions.
+
+---
+
+## ResearchEvaluator
+
+Evaluates evidence and determines whether validated knowledge has been produced.
+
+Domain Services contain business rules that do not naturally belong to a single Aggregate.
+
+---
+
+# Domain Invariants
+
+## HistoricalDataset
+
+* Immutable after creation.
+* Represents a single historical source.
+
+---
+
+## MarketDescription
+
+* Refers to exactly one HistoricalDataset.
+* Immutable after creation.
+
+---
+
+## ResearchHypothesis
+
+* Must describe a single falsifiable hypothesis.
+* Cannot exist without a MarketDescription.
+
+---
+
+## Experiment
+
+* Refers to exactly one ResearchHypothesis.
+* Executes under exactly one ResearchConfiguration.
+* Produces objective Evidence.
+* Immutable after completion.
+
+---
+
+## Edge
+
+* Must originate from validated Knowledge.
+* Must maintain a valid lifecycle state.
+
+---
+
+# Aggregate Lifecycles
+
+## Experiment
+
+Created
+
+↓
+
+Running
+
+↓
+
+Completed
+
+↓
+
+Archived
+
+---
+
+## Edge
+
+Candidate
+
+↓
+
+Validated
+
+↓
+
+Active
+
+↓
+
+Retired
+
+---
+
+# Relationships
+
+The conceptual domain flow is:
+
 HistoricalDataset
-        │
-        ▼
+
+↓
+
 MarketDescription
-        │
-        ▼
-MarketVocabulary
-        │
-        ▼
-ResearchConfiguration
-        │
-        ▼
+
+↓
+
+ResearchHypothesis
+
+↓
+
 Experiment
-        │
-        ▼
-ExperimentResult
-        │
-        ▼
+
+↓
+
 Evidence
-        │
-        ▼
+
+↓
+
 Knowledge
-        │
-        ▼
-ValidatedEdge
-```
+
+↓
+
+Edge
+
+This represents conceptual evolution rather than implementation dependencies.
 
 ---
 
-# 7. Domain Invariants
+# Domain Events
 
-- HistoricalDataset is immutable.
-- MarketDescription is immutable.
-- Evidence never modifies ExperimentResult.
-- Knowledge never modifies history.
-- Infrastructure never defines business rules.
-- Business decisions belong to the Domain.
+The domain may publish events describing significant business facts.
 
----
+Examples include:
 
-# 8. Aggregate Overview
+* ExperimentCompleted
+* KnowledgeValidated
+* EdgeValidated
+* EdgeRetired
 
-| Aggregate | Root |
-|-----------|------|
-| Dataset | HistoricalDataset |
-| Description | MarketDescription |
-| Vocabulary | MarketVocabulary |
-| Research | Experiment |
-| Evidence | Evidence |
-| Knowledge | Knowledge |
-| Edge | Edge |
+The event model will evolve together with the implementation.
 
 ---
 
-# 9. Future Evolution
+# Evolution Rules
 
-Future artifacts may extend the model without modifying existing concepts.
+The Domain Model is considered stable.
 
-Examples:
+Future changes must satisfy all of the following conditions:
 
-- Regime
-- EdgeLifecycle
-- PortfolioOfEdges
+* solve a demonstrated business problem;
+* preserve the ubiquitous language;
+* preserve aggregate invariants;
+* remain consistent with the Foundation Blueprint and Manifesto;
+* be documented through an Architecture Decision Record (ADR).
 
----
-
-# 10. Conclusion
-
-The Domain Model defines the common language of EDGE_ENGINE.
-
-All future implementations must derive from this specification.
-
-End of Document
+The Domain Model evolves incrementally rather than through complete redesigns.

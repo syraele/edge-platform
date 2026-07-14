@@ -1,124 +1,139 @@
 # EDGE_ENGINE Git Workflow
 
----
-**Document ID:** GIT-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 03_ROADMAP.md
-- 05_CODING_STANDARD.md
-- 06_TESTING.md
----
-
-# 1. Purpose
-
-This document defines the official Git workflow for EDGE_ENGINE.
-
-The objective is to keep the repository clean, traceable and reproducible.
+Status: Foundation v2
 
 ---
 
-# 2. Branch Strategy
+# Purpose
 
-Current strategy:
+This document defines the Git workflow adopted by EDGE_ENGINE.
 
-- main (or master): stable branch
-- Feature development is completed as small, reviewable milestones.
-
-Future branch strategies may evolve as the project grows.
+Its objective is to ensure a clean, traceable, and reproducible development history.
 
 ---
 
-# 3. Development Cycle
+# Development Model
 
-Every milestone follows the same lifecycle:
+EDGE_ENGINE follows a trunk-based development model.
 
+The main branch always represents a stable state of the project.
+
+Development progresses through small, incremental commits.
+
+---
+
+# Development Cycle
+
+Every implementation follows the same lifecycle.
+
+```text
+Milestone
+        ↓
 Design
-→ Review
-→ Documentation
-→ Implementation
-→ Testing
-→ Final Review
-→ Git Commit
+        ↓
+Implementation
+        ↓
+Testing
+        ↓
+Review
+        ↓
+Commit
+```
+
+Code is committed only after tests successfully pass.
 
 ---
 
-# 4. Commit Principles
+# Commit Principles
 
-Every commit must:
+Every commit should:
 
-- have a single purpose;
-- be buildable;
-- keep tests passing;
-- preserve repository consistency.
+* represent one logical change;
+* leave the project in a working state;
+* preserve a green test suite;
+* be understandable without additional context.
 
-Avoid mixing unrelated changes.
+Avoid mixing unrelated changes in the same commit.
 
 ---
 
-# 5. Commit Message Convention
+# Commit Messages
 
-Format:
-
-<type>: <summary>
+Commit messages follow the Conventional Commits specification.
 
 Examples:
 
-- docs: add testing strategy
-- feat(domain): add MarketDescriptor entity
-- test(core): add runtime tests
-- refactor(application): simplify experiment workflow
-- fix(data): validate dataset metadata
+* feat(domain): add MarketDescription aggregate
+* feat(research): implement hypothesis validation
+* fix(core): preserve aggregate invariant
+* refactor(application): simplify experiment workflow
+* docs(manifesto): rewrite Foundation v2 manifesto
+* test(domain): add Experiment aggregate tests
 
 ---
 
-# 6. Recommended Commit Types
+# Branch Strategy
 
-- feat
-- fix
-- refactor
-- docs
-- test
-- chore
+The default branch is the stable branch.
 
----
+Feature branches may be used for large milestones, but should remain short-lived.
 
-# 7. Before Every Commit
-
-Checklist:
-
-- Documentation updated (if required)
-- Tests passing
-- No debug code
-- No temporary files
-- Meaningful commit message
+Long-running branches should be avoided.
 
 ---
 
-# 8. Milestone Commits
+# Tags
 
-Prefer one commit per completed milestone.
+Tags identify significant project milestones.
 
-Milestones should represent coherent progress.
+Typical examples include:
 
----
+* foundation-v2.0
+* mdf-001
+* mdf-002
 
-# 9. Repository History
-
-Git history should tell the story of the project.
-
-Every commit should explain why the repository improved.
+Tags represent stable, review-approved project states.
 
 ---
 
-# 10. Conclusion
+# Pull Request Review
 
-Git is the permanent memory of EDGE_ENGINE.
+Before integration, every change should verify:
 
-Every commit should leave the project in a better state than before.
+* architecture consistency;
+* domain consistency;
+* coding standards;
+* successful automated tests;
+* documentation updates when required.
 
-End of Document
+---
+
+# Definition of Ready
+
+Implementation starts only after:
+
+* requirements are understood;
+* design is approved;
+* architecture impact is evaluated.
+
+---
+
+# Definition of Done
+
+A milestone is complete only when:
+
+* implementation is complete;
+* tests pass;
+* documentation is updated;
+* review is completed;
+* changes are committed.
+
+---
+
+# Governance
+
+Git history is considered part of the project documentation.
+
+Every commit should contribute to telling the evolution of the project in a clear and traceable manner.

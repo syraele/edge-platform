@@ -1,222 +1,143 @@
 # EDGE_ENGINE Research Model
 
----
-**Document ID:** RESEARCH-001  
-**Version:** 1.0.0  
-**Status:** Approved  
-**Owner:** EDGE_ENGINE Project  
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 00_MANIFESTO.md
-- 01_ARCHITECTURE.md
-- 03_ROADMAP.md
-- 04_DOMAIN_MODEL.md
----
-
-# 1. Purpose
-
-This document defines the official quantitative research model of EDGE_ENGINE.
-
-It describes how the platform transforms raw market data into validated quantitative knowledge.
+Status: Foundation v2
 
 ---
 
-# 2. Research Philosophy
+# Purpose
 
-EDGE_ENGINE is not designed to search for profitable trades.
+This document defines the research methodology adopted by EDGE_ENGINE.
 
-It is designed to discover statistically replicable market behaviour.
+It describes how observations are transformed into validated quantitative knowledge through a reproducible scientific process.
 
-Research always precedes execution.
-
-Knowledge always precedes strategy.
-
-Evidence always precedes optimization.
+It does not describe software architecture or implementation details.
 
 ---
 
-# 3. Research Principles
+# Research Philosophy
 
-The research process must be:
+EDGE_ENGINE treats quantitative research as a cumulative scientific process.
 
-- Deterministic
-- Reproducible
-- Data-driven
-- Explainable
-- Incremental
-- Measurable
+The objective is not to maximize the number of experiments, but to continuously increase the amount of validated knowledge available for future research.
 
-Research results must be reproducible using the same dataset and configuration.
+Knowledge is considered the primary outcome of the research process.
 
 ---
 
-# 4. Official Research Pipeline
+# Scientific Method
+
+Every research activity follows the same conceptual process.
 
 ```text
-Market Data
-      │
-      ▼
-HistoricalDataset
-      │
-      ▼
-Market Description Framework
-      │
-      ▼
-Market Vocabulary
-      │
-      ▼
-Configuration Generator
-      │
-      ▼
-Backtest Runner
-      │
-      ▼
-Scoring Engine
-      │
-      ▼
-Knowledge Base
-      │
-      ▼
-AI Research
-      │
-      ▼
-Validated Edge
+Observation
+        ↓
+Research Hypothesis
+        ↓
+Experiment Design
+        ↓
+Experiment Execution
+        ↓
+Evidence
+        ↓
+Knowledge
+        ↓
+Edge
 ```
 
-Every stage has one responsibility.
+No stage may be skipped.
 
-Outputs become inputs for the next stage.
-
----
-
-# 5. Pipeline Stages
-
-## Market Data
-
-Raw historical market information.
-
-Output:
-- Historical observations
+Knowledge can only emerge from validated evidence.
 
 ---
 
-## HistoricalDataset
+# Research Cycle
 
-Creates a normalized and immutable representation of historical data.
+The research process is iterative.
 
-Output:
-- HistoricalDataset
+Each validated discovery becomes the starting point for new observations and hypotheses.
 
----
+Research therefore evolves as a continuous cycle rather than a linear workflow.
 
-## Market Description Framework
-
-Transforms raw observations into objective market descriptors.
-
-Examples:
-
-- Trend strength
-- Volatility
-- Noise
-- Efficiency
-- Directionality
-
-Output:
-- MarketDescription
+```text
+Knowledge
+      ↓
+Observation
+      ↓
+Hypothesis
+      ↓
+Experiment
+      ↓
+Evidence
+      ↓
+Knowledge
+```
 
 ---
 
-## Market Vocabulary
+# Research Artifacts
 
-Transforms market descriptions into a common language used by the platform.
+The research process produces the following conceptual artifacts.
 
-Output:
-- Vocabulary terms
+* Market Observation
+* Research Hypothesis
+* Experiment
+* Evidence
+* Knowledge
+* Edge
 
----
-
-## Configuration Generator
-
-Produces research configurations automatically.
-
-Output:
-- Experiment configurations
+Their structure is defined in the Domain Model.
 
 ---
 
-## Backtest Runner
+# Validation Principles
 
-Executes deterministic experiments.
+A research result becomes knowledge only if it is:
 
-Output:
-- Raw experiment results
+* objectively measurable;
+* reproducible;
+* supported by evidence;
+* documented;
+* reusable.
 
----
-
-## Scoring Engine
-
-Evaluates experiment quality.
-
-Typical metrics include:
-
-- Stability
-- Robustness
-- Statistical significance
-- Risk characteristics
-
-Output:
-- Scored experiments
+Otherwise it remains an experimental result.
 
 ---
 
-## Knowledge Base
+# Relationship with the Domain Model
 
-Stores validated research results.
+This document defines the research methodology.
 
-Output:
-- Structured knowledge
+The Domain Model defines the business concepts supporting this methodology.
 
----
+The Architecture defines how the software implements it.
 
-## AI Research
-
-Uses accumulated knowledge to identify promising research directions.
-
-Output:
-- Candidate edges
+Each document has a distinct responsibility.
 
 ---
 
-## Validated Edge
+# Research Principles
 
-Final output of the research pipeline.
+The research process follows these principles:
 
-A validated edge is supported by quantitative evidence and reproducible experiments.
+* Observation before interpretation.
+* Hypothesis before implementation.
+* Evidence before conclusion.
+* Knowledge before optimization.
+* Reproducibility before performance.
 
----
-
-# 6. Research Rules
-
-- Every stage has one responsibility.
-- Every stage must be deterministic.
-- Intermediate outputs must be reusable.
-- Research must be reproducible.
-- AI never replaces statistical validation.
+These principles derive directly from the Manifesto.
 
 ---
 
-# 7. Success Criteria
+# Scope
 
-The purpose of the research process is not to maximize profit.
+This document defines **how research is performed**.
 
-Its purpose is to maximize confidence that an observed edge is statistically valid, reproducible and robust.
+It does not define:
 
----
-
-# 8. Conclusion
-
-EDGE_ENGINE transforms market data into validated quantitative knowledge through a structured and reproducible research pipeline.
-
-Every future research capability must integrate into this model without violating its principles.
+* software architecture;
+* implementation details;
+* business object structure;
+* technical workflows.

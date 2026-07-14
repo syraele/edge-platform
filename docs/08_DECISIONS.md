@@ -1,67 +1,120 @@
 # EDGE_ENGINE Architecture Decisions
 
----
-**Document ID:** ADR-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
+
+Status: Foundation v2
+
 ---
 
 # Purpose
 
-This document records major architectural decisions.
+This document defines how architectural decisions are documented and managed throughout the lifetime of EDGE_ENGINE.
 
-Architectural decisions are permanent unless superseded by a newer ADR.
+Architectural decisions are treated as first-class project artifacts.
 
 ---
 
-# ADR-001
+# Decision Philosophy
 
-## Title
+Architecture evolves through explicit, documented decisions.
 
-EDGE_ENGINE is a Quantitative Research Platform
+Significant architectural changes must never be introduced implicitly through code.
 
-## Status
+Every major decision should be traceable, reviewable, and understandable.
 
+---
+
+# When an ADR is Required
+
+An Architecture Decision Record (ADR) is required whenever a change:
+
+* modifies the architecture;
+* changes the Domain Model;
+* introduces a new dependency;
+* changes a public contract;
+* affects multiple bounded contexts;
+* changes a core architectural principle.
+
+Implementation details do not require ADRs.
+
+---
+
+# ADR Structure
+
+Every ADR follows the same structure.
+
+```text id="hzey6q"
+ADR-XXX
+
+Status
+
+Context
+
+Decision
+
+Consequences
+
+Alternatives Considered
+```
+
+---
+
+# ADR Lifecycle
+
+```text id="cvgd4v"
+Proposed
+        ↓
+Reviewed
+        ↓
 Accepted
+        ↓
+Implemented
+        ↓
+Superseded (optional)
+```
 
-## Context
-
-The project could evolve toward a generic trading platform or remain focused on quantitative research.
-
-## Decision
-
-EDGE_ENGINE exists to discover, validate, monitor and accumulate statistically reliable market knowledge capable of generating sustainable economic value.
-
-Trading execution is outside the core mission.
-
-## Consequences
-
-- Research has priority over execution.
-- Business knowledge belongs to the Domain.
-- New features must improve research capability.
-- Execution engines are consumers, not the core.
+Every accepted ADR becomes part of the architectural history of the project.
 
 ---
 
-# Future ADR Template
+# Decision Principles
 
-## ADR-XXX
+Good architectural decisions should:
 
-### Title
+* preserve the Domain Model;
+* remain consistent with the Manifesto;
+* respect the Foundation Blueprint;
+* minimize unnecessary complexity;
+* improve long-term maintainability.
 
-### Status
+---
 
-- Proposed
-- Accepted
-- Superseded
-- Rejected
+# Documentation
 
-### Context
+Accepted ADRs should be stored in:
 
-### Decision
+```text id="48krmk"
+docs/adr/
+```
 
-### Consequences
+using sequential numbering.
 
-End of Document
+Example:
+
+```text id="d1t9dg"
+ADR-001-domain-boundaries.md
+
+ADR-002-market-description.md
+
+ADR-003-plugin-contract.md
+```
+
+---
+
+# Governance
+
+Architecture is not modified by discussion alone.
+
+The official project architecture changes only through accepted ADRs.
+
+This ensures traceability, stability, and controlled evolution throughout the lifetime of EDGE_ENGINE.

@@ -1,121 +1,144 @@
 # EDGE_ENGINE Testing Strategy
 
----
-**Document ID:** TEST-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 01_ARCHITECTURE.md
-- 04_DOMAIN_MODEL.md
-- 05_CODING_STANDARD.md
----
-
-# 1. Purpose
-
-This document defines the official testing strategy for EDGE_ENGINE.
-
-Testing exists to verify that business behaviour remains correct and reproducible.
+Status: Foundation v2
 
 ---
 
-# 2. Testing Principles
+# Purpose
 
-- Tests are deterministic.
-- Tests must be repeatable.
-- Business logic has priority over infrastructure.
-- Every bug should result in a regression test.
-- Fast feedback is preferred.
+This document defines the testing philosophy and quality assurance strategy adopted by EDGE_ENGINE.
+
+Its objective is to ensure that every implementation remains reliable, reproducible, and maintainable throughout the lifetime of the project.
 
 ---
 
-# 3. Testing Pyramid
+# Testing Philosophy
+
+Testing is an integral part of software design.
+
+A feature is not considered complete until its expected behavior is verified through automated tests.
+
+Tests are treated as executable specifications.
+
+---
+
+# Testing Principles
+
+## TS-001 — Test Business Behavior
+
+Tests verify business behavior rather than implementation details.
+
+---
+
+## TS-002 — Deterministic Results
+
+Every test must produce identical results under identical conditions.
+
+---
+
+## TS-003 — Independence
+
+Tests must be independent from each other.
+
+Execution order must never influence results.
+
+---
+
+## TS-004 — Fast Feedback
+
+Unit tests should execute quickly to provide continuous feedback.
+
+---
+
+## TS-005 — Reproducibility
+
+Test results must be reproducible across environments.
+
+---
+
+# Testing Pyramid
+
+EDGE_ENGINE follows a layered testing strategy.
 
 ```text
-Unit Tests
-    ↑
-Integration Tests
-    ↑
-End-to-End Research Tests
+           End-to-End
+               ▲
+        Integration Tests
+               ▲
+          Unit Tests
 ```
 
-Unit tests form the foundation of the project.
+The majority of tests should be Unit Tests.
 
 ---
 
-# 4. Unit Tests
+# Unit Tests
 
-Unit tests verify:
+Unit Tests verify isolated business behavior.
 
-- Domain entities
-- Value objects
-- Business rules
-- Pure functions
-
-They must not depend on external services.
+They should execute without infrastructure whenever possible.
 
 ---
 
-# 5. Integration Tests
+# Integration Tests
 
-Integration tests verify interactions with:
+Integration Tests verify collaboration between components.
 
-- Filesystem
-- CSV readers
-- Data providers
-- Repositories
-
-Use realistic but controlled test data.
+They validate contracts and infrastructure integration.
 
 ---
 
-# 6. Research Validation Tests
+# End-to-End Tests
 
-Research workflows must be reproducible.
+End-to-End Tests verify complete workflows from the user's perspective.
 
-Given the same dataset and configuration, results must remain consistent.
-
----
-
-# 7. Test Organization
-
-```text
-tests/
-    unit/
-    integration/
-    research/
-```
-
-Test names should describe expected behaviour.
+Their number should remain limited.
 
 ---
 
-# 8. Definition of Done
+# Domain Testing
 
-A feature is complete only if:
+Business rules are verified at the Domain Layer.
 
-- Implementation finished
-- Tests added or updated
-- Existing tests pass
-- Documentation updated if needed
+Domain tests must not require infrastructure.
 
 ---
 
-# 9. Continuous Quality
+# Test Quality
 
-Run the full test suite before every commit.
+A good test is:
 
-Protect the main branch from failing tests.
+* deterministic;
+* readable;
+* isolated;
+* repeatable;
+* focused on one behavior.
 
 ---
 
-# 10. Conclusion
+# Coverage
 
-Testing is an integral part of quantitative research.
+Coverage percentage is an indicator, not an objective.
 
-Reliable research requires reliable software.
+High-quality tests are preferred over high coverage.
 
-End of Document
+---
+
+# Definition of Done
+
+A feature is considered complete only when:
+
+* implementation is finished;
+* automated tests pass;
+* existing tests remain green;
+* architectural rules are respected.
+
+---
+
+# Governance
+
+Every code change must preserve the stability of the existing test suite.
+
+Failing tests block integration until resolved.

@@ -1,165 +1,138 @@
 # EDGE_ENGINE
 
-> **Build a machine that transforms market data into validated quantitative knowledge capable of generating sustainable economic value.**
+A Domain-Driven research engine for building, validating, and evolving quantitative knowledge.
 
 ---
 
 ## Overview
 
-EDGE_ENGINE is a quantitative research platform.
+EDGE_ENGINE is a long-term research platform designed to transform historical market data into validated, reproducible, and reusable quantitative knowledge.
 
-Its purpose is not to execute trades.
+The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to support the systematic discovery and evolution of trading edges.
 
-Its purpose is to discover, validate, monitor and accumulate statistically reliable market knowledge that can be transformed into long-term market edge.
+EDGE_ENGINE is **not** a trading platform or an automated trading system.
 
-The repository follows a documentation-first and research-first approach.
-
----
-
-# Mission
-
-Discover statistically valid market edges through deterministic and reproducible quantitative research.
+Its primary objective is the construction and preservation of quantitative knowledge.
 
 ---
 
-# Vision
+## Core Principles
 
-Transform:
+The project is built around the following principles:
 
-Market Data
-→ Information
-→ Evidence
-→ Knowledge
-→ Validated Edge
+* Domain First
+* Scientific Method
+* Evidence Before Opinion
+* Knowledge Must Accumulate
+* Reproducibility by Design
+* Evolution Over Perfection
+* Clean Boundaries
 
-The platform continuously improves its understanding of market behaviour.
-
----
-
-# Current Status
-
-Project Phase:
-
-Foundation Release
-
-Core:
-
-CORE v0.1 (Frozen)
-
-Research Layer:
-
-Ready for implementation.
-
-Tests:
-
-9 / 9 PASS
+These principles are formally defined in the Manifesto.
 
 ---
 
-# Architecture
-
-The platform follows Clean Architecture principles.
-
-Layers:
-
-Core
-↓
-Domain
-↓
-Application
-↓
-Infrastructure
-
-Business knowledge always points inward.
-
----
-
-# Research Pipeline
-
-Market Data
-↓
-HistoricalDataset
-↓
-MarketDescription
-↓
-MarketVocabulary
-↓
-ResearchConfiguration
-↓
-Experiment
-↓
-ExperimentResult
-↓
-Evidence
-↓
-Knowledge
-↓
-ValidatedEdge
-
----
-
-# Repository Structure
+## Project Structure
 
 ```text
-docs/
-src/
-tests/
+edge-platform/
+│
+├── FOUNDATION_BLUEPRINT.md
+├── PROJECT_BOOTSTRAP.md
+├── PROJECT_STATUS.md
+├── README.md
+│
+├── docs/
+│   ├── 00_MANIFESTO.md
+│   ├── 01_ARCHITECTURE.md
+│   ├── 02_RESEARCH_MODEL.md
+│   ├── 03_ROADMAP.md
+│   ├── 04_DOMAIN_MODEL.md
+│   ├── 05_CODING_STANDARD.md
+│   ├── 06_TESTING.md
+│   ├── 07_GIT_WORKFLOW.md
+│   ├── 08_DECISIONS.md
+│   └── 09_GLOSSARY.md
+│
+├── src/
+├── tests/
+└── ...
 ```
 
-Documentation is the primary source of project knowledge.
+---
+
+## Documentation
+
+The documentation is organized by responsibility.
+
+| Document                | Purpose                              |
+| ----------------------- | ------------------------------------ |
+| FOUNDATION_BLUEPRINT.md | Conceptual foundation of the project |
+| PROJECT_STATUS.md       | Current project status               |
+| PROJECT_BOOTSTRAP.md    | Development bootstrap procedure      |
+| 00_MANIFESTO.md         | Project philosophy and principles    |
+| 01_ARCHITECTURE.md      | System architecture                  |
+| 02_RESEARCH_MODEL.md    | Research methodology                 |
+| 03_ROADMAP.md           | Project evolution                    |
+| 04_DOMAIN_MODEL.md      | Business domain model                |
+| 05_CODING_STANDARD.md   | Development standards                |
+| 06_TESTING.md           | Testing strategy                     |
+| 07_GIT_WORKFLOW.md      | Development workflow                 |
+| 08_DECISIONS.md         | Architecture decision process        |
+| 09_GLOSSARY.md          | Ubiquitous language                  |
 
 ---
 
-# Documentation
+## Development Workflow
 
-Read documents in the following order:
+EDGE_ENGINE follows an incremental development process.
 
-1. 00_MANIFESTO.md
-2. 01_ARCHITECTURE.md
-3. 02_RESEARCH_MODEL.md
-4. 03_ROADMAP.md
-5. 04_DOMAIN_MODEL.md
-6. 05_CODING_STANDARD.md
-7. 06_TESTING.md
-8. 07_GIT_WORKFLOW.md
-9. 08_DECISIONS.md
-10. 09_GLOSSARY.md
+```text
+Milestone
+      ↓
+Design
+      ↓
+Implementation
+      ↓
+Testing
+      ↓
+Review
+      ↓
+Commit
+```
 
-Additional project documents:
-
-- PROJECT_BOOTSTRAP.md
-- PROJECT_STATUS.md
-
----
-
-# Development Workflow
-
-ROADMAP
-→ DESIGN
-→ REVIEW
-→ IMPLEMENT
-→ TEST
-→ REVIEW
-→ COMMIT
+Every milestone preserves the architectural foundation established during Foundation v2.
 
 ---
 
-# Current Milestone
+## Current Status
 
-MDF-001
+Current Phase:
 
-Implement the Market Description Framework.
+**Foundation v2 Complete**
+
+Current Milestone:
+
+**MDF-001 – Market Description Framework**
+
+For the latest project status, see `PROJECT_STATUS.md`.
 
 ---
 
-# Long-Term Objective
+## Contributing
 
-Continuously discover statistically validated market edges capable of generating sustainable economic value.
+Every contribution must remain consistent with:
+
+* the Foundation Blueprint;
+* the Manifesto;
+* the Architecture;
+* the Domain Model;
+* the Coding Standard.
+
+Architectural changes are introduced only through Architecture Decision Records (ADRs).
 
 ---
 
-# License
+## License
 
-See LICENSE.
-
-End of Document
+Project license: TBD.

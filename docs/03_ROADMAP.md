@@ -1,136 +1,214 @@
 # EDGE_ENGINE Roadmap
 
----
-**Document ID:** ROADMAP-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
 
-**Related Documents**
-
-- 00_MANIFESTO.md
-- 01_ARCHITECTURE.md
-- 02_RESEARCH_MODEL.md
----
-
-# 1. Purpose
-
-This document defines the official development roadmap of EDGE_ENGINE.
-
-It describes the planned milestones, their current status and the recommended implementation order.
+Status: Foundation v2
 
 ---
 
-# 2. Guiding Principles
+# Purpose
 
-Development follows this lifecycle:
+This document defines the planned evolution of EDGE_ENGINE.
 
+It describes the major milestones of the project and their objectives.
+
+The Roadmap defines *what* will be built and *when*.
+
+It does not define architecture, domain concepts, or implementation details.
+
+---
+
+# Current Status
+
+Current Phase
+
+**Foundation v2**
+
+Current Status
+
+**Architecture Frozen**
+
+Current Objective
+
+**Begin implementation of the Market Description Framework (MDF-001).**
+
+---
+
+# Development Principles
+
+Project evolution follows these principles:
+
+* Foundation before implementation.
+* Design before code.
+* Tests before integration.
+* Incremental evolution.
+* Architecture preserved through ADRs.
+
+---
+
+# Development Lifecycle
+
+Every milestone follows the same workflow.
+
+```text
+Milestone
+        ↓
 Design
-→ Review
-→ Documentation
-→ Implementation
-→ Testing
-→ Final Review
-→ Git Commit
+        ↓
+Implementation
+        ↓
+Testing
+        ↓
+Review
+        ↓
+Commit
+        ↓
+Next Milestone
+```
 
-No implementation starts before design and documentation.
-
----
-
-# 3. Current Status
-
-## Foundation
-
-- [x] CORE v0.1 Frozen
-- [x] Manifesto
-- [x] Architecture
-- [x] Research Model
-
-## Documentation
-
-- [ ] Roadmap
-- [ ] Domain Model
-- [ ] Coding Standard
-- [ ] Testing Strategy
-- [ ] Git Workflow
-- [ ] Architecture Decisions
-- [ ] Glossary
+No milestone is considered complete until every step has been successfully completed.
 
 ---
 
-# 4. Product Roadmap
+# Roadmap
 
-## Phase 1 – Foundation
+## Phase 1 — Foundation
 
-- CORE
-- Documentation
-- Repository standards
+Objective
 
-Status: In Progress
+Establish a stable architectural and domain foundation.
 
----
+Deliverables
 
-## Phase 2 – Research Foundation
+* Foundation Blueprint
+* Manifesto
+* Architecture
+* Research Model
+* Domain Model
+* Development Standards
 
-- HistoricalDataset
-- Market Description Framework
-- Market Vocabulary
+Status
 
-Status: Planned
-
----
-
-## Phase 3 – Experimentation
-
-- Configuration Generator
-- Backtest Runner
-- Scoring Engine
-
-Status: Planned
+Completed
 
 ---
 
-## Phase 4 – Knowledge
+## Phase 2 — Market Description Framework (MDF)
 
-- Knowledge Base
-- AI Research
-- Validated Edge Repository
+Objective
 
-Status: Planned
+Build the framework responsible for transforming historical market data into structured market descriptions.
 
----
+Expected Deliverables
 
-# 5. Milestone Order
+* MarketDescription Aggregate
+* Descriptor infrastructure
+* Descriptor registry
+* Descriptor validation
+* Descriptor tests
 
-1. Documentation
-2. Market Description Framework
-3. Market Vocabulary
-4. Configuration Generator
-5. Backtest Runner
-6. Scoring Engine
-7. Knowledge Base
-8. AI Research
-9. Validated Edge
+Status
+
+Next Milestone
 
 ---
 
-# 6. Definition of Done
+## Phase 3 — Research Framework
 
-A milestone is complete only when:
+Objective
 
-- Design approved
-- Documentation updated
-- Implementation completed
-- Tests passing
-- Review completed
-- Git commit created
-- Changelog updated
+Introduce hypothesis management and experiment execution.
+
+Expected Deliverables
+
+* ResearchHypothesis
+* Experiment
+* Evidence
+* ResearchEvaluator
+
+Status
+
+Planned
 
 ---
 
-# 7. Maintenance
+## Phase 4 — Knowledge Framework
 
-This roadmap is a living document and must be updated whenever a milestone changes status or scope.
+Objective
 
-End of Document
+Introduce persistent validated knowledge.
+
+Expected Deliverables
+
+* Knowledge model
+* Knowledge validation
+* Knowledge persistence
+* Knowledge querying
+
+Status
+
+Planned
+
+---
+
+## Phase 5 — Edge Framework
+
+Objective
+
+Transform validated knowledge into operational trading edges.
+
+Expected Deliverables
+
+* Edge Aggregate
+* Edge lifecycle
+* Edge validation
+* Edge management
+
+Status
+
+Planned
+
+---
+
+## Phase 6 — Platform Evolution
+
+Objective
+
+Expand the platform without changing the Core Domain.
+
+Possible areas include:
+
+* AI-assisted research
+* Advanced experimentation
+* New descriptor families
+* Additional data sources
+* Visualization
+* Plugin ecosystem
+
+Status
+
+Future
+
+---
+
+# Success Criteria
+
+The roadmap is complete when EDGE_ENGINE is capable of:
+
+* describing markets;
+* validating research hypotheses;
+* accumulating reusable quantitative knowledge;
+* managing validated trading edges;
+* evolving through extension rather than architectural redesign.
+
+---
+
+# Governance
+
+The Roadmap is a planning document.
+
+Architectural changes are defined by the Architecture and Domain Model.
+
+Implementation details belong to individual milestone specifications.
+
+Progress is tracked through PROJECT_STATUS.md.

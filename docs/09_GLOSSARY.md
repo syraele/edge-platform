@@ -1,134 +1,221 @@
 # EDGE_ENGINE Glossary
 
----
-**Document ID:** GLOSSARY-001
-**Version:** 1.0.0
-**Status:** Approved
-**Owner:** EDGE_ENGINE Project
-**Last Updated:** 2026-07-14
+Version: 2.0
+
+Status: Foundation v2
+
 ---
 
 # Purpose
 
-This document defines the official vocabulary of EDGE_ENGINE.
+This document defines the ubiquitous language of EDGE_ENGINE.
 
-Every technical document, implementation and discussion should use these terms consistently.
+Every business concept used throughout the project is defined here to ensure consistency across documentation, architecture, implementation, and testing.
+
+The glossary is the authoritative source for domain terminology.
 
 ---
 
-# Core Concepts
-
-## Bar
-
-One immutable market observation (OHLCV).
+# Domain Concepts
 
 ## HistoricalDataset
 
-An immutable collection of historical market data with metadata.
+Immutable collection of historical market data used as the input for quantitative research.
+
+---
 
 ## MarketDescription
 
-An objective description of market behaviour extracted from a HistoricalDataset.
+Structured description of market behaviour extracted from a HistoricalDataset.
 
-## MarketDescriptor
+It represents the starting point of the research process.
 
-One measurable characteristic of market behaviour.
+---
 
-Examples:
+## ResearchHypothesis
 
-- Trend
-- Volatility
-- Noise
-- Liquidity
-- Momentum
-- Efficiency
+A falsifiable statement describing an expected market behaviour.
 
-## MarketVocabulary
+Every hypothesis must be testable through experimentation.
 
-A standardized language used to describe market states.
-
-## VocabularyTerm
-
-A single concept within the Market Vocabulary.
-
-## ResearchConfiguration
-
-A deterministic specification of a research experiment.
+---
 
 ## Experiment
 
-An executable research hypothesis.
+Execution of a ResearchHypothesis under controlled conditions.
 
-## ExperimentResult
+Its purpose is to generate objective evidence.
 
-The raw output produced by an experiment.
+---
 
 ## Evidence
 
-Statistical measurements extracted from an ExperimentResult.
+Objective measurements produced by an Experiment.
 
-Evidence supports or rejects a research hypothesis.
+Evidence alone does not constitute knowledge.
+
+---
 
 ## Knowledge
 
-Validated market understanding derived from evidence.
+Validated, reproducible and reusable quantitative conclusions derived from Evidence.
 
-Knowledge is independent from storage.
+Knowledge is cumulative and represents the primary asset of EDGE_ENGINE.
+
+---
 
 ## Edge
 
-A research hypothesis supported by sufficient evidence.
+Actionable quantitative knowledge demonstrating repeatable value.
 
-## ValidatedEdge
-
-An edge approved for continuous monitoring.
+Edges are derived from validated Knowledge.
 
 ---
 
-# Architectural Terms
+# Architectural Concepts
 
 ## Domain
 
-Business knowledge independent from technology.
+The business core of the system.
+
+Contains business rules independent from technology.
+
+---
 
 ## Application
 
-Coordinates research workflows.
+Coordinates use cases and orchestrates domain behaviour.
+
+Contains no business rules.
+
+---
 
 ## Infrastructure
 
-Technical implementations such as storage, files and external services.
+Implements technical capabilities required by the application.
 
-## Core
-
-Shared technical building blocks.
+Infrastructure depends on the Domain, never the opposite.
 
 ---
 
-# Research Terms
+## Plugin
 
-## Deterministic
+Extension that adds new capabilities without modifying the Core.
 
-Produces the same result given the same inputs.
-
-## Reproducible
-
-Can be independently repeated with identical results.
-
-## Statistical Validation
-
-Verification that observed behaviour is unlikely to be random.
-
-## Hypothesis
-
-A proposed explanation of observed market behaviour.
+Plugins interact through stable contracts.
 
 ---
 
-# Maintenance
+## Aggregate
 
-The glossary evolves together with the Domain Model.
+Cluster of domain objects treated as a single consistency boundary.
 
-New business concepts must be added before implementation.
+Each Aggregate is represented by an Aggregate Root.
 
-End of Document
+---
+
+## Aggregate Root
+
+The only externally accessible entity responsible for preserving aggregate invariants.
+
+---
+
+## Entity
+
+Domain object identified by stable identity.
+
+Equality is based on identity rather than value.
+
+---
+
+## Value Object
+
+Immutable domain object identified entirely by its values.
+
+Equality is value-based.
+
+---
+
+## Domain Service
+
+Business behaviour that does not naturally belong to a single Aggregate.
+
+---
+
+## Domain Event
+
+Immutable record describing a significant business fact that has already occurred.
+
+---
+
+# Research Concepts
+
+## Observation
+
+Objective description of market behaviour prior to interpretation.
+
+---
+
+## Scientific Method
+
+Research process followed by EDGE_ENGINE.
+
+Observation
+
+↓
+
+Research Hypothesis
+
+↓
+
+Experiment
+
+↓
+
+Evidence
+
+↓
+
+Knowledge
+
+↓
+
+Edge
+
+---
+
+# Project Concepts
+
+## Foundation
+
+The stable conceptual basis of the project.
+
+Defines the architecture, domain model, research model and development principles.
+
+---
+
+## Milestone
+
+Incremental development objective delivering measurable project progress.
+
+---
+
+## Architecture Decision Record (ADR)
+
+Document describing an accepted architectural decision and its consequences.
+
+---
+
+## Ubiquitous Language
+
+The shared vocabulary used consistently throughout the project.
+
+All documentation and source code must use these terms without introducing synonyms.
+
+---
+
+# Naming Rule
+
+Every new business concept introduced into EDGE_ENGINE must first be defined in this Glossary before becoming part of the Domain Model or implementation.
+
+This document is the authoritative reference for project terminology.
