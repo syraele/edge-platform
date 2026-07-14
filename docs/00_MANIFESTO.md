@@ -1,153 +1,130 @@
-# EDGE_ENGINE
+# EDGE_ENGINE Manifesto
 
-## Manifesto v1.0
+Version: 2.0
+
+Status: Foundation v2
 
 ---
 
-# Mission
+# Purpose
 
-Discover, validate and monitor statistically robust and replicable market edges through automated quantitative research.
+EDGE_ENGINE exists to transform quantitative research from a collection of isolated experiments into a systematic process for building reliable, reproducible, and reusable quantitative knowledge about financial markets.
+
+The project is founded on the belief that sustainable value is not created by individual strategies or backtests, but by the continuous accumulation of validated knowledge.
+
+Every architectural decision, every component, and every implementation must contribute to this objective.
 
 ---
 
 # Vision
 
-EDGE_ENGINE is not a trading bot.
-
-EDGE_ENGINE is not a backtesting framework.
-
-EDGE_ENGINE is a quantitative research platform designed to transform market data into verified knowledge.
-
-The final product of the platform is not software.
-
-The final product is a validated and replicable statistical edge.
+To establish a research platform where every validated discovery becomes part of an evolving body of quantitative knowledge, allowing future research to start from what has already been proven instead of beginning from scratch.
 
 ---
 
-# Fundamental Principle
+# Constitutional Principles
 
-Do not program strategies.
+## 1. Domain First
 
-Build a system capable of discovering them.
+The domain is the foundation of every architectural decision.
 
----
-
-# Core Principles
-
-## 1. Data before assumptions
-
-Every hypothesis must originate from market data.
+Technology exists to serve the domain, never to define it.
 
 ---
 
-## 2. Evidence before opinions
+## 2. Scientific Method First
 
-Architectural and research decisions must be supported by measurable evidence.
+Research follows a systematic process:
 
----
+**Observation → Hypothesis → Experiment → Evidence → Knowledge → Edge**
 
-## 3. Immutable artifacts
-
-Historical data and research artifacts are immutable.
-
-Every transformation generates a new artifact.
+Every capability implemented by EDGE_ENGINE must reinforce this process.
 
 ---
 
-## 4. Single Responsibility
+## 3. Evidence Before Opinion
 
-Every component has one clear responsibility.
+Every hypothesis, conclusion, or architectural decision should be supported by objective evidence whenever possible.
 
----
-
-## 5. Modular Architecture
-
-Every subsystem can evolve independently.
+Assumptions are starting points.
+Evidence is the basis for knowledge.
 
 ---
 
-## 6. Knowledge First
+## 4. Knowledge Must Accumulate
 
-Knowledge is more valuable than models.
+The primary asset of EDGE_ENGINE is validated quantitative knowledge.
 
-Artificial Intelligence consumes knowledge.
+Every completed research activity should increase the knowledge available to future research.
 
-It does not replace it.
-
----
-
-## 7. Research before Trading
-
-The platform exists to discover statistical edges.
-
-Trading is only one possible application.
+Knowledge is never considered disposable.
 
 ---
 
-## 8. Continuous Validation
+## 5. Reproducibility by Design
 
-An edge is never considered permanent.
+Every experiment must be reproducible.
 
-Every edge must be continuously monitored and revalidated.
+The same inputs must always generate the same outputs under identical conditions.
 
----
-
-# Official Research Pipeline
-
-Market Data
-
-↓
-
-Historical Dataset
-
-↓
-
-Market Description Framework
-
-↓
-
-Market Vocabulary
-
-↓
-
-Configuration Generator
-
-↓
-
-Backtest Runner
-
-↓
-
-Scoring Engine
-
-↓
-
-Knowledge Base
-
-↓
-
-AI Research
-
-↓
-
-Validated Edge
+If a result cannot be reproduced, it cannot become knowledge.
 
 ---
 
-# Final Goal
+## 6. Evolution Over Perfection
 
-Create a platform capable of discovering statistical market edges that are:
+EDGE_ENGINE is designed to evolve continuously.
 
-- Robust
-- Replicable
-- Measurable
-- Continuously validated
-- Applicable in real markets
+Architectural flexibility is preferred over premature optimization.
+
+Long-term sustainability is more valuable than short-term convenience.
 
 ---
 
-# Motto
+## 7. Clean Boundaries
 
-The product is not the software.
+Every responsibility has exactly one place.
 
-The product is the edge.
+The domain remains independent from infrastructure, external technologies, frameworks, and implementation details.
+
+Architecture preserves these boundaries at all times.
+
+---
+
+# Non Goals
+
+EDGE_ENGINE is not:
+
+* a trading platform;
+* an automated trading system;
+* an Expert Advisor generator;
+* a generic backtesting framework;
+* a collection of technical indicators;
+* a collection of disconnected scripts.
+
+Its purpose is to build, validate, preserve, and evolve quantitative knowledge.
+
+---
+
+# Decision Rule
+
+Every significant architectural decision must be consistent with this Manifesto.
+
+When multiple solutions are technically valid, the preferred solution is the one that best preserves:
+
+* the domain;
+* the scientific method;
+* reproducibility;
+* knowledge accumulation;
+* simplicity;
+* long-term evolution.
+
+Implementation convenience must never override these principles.
+
+---
+
+# Closing Statement
+
+EDGE_ENGINE is a long-term research system.
+
+Its success is measured not by the amount of code produced, nor by the number of experiments executed, but by the quality, reliability, reproducibility, and cumulative growth of the quantitative knowledge it creates.
