@@ -55,3 +55,18 @@ def test_get_unknown_descriptor_raises():
         assert False, "Expected KeyError"
     except KeyError:
         pass
+
+
+def test_register_invalid_descriptor_raises():
+    registry = DescriptorRegistry()
+
+    definition = DescriptorDefinition(
+        name="",
+        category="trend",
+    )
+
+    try:
+        registry.register(definition)
+        assert False, "Expected ValueError"
+    except ValueError:
+        pass

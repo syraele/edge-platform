@@ -5,26 +5,33 @@ Descriptor Registry
 """
 
 from edge.domain.descriptor_definition import DescriptorDefinition
+from edge.domain.services.descriptor_validator import DescriptorValidator
 
 
 class DescriptorRegistry:
     """
     Registry of available market descriptors.
 
-    Stores the descriptor definitions known by the system.
+    Stores validated descriptor definitions known by the system.
     """
 
     def __init__(self) -> None:
         self._definitions: dict[str, DescriptorDefinition] = {}
+        self._validator = DescriptorValidator()
 
     def register(self, definition: DescriptorDefinition) -> None:
         """
-        Register a new descriptor definition.
+        Register a validated descriptor definition.
 
         Raises:
-            ValueError: if a descriptor with the same name
-                        is already registered.
+            ValueError:
+                If the descriptor is invalid or already registered.
         """
+        result = self._validator.validate(definition)
+
+        if result.has_errors:
+            raise ValueError("; ".join(result.errors))
+
         if definition.name in self._definitions:
             raise ValueError(
                 f"Descriptor '{definition.name}' is already registered."
@@ -43,7 +50,8 @@ class DescriptorRegistry:
         Retrieve a registered descriptor.
 
         Raises:
-            KeyError: if the descriptor does not exist.
+            KeyError:
+                If the descriptor does not exist.
         """
         return self._definitions[name]
 
