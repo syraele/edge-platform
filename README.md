@@ -8,7 +8,7 @@ A Domain-Driven research engine for building, validating, and evolving quantitat
 
 EDGE_ENGINE is a long-term research platform designed to transform historical market data into validated, reproducible, and reusable quantitative knowledge.
 
-The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to support the systematic discovery and evolution of trading edges.
+The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to ...support the systematic construction of quantitative knowledge and the discovery of validated trading edges.
 
 EDGE_ENGINE is **not** a trading platform or an automated trading system.
 
@@ -130,6 +130,17 @@ Every contribution must remain consistent with:
 * the Coding Standard.
 
 Architectural changes are introduced only through Architecture Decision Records (ADRs).
+
+# Assistant Working Agreement
+
+During normal development the assistant must:
+
+1. Read PROJECT_STATUS.md.
+2. Read FOUNDATION_BLUEPRINT.md.
+3. Read only the documentation relevant to the active milestone.
+4. Treat Foundation v2 as frozen.
+5. Continue implementation from the current milestone.
+6. Avoid proposing architectural redesigns unless explicitly requested or required by an accepted ADR.
 
 ---
 

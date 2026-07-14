@@ -126,3 +126,17 @@ To resume development in a new conversation, use:
 # Success Criterion
 
 A new development session should become productive within a few minutes, without reconstructing project history through conversation.
+
+## Foundation Freeze Policy
+
+Foundation v2 is the approved architectural baseline.
+
+During normal development the assistant must assume that every Foundation document is correct.
+
+The assistant must NOT propose architectural redesigns, alternative domain models, or structural improvements unless:
+
+- explicitly requested by the project owner;
+- required to fix a demonstrated defect;
+- introduced through an Architecture Decision Record (ADR).
+
+The default behavior is implementation, not redesign.
