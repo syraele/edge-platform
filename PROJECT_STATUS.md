@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.1
+Version: 2.2
 
 Status: Active
 
-Last Updated: RF-002
+Last Updated: EF-001
 
 ---
 
@@ -12,7 +12,7 @@ Last Updated: RF-002
 
 Current Phase
 
-**Research Framework**
+**Edge Framework**
 
 Project State
 
@@ -34,7 +34,7 @@ Foundation Blueprint
 
 # Current Milestone
 
-**RF-003 — Evidence**
+**EF-002 — Edge Validation**
 
 Status
 
@@ -42,7 +42,7 @@ Ready to Start
 
 Objective
 
-Implement the Evidence model according to the approved Domain Model.
+Implement the baseline validation process that determines whether validated Knowledge can originate an Edge.
 
 ---
 
@@ -96,15 +96,11 @@ Completed
 
 Market Description baseline.
 
----
-
 ### MDF-002
 
 Completed
 
 Descriptor Registry.
-
----
 
 ### MDF-003
 
@@ -122,13 +118,55 @@ Completed
 
 ResearchHypothesis Aggregate.
 
----
-
 ### RF-002
 
 Completed
 
 Experiment Aggregate.
+
+### RF-003
+
+Completed
+
+Evidence Value Object.
+
+### RF-004
+
+Completed
+
+ResearchEvaluator Domain Service.
+
+---
+
+## Phase 4 — Knowledge Framework
+
+### KF-001
+
+Completed
+
+Knowledge Value Object.
+
+### KF-002
+
+Completed
+
+Knowledge validation process.
+
+### KF-003
+
+Completed
+
+KnowledgeCollection Value Object.
+
+---
+
+## Phase 5 — Edge Framework
+
+### EF-001
+
+Completed
+
+Edge Aggregate Root.
 
 ---
 
@@ -136,11 +174,11 @@ Experiment Aggregate.
 
 Priority 1
 
-Implement RF-003.
+Implement EF-002.
 
 Priority 2
 
-Maintain architectural consistency.
+Preserve Foundation consistency.
 
 Priority 3
 
@@ -148,21 +186,43 @@ Keep the regression suite green.
 
 ---
 
+# Project Metrics
+
+Current test status
+
+**34 tests passing**
+
+Architecture status
+
+**Stable**
+
+Foundation status
+
+**Fully implemented**
+
+---
+
 # Development Workflow
 
 Every milestone follows:
 
-```text
 Design
-        ↓
+
+↓
+
 Implementation
-        ↓
+
+↓
+
 Testing
-        ↓
+
+↓
+
 Review
-        ↓
+
+↓
+
 Commit
-```
 
 PROJECT_STATUS.md is updated when changing conversation and represents the official project checkpoint.
 
@@ -184,7 +244,7 @@ Architectural changes require:
 
 # Next Action
 
-Start RF-003 by implementing the Evidence model.
+Read PROJECT_BOOTSTRAP.md and continue from **EF-002 — Edge Validation**.
 
 ---
 
@@ -204,7 +264,7 @@ When starting a new conversation:
 
 Current objective:
 
-Implement RF-003.
+Implement EF-002.
 
 Foundation v2 is frozen.
 
