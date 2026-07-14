@@ -4,25 +4,29 @@ EDGE_ENGINE
 Research Evaluator
 """
 
-from edge.domain import Evidence
+from edge.domain import Evidence, Knowledge
 
 
 class ResearchEvaluator:
     """
     Domain Service responsible for evaluating research evidence.
 
-    This baseline implementation only determines whether
-    objective measurements are available.
-
-    Future milestones will extend this service with the
-    business rules required to produce validated Knowledge.
+    This baseline implementation transforms objective
+    Evidence into validated Knowledge.
     """
 
-    def evaluate(self, evidence: Evidence) -> bool:
+    def evaluate(self, evidence: Evidence) -> Knowledge | None:
         """
-        Evaluate evidence.
+        Evaluate Evidence and produce Knowledge.
 
-        Returns True when objective measurements are present.
+        Returns:
+            Knowledge if objective measurements are present;
+            otherwise None.
         """
 
-        return bool(evidence.measurements)
+        if not evidence.measurements:
+            return None
+
+        return Knowledge(
+            statement="Evidence successfully validated."
+        )

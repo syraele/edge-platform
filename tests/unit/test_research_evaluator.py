@@ -1,8 +1,8 @@
-from edge.domain import Evidence
+from edge.domain import Evidence, Knowledge
 from edge.domain.services import ResearchEvaluator
 
 
-def test_evaluator_returns_true_when_measurements_exist() -> None:
+def test_evaluator_produces_knowledge_when_measurements_exist() -> None:
     evaluator = ResearchEvaluator()
 
     evidence = Evidence(
@@ -11,14 +11,19 @@ def test_evaluator_returns_true_when_measurements_exist() -> None:
         }
     )
 
-    assert evaluator.evaluate(evidence) is True
+    knowledge = evaluator.evaluate(evidence)
+
+    assert isinstance(knowledge, Knowledge)
+    assert knowledge.statement == "Evidence successfully validated."
 
 
-def test_evaluator_returns_false_when_measurements_are_empty() -> None:
+def test_evaluator_returns_none_when_measurements_are_empty() -> None:
     evaluator = ResearchEvaluator()
 
     evidence = Evidence(
         measurements={}
     )
 
-    assert evaluator.evaluate(evidence) is False
+    knowledge = evaluator.evaluate(evidence)
+
+    assert knowledge is None
