@@ -6,6 +6,7 @@ Research Pipeline
 
 from __future__ import annotations
 
+from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import ResearchSession
 from edge.domain.services.research_evaluator import ResearchEvaluator
@@ -49,7 +50,7 @@ class ResearchPipeline:
                     session.knowledge = knowledge
 
             session.complete()
-            return session
+            return PipelineReport.from_session(session)
 
         except Exception as exc:
             session.fail(str(exc))

@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.4
+Version: 2.6
 
 Status: Active
 
-Last Updated: RP-002 + Documentation Synchronization
+Last Updated: Workflow v1.1 / RP-004 Completed
 
 ---
 
@@ -34,15 +34,49 @@ Last Updated: RP-002 + Documentation Synchronization
 
 # Current Milestone
 
-## RP-003 — Research Pipeline
+## RP-004 — Pipeline Report
 
 ### Status
 
-**Ready to Start**
+**Completed**
 
 ### Objective
 
-Implement the Research Pipeline responsible for orchestrating the complete research workflow using the existing Domain and Application components without introducing business logic.
+Implement RP-004 Pipeline Report and verify regression.
+
+### Result
+
+* Pipeline Report implemented.
+* ResearchPipeline returns immutable PipelineReport.
+* Integration test updated.
+* Full regression completed successfully.
+
+### Regression
+
+**46 / 46 tests passing**
+
+---
+
+# Last Completed Milestone
+
+## RP-004 — Pipeline Report
+
+**Completed**
+
+### Result
+
+* Pipeline Report implemented.
+* ResearchPipeline returns immutable PipelineReport.
+* Integration test updated.
+* Full regression completed successfully.
+
+### Commit
+
+`feat(research): complete RP-004 Pipeline Report`
+
+### Regression
+
+**46 / 46 tests passing**
 
 ---
 
@@ -186,25 +220,11 @@ Edge Management.
 
 Application Layer architecture.
 
-**Result**
-
-* Application Layer architecture defined.
-* Domain/Application responsibilities established.
-* Research package structure implemented.
-* Foundation principles preserved.
-
 ### RP-001
 
 **Completed**
 
 Research Session.
-
-**Result**
-
-* ResearchSession introduced.
-* Session lifecycle implemented.
-* SessionStatus introduced.
-* Application Layer extended without impacting the Domain.
 
 ### RP-002
 
@@ -212,12 +232,17 @@ Research Session.
 
 Experiment Runner.
 
-**Result**
+### RP-003
 
-* ExperimentRunner implemented.
-* ExperimentExecutor introduced as Domain Service.
-* Application and Domain responsibilities clarified.
-* Full regression completed successfully.
+**Completed**
+
+Research Pipeline.
+
+### RP-004
+
+**Completed**
+
+Pipeline Report.
 
 ---
 
@@ -229,25 +254,25 @@ Experiment Runner.
 
 Latest updates:
 
-* PROJECT_BOOTSTRAP.md updated to v2.2
-* 06_TESTING.md updated to v2.1
-* Bootstrap workflow aligned with Repository First development
-* Regression workflow documented
+* DEVELOPMENT_WORKFLOW.md updated to v1.1
+* Repository First workflow reinforced.
+* Milestone Specification introduced.
+* Specification Approval added to the development process.
 
 ## Testing
 
 Current regression status:
 
-**45 tests passing**
+**46 tests passing**
 
 ---
 
 # Current Priorities
 
-1. Implement RP-003 — Research Pipeline.
-2. Continue building the Application Layer.
-3. Preserve Foundation consistency.
-4. Keep the complete regression suite green.
+1. Prepare RP-005 Specification.
+2. Review and approve RP-005 Specification.
+3. Synchronize RP-004 documentation.
+4. Preserve Foundation consistency.
 
 ---
 
@@ -255,7 +280,7 @@ Current regression status:
 
 ## Test Suite
 
-**45 / 45 passing**
+**46 / 46 passing**
 
 ## Architecture
 
@@ -267,7 +292,11 @@ Frozen
 
 ## Application Layer
 
-Research Session and Experiment Runner implemented.
+Research Pipeline completed.
+
+RP-004 Pipeline Report completed.
+
+Next milestone: RP-005 Specification.
 
 ## Documentation
 
@@ -280,13 +309,21 @@ Synchronized with repository.
 Every milestone follows:
 
 ```text
-Design
+Repository Review
         ↓
-Implementation
+Technical Review
         ↓
-Testing
+Implementation Plan
         ↓
-Review
+Milestone Specification Review & Approval
+        ↓
+Functional Block Implementation
+        ↓
+Regression Testing
+        ↓
+Documentation Synchronization
+        ↓
+Next Milestone Preparation
         ↓
 Commit
 ```
@@ -314,9 +351,12 @@ Architectural changes require:
 # Development Principles
 
 * The repository is the single source of truth.
+* Documentation drives implementation.
+* Every milestone requires an approved Milestone Specification.
 * The roadmap is the authoritative implementation guide.
 * Implement one milestone at a time.
 * Complete each milestone before starting the next.
+* Prepare the next milestone before closing the current one.
 * Follow the Repository First workflow.
 * Study existing technologies for ideas and algorithms while keeping the EDGE_ENGINE Core independent.
 * Do not introduce external framework dependencies into the Core.
@@ -325,7 +365,11 @@ Architectural changes require:
 
 # Next Action
 
-Read PROJECT_BOOTSTRAP.md and continue with **RP-003 — Research Pipeline**.
+Prepare the RP-005 Milestone Specification.
+
+Review the repository area affected by RP-005.
+
+Continue development following the documented workflow.
 
 ---
 
@@ -335,10 +379,14 @@ When starting a new conversation:
 
 1. Read PROJECT_STATUS.md.
 2. Read PROJECT_BOOTSTRAP.md.
-3. Read FOUNDATION_BLUEPRINT.md.
-4. Read 03_ROADMAP.md.
-5. Read the documentation of the active milestone.
-6. Continue following the documented workflow.
+3. Read DEVELOPMENT_WORKFLOW.md.
+4. Read FOUNDATION_BLUEPRINT.md.
+5. Read 03_ROADMAP.md.
+6. Read the active Milestone Specification.
+7. Review the affected repository area.
+8. Produce an Implementation Plan.
+9. Obtain approval.
+10. Continue following the documented workflow.
 
 ---
 
@@ -346,12 +394,14 @@ When starting a new conversation:
 
 Current objective:
 
-**Implement RP-003 — Research Pipeline.**
+Prepare the RP-005 Milestone Specification.
+
+Continue development following the documented workflow.
 
 Foundation v2 is frozen.
 
 The roadmap is authoritative.
 
-Do not propose architectural redesigns unless a documented defect exists.
-
 The repository is the single source of truth.
+
+Implementation is not allowed without an approved Milestone Specification.

@@ -1,6 +1,6 @@
 # EDGE_ENGINE Project Bootstrap
 
-Version: 2.2
+Version: 2.3
 
 Status: Foundation v2
 
@@ -215,13 +215,17 @@ Do not anticipate future functionality.
 Every functional milestone follows the same lifecycle.
 
 ```text
-Design
+Repository Review
         ↓
-Implementation
+Technical Review
         ↓
-Testing
+Implementation Plan
         ↓
-Review
+Functional Block Implementation
+        ↓
+Regression
+        ↓
+Documentation Synchronization
         ↓
 Commit
 ```
@@ -231,7 +235,31 @@ No implementation starts before design approval.
 No milestone is complete until all tests pass.
 
 ---
+# Milestone Development Strategy
 
+Functional milestones are developed as coherent implementation blocks rather than individual files.
+
+Each milestone follows this workflow:
+
+1. Read the milestone documentation.
+2. Perform a technical repository review.
+3. Produce a complete implementation plan.
+4. Implement the entire functional block.
+5. Execute the full regression suite.
+6. Review the completed milestone.
+7. Commit the completed work.
+
+The implementation plan should identify:
+
+- files to modify;
+- files to create;
+- responsibilities of each component;
+- tests to implement or update;
+- interactions with existing components.
+
+Implementation begins only after the implementation plan has been completed.
+
+This approach reduces context switching, keeps related changes coherent, and improves overall development efficiency while preserving the Repository First philosophy.
 # Technical Milestones
 
 Technical milestones improve the repository without changing production behaviour.

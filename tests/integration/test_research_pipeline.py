@@ -7,6 +7,7 @@ Research Pipeline Integration Test
 from datetime import datetime
 
 from edge.application.research.pipeline import ResearchPipeline
+from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import (
     ResearchSession,
@@ -89,7 +90,14 @@ def test_research_pipeline_executes_complete_session() -> None:
 
     result = pipeline.execute(session)
 
-    assert result is session
+    assert isinstance(result, PipelineReport)
+    assert result.session_id == session.session_id
     assert result.status is SessionStatus.COMPLETED
     assert len(result.evidences) == 1
     assert result.knowledge is None
+    assert result.started_at is not None
+    assert result.completed_at is not None
+    assert result.hypotheses == tuple(session.hypotheses)
+    assert result.experiments == tuple(session.experiments)
+    assert result.edges == tuple(session.edges)
+    assert result.message is None
