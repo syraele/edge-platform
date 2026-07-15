@@ -1,214 +1,334 @@
 # EDGE_ENGINE Roadmap
 
-Version: 2.0
+## Vision
 
-Status: Foundation v2
+EDGE_ENGINE transforms market observations into quantitative knowledge through a structured, reproducible research workflow.
 
----
-
-# Purpose
-
-This document defines the planned evolution of EDGE_ENGINE.
-
-It describes the major milestones of the project and their objectives.
-
-The Roadmap defines *what* will be built and *when*.
-
-It does not define architecture, domain concepts, or implementation details.
+The roadmap follows a layered architecture where each phase builds upon the previous one without violating the Foundation principles.
 
 ---
 
-# Current Status
+# Phase 1 — Foundation
 
-Current Phase
+## Goal
 
-**Foundation v2**
+Build the architectural foundations of the platform.
 
-Current Status
+### Foundation v1
 
-**Architecture Frozen**
+* Initial architecture
+* Project structure
+* Core services
 
-Current Objective
+### Foundation v2
 
-**Begin implementation of the Market Description Framework (MDF-001).**
+* Architecture redesign
+* Documentation consolidation
+* Frozen Domain architecture
+* Frozen Foundation Blueprint
 
----
+**Outcome**
 
-# Development Principles
-
-Project evolution follows these principles:
-
-* Foundation before implementation.
-* Design before code.
-* Tests before integration.
-* Incremental evolution.
-* Architecture preserved through ADRs.
+A stable architectural baseline for all future development.
 
 ---
 
-# Development Lifecycle
+# Phase 2 — Market Description Framework
 
-Every milestone follows the same workflow.
+## Goal
 
-```text
-Milestone
-        ↓
-Design
-        ↓
-Implementation
-        ↓
-Testing
-        ↓
-Review
-        ↓
-Commit
-        ↓
-Next Milestone
-```
+Transform raw historical market data into structured market descriptions.
 
-No milestone is considered complete until every step has been successfully completed.
+Pipeline
 
----
+Historical Dataset
 
-# Roadmap
+↓
 
-## Phase 1 — Foundation
+Market Description
 
-Objective
+Milestones
 
-Establish a stable architectural and domain foundation.
+### MDF-001
 
-Deliverables
+Market Description Aggregate
 
-* Foundation Blueprint
-* Manifesto
-* Architecture
-* Research Model
-* Domain Model
-* Development Standards
+### MDF-002
 
-Status
+Descriptor Registry
 
-Completed
+### MDF-003
+
+Descriptor Validation
+
+**Outcome**
+
+Market behaviour can be described through reusable descriptors.
 
 ---
 
-## Phase 2 — Market Description Framework (MDF)
+# Phase 3 — Research Framework
 
-Objective
+## Goal
 
-Build the framework responsible for transforming historical market data into structured market descriptions.
+Model quantitative research as first-class domain concepts.
 
-Expected Deliverables
+Pipeline
 
-* MarketDescription Aggregate
-* Descriptor infrastructure
-* Descriptor registry
-* Descriptor validation
-* Descriptor tests
+Market Description
 
-Status
+↓
 
-Next Milestone
+Research Hypothesis
 
----
+↓
 
-## Phase 3 — Research Framework
+Experiment
 
-Objective
+↓
 
-Introduce hypothesis management and experiment execution.
+Evidence
 
-Expected Deliverables
+↓
 
-* ResearchHypothesis
-* Experiment
-* Evidence
-* ResearchEvaluator
+Research Evaluation
 
-Status
+Milestones
 
-Planned
+### RF-001
 
----
+ResearchHypothesis Aggregate
 
-## Phase 4 — Knowledge Framework
+### RF-002
 
-Objective
+Experiment Aggregate
 
-Introduce persistent validated knowledge.
+### RF-003
 
-Expected Deliverables
+Evidence Value Object
 
-* Knowledge model
-* Knowledge validation
-* Knowledge persistence
-* Knowledge querying
+### RF-004
 
-Status
+ResearchEvaluator Domain Service
 
-Planned
+**Outcome**
+
+Research becomes a reproducible domain process.
 
 ---
 
-## Phase 5 — Edge Framework
+# Phase 4 — Knowledge Framework
 
-Objective
+## Goal
 
-Transform validated knowledge into operational trading edges.
+Convert validated research into reusable knowledge.
 
-Expected Deliverables
+Pipeline
 
-* Edge Aggregate
-* Edge lifecycle
-* Edge validation
-* Edge management
+Research Results
 
-Status
+↓
 
-Planned
+Knowledge
 
----
+Milestones
 
-## Phase 6 — Platform Evolution
+### KF-001
 
-Objective
+Knowledge Value Object
 
-Expand the platform without changing the Core Domain.
+### KF-002
 
-Possible areas include:
+Knowledge Validation
 
-* AI-assisted research
-* Advanced experimentation
-* New descriptor families
-* Additional data sources
-* Visualization
-* Plugin ecosystem
+### KF-003
 
-Status
+Knowledge Collection
 
-Future
+**Outcome**
+
+Research results become validated domain knowledge.
 
 ---
 
-# Success Criteria
+# Phase 5 — Edge Framework
 
-The roadmap is complete when EDGE_ENGINE is capable of:
+## Goal
 
-* describing markets;
-* validating research hypotheses;
-* accumulating reusable quantitative knowledge;
-* managing validated trading edges;
-* evolving through extension rather than architectural redesign.
+Convert validated knowledge into reusable market edges.
+
+Pipeline
+
+Knowledge
+
+↓
+
+Edge
+
+Milestones
+
+### EF-001
+
+Edge Aggregate
+
+### EF-002
+
+Edge Validation
+
+### EF-003
+
+Edge Lifecycle
+
+### EF-004
+
+Edge Management
+
+**Outcome**
+
+Validated knowledge can originate quantitative trading edges.
 
 ---
 
-# Governance
+# Phase 6 — Application Layer & Research Pipeline
 
-The Roadmap is a planning document.
+## Goal
 
-Architectural changes are defined by the Architecture and Domain Model.
+Execute an end-to-end quantitative research workflow using the Domain.
 
-Implementation details belong to individual milestone specifications.
+The Application Layer orchestrates the Domain while preserving Domain independence.
 
-Progress is tracked through PROJECT_STATUS.md.
+Pipeline
+
+Historical Dataset
+
+↓
+
+MarketDescriptionBuilder
+
+↓
+
+ResearchHypothesis
+
+↓
+
+Experiment Runner
+
+↓
+
+ResearchEvaluator
+
+↓
+
+KnowledgeCollection
+
+↓
+
+Edge
+
+Milestones
+
+### RP-000
+
+Application Layer Architecture
+
+Define responsibilities, boundaries and interaction rules between Application Layer and Domain.
+
+### RP-001
+
+Research Session
+
+Represent a complete research execution.
+
+### RP-002
+
+Experiment Runner
+
+Coordinate experiment execution.
+
+### RP-003
+
+Research Pipeline
+
+Implement the complete orchestration workflow.
+
+### RP-004
+
+Pipeline Report
+
+Generate execution reports and collected results.
+
+**Outcome**
+
+EDGE_ENGINE executes a complete quantitative research workflow from historical data to validated Edge generation.
+
+---
+
+# Phase 7 — Platform Evolution
+
+## Goal
+
+Extend the platform with advanced capabilities.
+
+Possible milestones
+
+### PE-001
+
+Plugin System
+
+### PE-002
+
+Advanced Dataset Providers
+
+### PE-003
+
+Portfolio Research
+
+### PE-004
+
+Optimization Engine
+
+### PE-005
+
+Machine Learning Integration
+
+### PE-006
+
+Visualization & Dashboards
+
+### PE-007
+
+Distributed Research Execution
+
+**Outcome**
+
+EDGE_ENGINE evolves into a complete quantitative research platform.
+
+---
+
+# Long-Term Vision
+
+Historical Data
+
+↓
+
+Market Description
+
+↓
+
+Research
+
+↓
+
+Knowledge
+
+↓
+
+Edge
+
+↓
+
+Research Pipeline
+
+↓
+
+Quantitative Trading Platform
