@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.2
+Version: 2.3
 
 Status: Active
 
-Last Updated: EF-001
+Last Updated: RP-000
 
 ---
 
@@ -12,7 +12,7 @@ Last Updated: EF-001
 
 Current Phase
 
-**Edge Framework**
+**Application Layer & Research Pipeline**
 
 Project State
 
@@ -34,15 +34,15 @@ Foundation Blueprint
 
 # Current Milestone
 
-**EF-002 — Edge Validation**
+**RP-001 — Research Session**
 
 Status
 
-Ready to Start
+**Ready to Start**
 
 Objective
 
-Implement the baseline validation process that determines whether validated Knowledge can originate an Edge.
+Implement the Research Session that coordinates a complete quantitative research execution without introducing business logic.
 
 ---
 
@@ -74,17 +74,17 @@ Complete architectural redesign and documentation consolidation.
 
 Approved documents:
 
-- FOUNDATION_BLUEPRINT.md
-- 00_MANIFESTO.md
-- 01_ARCHITECTURE.md
-- 02_RESEARCH_MODEL.md
-- 03_ROADMAP.md
-- 04_DOMAIN_MODEL.md
-- 05_CODING_STANDARD.md
-- 06_TESTING.md
-- 07_GIT_WORKFLOW.md
-- 08_DECISIONS.md
-- 09_GLOSSARY.md
+* FOUNDATION_BLUEPRINT.md
+* 00_MANIFESTO.md
+* 01_ARCHITECTURE.md
+* 02_RESEARCH_MODEL.md
+* 03_ROADMAP.md
+* 04_DOMAIN_MODEL.md
+* 05_CODING_STANDARD.md
+* 06_TESTING.md
+* 07_GIT_WORKFLOW.md
+* 08_DECISIONS.md
+* 09_GLOSSARY.md
 
 ---
 
@@ -150,7 +150,7 @@ Knowledge Value Object.
 
 Completed
 
-Knowledge validation process.
+Knowledge Validation.
 
 ### KF-003
 
@@ -166,7 +166,42 @@ KnowledgeCollection Value Object.
 
 Completed
 
-Edge Aggregate Root.
+Edge Aggregate.
+
+### EF-002
+
+Completed
+
+Edge Validation.
+
+### EF-003
+
+Pending
+
+Edge Lifecycle.
+
+### EF-004
+
+Pending
+
+Edge Management.
+
+---
+
+## Phase 6 — Application Layer & Research Pipeline
+
+### RP-000
+
+Completed
+
+Application Layer Architecture.
+
+Result
+
+* Application Layer architecture defined.
+* Responsibilities separated from the Domain.
+* Research package structure implemented.
+* Foundation principles preserved.
 
 ---
 
@@ -174,13 +209,17 @@ Edge Aggregate Root.
 
 Priority 1
 
-Implement EF-002.
+Implement RP-001 — Research Session.
 
 Priority 2
 
-Preserve Foundation consistency.
+Continue building the Application Layer.
 
 Priority 3
+
+Preserve Foundation consistency.
+
+Priority 4
 
 Keep the regression suite green.
 
@@ -190,7 +229,7 @@ Keep the regression suite green.
 
 Current test status
 
-**34 tests passing**
+**39 tests passing**
 
 Architecture status
 
@@ -198,7 +237,11 @@ Architecture status
 
 Foundation status
 
-**Fully implemented**
+**Frozen**
+
+Application Layer
+
+**Bootstrapped**
 
 ---
 
@@ -224,7 +267,7 @@ Review
 
 Commit
 
-PROJECT_STATUS.md is updated when changing conversation and represents the official project checkpoint.
+PROJECT_STATUS.md represents the official project checkpoint between conversations.
 
 ---
 
@@ -232,19 +275,32 @@ PROJECT_STATUS.md is updated when changing conversation and represents the offic
 
 Foundation v2 is the authoritative baseline.
 
-Do not redesign the Foundation during normal development.
+The Domain Model is frozen.
+
+The Application Layer orchestrates the Domain without modifying it.
 
 Architectural changes require:
 
-- demonstrated defect;
-- business change;
-- approved ADR.
+* demonstrated defect;
+* business change;
+* approved ADR.
+
+---
+
+# Development Principles
+
+* The roadmap is the authoritative implementation guide.
+* Implement one milestone at a time.
+* Complete each milestone before starting the next.
+* Study existing technologies for ideas, algorithms and architectural patterns, but keep the EDGE_ENGINE Core independent.
+* Do not introduce external framework dependencies into the Core.
+* The repository is the single source of truth.
 
 ---
 
 # Next Action
 
-Read PROJECT_BOOTSTRAP.md and continue from **EF-002 — Edge Validation**.
+Read PROJECT_BOOTSTRAP.md and continue from **RP-001 — Research Session**.
 
 ---
 
@@ -255,8 +311,26 @@ When starting a new conversation:
 1. Read PROJECT_STATUS.md.
 2. Read PROJECT_BOOTSTRAP.md.
 3. Read FOUNDATION_BLUEPRINT.md.
-4. Read only the documentation relevant to the active milestone.
-5. Continue implementation following the documented workflow.
+4. Read only the documentation related to the active milestone.
+5. Continue following the documented workflow:
+
+Design
+
+↓
+
+Implementation
+
+↓
+
+Testing
+
+↓
+
+Review
+
+↓
+
+Commit
 
 ---
 
@@ -264,8 +338,12 @@ When starting a new conversation:
 
 Current objective:
 
-Implement EF-002.
+**Implement RP-001 — Research Session.**
 
 Foundation v2 is frozen.
 
-Implementation takes precedence over architectural discussion unless explicitly requested.
+The roadmap is authoritative.
+
+Do not propose architectural redesigns unless a documented defect exists.
+
+The repository is the single source of truth.
