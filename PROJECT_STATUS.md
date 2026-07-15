@@ -1,48 +1,48 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.3
+Version: 2.4
 
 Status: Active
 
-Last Updated: RP-000
+Last Updated: RP-002 + Documentation Synchronization
 
 ---
 
 # Project Overview
 
-Current Phase
+## Current Phase
 
 **Application Layer & Research Pipeline**
 
-Project State
+## Project State
 
 **Stable**
 
-Architecture
+## Architecture
+
+**Foundation v2 — Frozen**
+
+## Domain Model
 
 **Frozen**
 
-Domain Model
+## Repository
 
-**Frozen**
-
-Foundation Blueprint
-
-**Frozen**
+**Synchronized**
 
 ---
 
 # Current Milestone
 
-**RP-001 — Research Session**
+## RP-003 — Research Pipeline
 
-Status
+### Status
 
 **Ready to Start**
 
-Objective
+### Objective
 
-Implement the Research Session that coordinates a complete quantitative research execution without introducing business logic.
+Implement the Research Pipeline responsible for orchestrating the complete research workflow using the existing Domain and Application components without introducing business logic.
 
 ---
 
@@ -52,23 +52,13 @@ Implement the Research Session that coordinates a complete quantitative research
 
 ### Foundation v1
 
-Status
-
-Completed
-
-Result
+**Completed**
 
 Initial project architecture established.
 
----
-
 ### Foundation v2
 
-Status
-
-Completed
-
-Result
+**Completed**
 
 Complete architectural redesign and documentation consolidation.
 
@@ -92,19 +82,19 @@ Approved documents:
 
 ### MDF-001
 
-Completed
+**Completed**
 
 Market Description baseline.
 
 ### MDF-002
 
-Completed
+**Completed**
 
 Descriptor Registry.
 
 ### MDF-003
 
-Completed
+**Completed**
 
 Descriptor Validation.
 
@@ -114,25 +104,25 @@ Descriptor Validation.
 
 ### RF-001
 
-Completed
+**Completed**
 
 ResearchHypothesis Aggregate.
 
 ### RF-002
 
-Completed
+**Completed**
 
 Experiment Aggregate.
 
 ### RF-003
 
-Completed
+**Completed**
 
 Evidence Value Object.
 
 ### RF-004
 
-Completed
+**Completed**
 
 ResearchEvaluator Domain Service.
 
@@ -142,19 +132,19 @@ ResearchEvaluator Domain Service.
 
 ### KF-001
 
-Completed
+**Completed**
 
 Knowledge Value Object.
 
 ### KF-002
 
-Completed
+**Completed**
 
 Knowledge Validation.
 
 ### KF-003
 
-Completed
+**Completed**
 
 KnowledgeCollection Value Object.
 
@@ -164,25 +154,25 @@ KnowledgeCollection Value Object.
 
 ### EF-001
 
-Completed
+**Completed**
 
 Edge Aggregate.
 
 ### EF-002
 
-Completed
+**Completed**
 
 Edge Validation.
 
 ### EF-003
 
-Pending
+**Pending**
 
 Edge Lifecycle.
 
 ### EF-004
 
-Pending
+**Pending**
 
 Edge Management.
 
@@ -192,56 +182,96 @@ Edge Management.
 
 ### RP-000
 
-Completed
+**Completed**
 
-Application Layer Architecture.
+Application Layer architecture.
 
-Result
+**Result**
 
 * Application Layer architecture defined.
-* Responsibilities separated from the Domain.
+* Domain/Application responsibilities established.
 * Research package structure implemented.
 * Foundation principles preserved.
+
+### RP-001
+
+**Completed**
+
+Research Session.
+
+**Result**
+
+* ResearchSession introduced.
+* Session lifecycle implemented.
+* SessionStatus introduced.
+* Application Layer extended without impacting the Domain.
+
+### RP-002
+
+**Completed**
+
+Experiment Runner.
+
+**Result**
+
+* ExperimentRunner implemented.
+* ExperimentExecutor introduced as Domain Service.
+* Application and Domain responsibilities clarified.
+* Full regression completed successfully.
+
+---
+
+# Repository Status
+
+## Documentation
+
+**Synchronized**
+
+Latest updates:
+
+* PROJECT_BOOTSTRAP.md updated to v2.2
+* 06_TESTING.md updated to v2.1
+* Bootstrap workflow aligned with Repository First development
+* Regression workflow documented
+
+## Testing
+
+Current regression status:
+
+**45 tests passing**
 
 ---
 
 # Current Priorities
 
-Priority 1
-
-Implement RP-001 — Research Session.
-
-Priority 2
-
-Continue building the Application Layer.
-
-Priority 3
-
-Preserve Foundation consistency.
-
-Priority 4
-
-Keep the regression suite green.
+1. Implement RP-003 — Research Pipeline.
+2. Continue building the Application Layer.
+3. Preserve Foundation consistency.
+4. Keep the complete regression suite green.
 
 ---
 
 # Project Metrics
 
-Current test status
+## Test Suite
 
-**39 tests passing**
+**45 / 45 passing**
 
-Architecture status
+## Architecture
 
-**Stable**
+Stable
 
-Foundation status
+## Foundation
 
-**Frozen**
+Frozen
 
-Application Layer
+## Application Layer
 
-**Bootstrapped**
+Research Session and Experiment Runner implemented.
+
+## Documentation
+
+Synchronized with repository.
 
 ---
 
@@ -249,23 +279,17 @@ Application Layer
 
 Every milestone follows:
 
+```text
 Design
-
-↓
-
+        ↓
 Implementation
-
-↓
-
+        ↓
 Testing
-
-↓
-
+        ↓
 Review
-
-↓
-
+        ↓
 Commit
+```
 
 PROJECT_STATUS.md represents the official project checkpoint between conversations.
 
@@ -273,7 +297,7 @@ PROJECT_STATUS.md represents the official project checkpoint between conversatio
 
 # Architecture Policy
 
-Foundation v2 is the authoritative baseline.
+Foundation v2 is the authoritative architectural baseline.
 
 The Domain Model is frozen.
 
@@ -281,26 +305,27 @@ The Application Layer orchestrates the Domain without modifying it.
 
 Architectural changes require:
 
-* demonstrated defect;
-* business change;
-* approved ADR.
+* a demonstrated defect;
+* a business requirement;
+* an approved ADR.
 
 ---
 
 # Development Principles
 
+* The repository is the single source of truth.
 * The roadmap is the authoritative implementation guide.
 * Implement one milestone at a time.
 * Complete each milestone before starting the next.
-* Study existing technologies for ideas, algorithms and architectural patterns, but keep the EDGE_ENGINE Core independent.
+* Follow the Repository First workflow.
+* Study existing technologies for ideas and algorithms while keeping the EDGE_ENGINE Core independent.
 * Do not introduce external framework dependencies into the Core.
-* The repository is the single source of truth.
 
 ---
 
 # Next Action
 
-Read PROJECT_BOOTSTRAP.md and continue from **RP-001 — Research Session**.
+Read PROJECT_BOOTSTRAP.md and continue with **RP-003 — Research Pipeline**.
 
 ---
 
@@ -311,34 +336,17 @@ When starting a new conversation:
 1. Read PROJECT_STATUS.md.
 2. Read PROJECT_BOOTSTRAP.md.
 3. Read FOUNDATION_BLUEPRINT.md.
-4. Read only the documentation related to the active milestone.
-5. Continue following the documented workflow:
-
-Design
-
-↓
-
-Implementation
-
-↓
-
-Testing
-
-↓
-
-Review
-
-↓
-
-Commit
+4. Read 03_ROADMAP.md.
+5. Read the documentation of the active milestone.
+6. Continue following the documented workflow.
 
 ---
 
-## Assistant Policy
+# Assistant Policy
 
 Current objective:
 
-**Implement RP-001 — Research Session.**
+**Implement RP-003 — Research Pipeline.**
 
 Foundation v2 is frozen.
 

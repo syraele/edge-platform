@@ -1,6 +1,6 @@
 # EDGE_ENGINE Testing Strategy
 
-Version: 2.0
+Version: 2.1
 
 Status: Foundation v2
 
@@ -106,6 +106,37 @@ Domain tests must not require infrastructure.
 
 ---
 
+# Test Infrastructure
+
+EDGE_ENGINE provides a dedicated Testing Infrastructure to reduce duplicated setup while keeping production code completely independent from testing concerns.
+
+Reusable builders and testing utilities belong exclusively to the test suite.
+
+Production code must never depend on testing infrastructure.
+
+---
+
+# Test Builders
+
+Builders provide valid Domain objects for unit tests.
+
+They exist to:
+
+* reduce duplicated setup;
+* improve readability;
+* standardize object creation.
+
+Builders must:
+
+* use real Domain constructors;
+* produce valid Domain objects;
+* remain deterministic;
+* avoid hidden behavior.
+
+Builders must never bypass Domain validation.
+
+---
+
 # Test Quality
 
 A good test is:
@@ -115,6 +146,19 @@ A good test is:
 * isolated;
 * repeatable;
 * focused on one behavior.
+
+---
+
+# Repository First Testing
+
+Before introducing new test utilities or builders:
+
+1. Inspect the existing test structure.
+2. Inspect existing builders and helpers.
+3. Reuse existing testing utilities whenever possible.
+4. Introduce new builders only when duplication becomes significant.
+
+Testing infrastructure evolves together with the repository.
 
 ---
 
@@ -134,6 +178,20 @@ A feature is considered complete only when:
 * automated tests pass;
 * existing tests remain green;
 * architectural rules are respected.
+
+---
+
+# Regression Testing
+
+Every completed milestone must execute the complete automated test suite.
+
+A milestone is considered stable only when:
+
+* all existing tests pass;
+* new tests pass;
+* no regression is introduced.
+
+Regression testing is mandatory before every commit.
 
 ---
 
