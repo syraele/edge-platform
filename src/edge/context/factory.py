@@ -9,6 +9,7 @@ from __future__ import annotations
 from edge.events.event_bus import EventBus
 from edge.core.logger import Logger
 from edge.core.registry import ServiceRegistry
+from edge.data.providers import DatasetProviderRegistry
 from edge.plugins import PluginManager
 
 from .config_context import ConfigContext
@@ -38,11 +39,14 @@ def create_context(
 
     plugin_manager = PluginManager()
 
+    dataset_provider_registry = DatasetProviderRegistry()
+
     services = Services(
         logger=logger,
         event_bus=event_bus,
         registry=registry,
         plugin_manager=plugin_manager,
+        dataset_provider_registry=dataset_provider_registry,
     )
 
     registry.register(
@@ -63,6 +67,11 @@ def create_context(
     registry.register(
         "plugin_manager",
         plugin_manager,
+    )
+
+    registry.register(
+        "dataset_provider_registry",
+        dataset_provider_registry,
     )
 
     config = ConfigContext(

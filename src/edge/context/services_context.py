@@ -21,6 +21,7 @@ class Services:
         context.services.event_bus
         context.services.registry
         context.services.plugin_manager
+        context.services.dataset_provider_registry
         context.services.cache
         context.services.metrics
     """
@@ -32,6 +33,8 @@ class Services:
     registry: Any = None
 
     plugin_manager: Any = None
+
+    dataset_provider_registry: Any = None
 
     cache: Any = None
 

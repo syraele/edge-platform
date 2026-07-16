@@ -6,6 +6,7 @@ Application Startup
 
 from edge.application.lifecycle.manager import LifecycleManager
 from edge.application.components.config_component import ConfigComponent
+from edge.application.components.dataset_provider_component import DatasetProviderComponent
 from edge.application.components.plugin_component import PluginComponent
 
 from edge.context import create_context
@@ -57,12 +58,21 @@ class EdgeApplication:
             engine_config=self.engine_config.get_config(),
         )
 
+        self.dataset_providers = DatasetProviderComponent(
+            registry=self.context.services.dataset_provider_registry,
+            engine_config=self.engine_config.get_config(),
+        )
+
         self.lifecycle.register(
             self.config
         )
 
         self.lifecycle.register(
             self.engine
+        )
+
+        self.lifecycle.register(
+            self.dataset_providers
         )
 
         self.lifecycle.register(
