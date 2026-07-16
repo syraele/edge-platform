@@ -8,7 +8,7 @@ A Domain-Driven research engine for building, validating, and evolving quantitat
 
 EDGE_ENGINE is a long-term research platform designed to transform historical market data into validated, reproducible, and reusable quantitative knowledge.
 
-The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to ...support the systematic construction of quantitative knowledge and the discovery of validated trading edges.
+The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to support the systematic construction of quantitative knowledge and the discovery of validated trading edges.
 
 EDGE_ENGINE is **not** a trading platform or an automated trading system.
 
@@ -52,7 +52,9 @@ edge-platform/
 │   ├── 06_TESTING.md
 │   ├── 07_GIT_WORKFLOW.md
 │   ├── 08_DECISIONS.md
-│   └── 09_GLOSSARY.md
+│   ├── 09_GLOSSARY.md
+│   ├── 10_PLATFORM_PRINCIPLES.md
+│   └── PLATFORM_EVOLUTION_REVIEW.md
 │
 ├── src/
 ├── tests/
@@ -65,23 +67,30 @@ edge-platform/
 
 The documentation is organized by responsibility.
 
-| Document                | Purpose                              |
-| ----------------------- | ------------------------------------ |
-| AGENTS.md               | Contributor workflow expectations    |
+| Document | Purpose |
+| --- | --- |
+| AGENTS.md | Operational guidance for contributors and assistants |
 | FOUNDATION_BLUEPRINT.md | Conceptual foundation of the project |
-| PROJECT_STATUS.md       | Current project status               |
-| PROJECT_BOOTSTRAP.md    | Development bootstrap procedure      |
-| 00_MANIFESTO.md         | Project philosophy and principles    |
-| 01_ARCHITECTURE.md      | System architecture                  |
-| 02_RESEARCH_MODEL.md    | Research methodology                 |
-| 03_ROADMAP.md           | Project evolution                    |
-| 04_DOMAIN_MODEL.md      | Business domain model                |
-| 05_CODING_STANDARD.md   | Development standards                |
-| 06_TESTING.md           | Testing strategy                     |
-| 07_GIT_WORKFLOW.md      | Development workflow                 |
-| 08_DECISIONS.md         | Architecture decision process        |
-| 09_GLOSSARY.md          | Ubiquitous language                  |
-
+| PROJECT_STATUS.md | Current project status and milestone state |
+| PROJECT_BOOTSTRAP.md | Development bootstrap procedure |
+| 00_MANIFESTO.md | Project philosophy and principles |
+| 01_ARCHITECTURE.md | System architecture |
+| 02_RESEARCH_MODEL.md | Research methodology |
+| 03_ROADMAP.md | Project evolution |
+| 04_DOMAIN_MODEL.md | Business domain model |
+| 05_CODING_STANDARD.md | Development standards |
+| 06_TESTING.md | Testing strategy |
+| 07_GIT_WORKFLOW.md | Development workflow |
+| 08_DECISIONS.md | Architecture decision process |
+| 09_GLOSSARY.md | Ubiquitous language |
+| 10_PLATFORM_PRINCIPLES.md | Long-term architectural principles for platform evolution |
+| docs/PLATFORM_EVOLUTION_REVIEW.md | Consolidated review package for Platform Evolution milestones |
+| docs/PE-001_EXECUTION_BRIEF.md | Execution-oriented guide for the next PE-001 implementation step |
+| docs/PE-001_IMPLEMENTATION_PLAN.md | Structured implementation plan for PE-001 |
+| docs/PE-001_DELIVERABLES_CHECKLIST.md | Completion checklist for PE-001 preparation |
+| docs/PE-001_REVIEW_SUMMARY.md | Readiness summary for PE-001 review |
+| docs/PE-001_APPROVAL_NOTE.md | Approval-oriented summary for PE-001 |
+| docs/PLATFORM_EVOLUTION_EXECUTION_PATH.md | Operational execution path for Platform Evolution milestones |
 ---
 
 ## Development Workflow
@@ -91,13 +100,17 @@ EDGE_ENGINE follows an incremental development process.
 ```text
 Milestone
       ↓
-Design
+Repository Review
       ↓
-Implementation
+Technical Review
       ↓
-Testing
+Specification Review & Approval
       ↓
-Review
+Test-First Implementation
+      ↓
+Regression Testing
+      ↓
+Documentation Synchronization
       ↓
 Commit
 ```
@@ -106,9 +119,9 @@ Every milestone preserves the architectural foundation established during Founda
 
 For the latest workflow guidance, see:
 
-* `AGENTS.md`
-* `docs/DEVELOPMENT_SETUP.md`
-* `docs/WF-001_DEVELOPMENT_WORKFLOW.md`
+* AGENTS.md
+* docs/DEVELOPMENT_SETUP.md
+* docs/DEVELOPMENT_WORKFLOW.md
 
 ---
 
@@ -116,13 +129,29 @@ For the latest workflow guidance, see:
 
 Current Phase:
 
-**Application Layer & Research Pipeline**
+**Platform Evolution**
 
 Current Milestone:
 
-**WF-001 – Development Workflow Standardization**
+**PE-001 – Plugin System (Specification)**
 
-For the latest project status, see `PROJECT_STATUS.md`.
+The repository is currently positioned for milestone review and controlled progression toward implementation.
+
+Platform Evolution Milestones:
+
+* PE-001 – Plugin System
+* PE-002 – Advanced Dataset Providers
+* PE-003 – Portfolio Research
+* PE-004 – Optimization Engine
+* PE-005 – Machine Learning Integration
+* PE-006 – Visualization Dashboards
+* PE-007 – Distributed Research Execution
+
+Next step:
+
+**Review and approve the PE-001 specification before implementation begins.**
+
+For the latest project status, see PROJECT_STATUS.md.
 
 ---
 

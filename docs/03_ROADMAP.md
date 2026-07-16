@@ -4,7 +4,7 @@
 
 EDGE_ENGINE transforms market observations into quantitative knowledge through a structured, reproducible research workflow.
 
-The roadmap follows a layered architecture where each phase builds upon the previous one without violating the Foundation principles.
+The roadmap follows a layered architecture where each phase builds upon the previous one without violating the Foundation principles or weakening the long-term research mission.
 
 ---
 
@@ -29,7 +29,7 @@ Build the architectural foundations of the platform.
 
 **Outcome**
 
-A stable architectural baseline for all future development.
+A stable architectural baseline for all future development and evolution.
 
 ---
 
@@ -113,7 +113,7 @@ ResearchEvaluator Domain Service
 
 **Outcome**
 
-Research becomes a reproducible domain process.
+Research becomes a reproducible and traceable domain process.
 
 ---
 
@@ -185,7 +185,7 @@ Edge Management
 
 **Outcome**
 
-Validated knowledge can originate quantitative trading edges.
+Validated knowledge can give rise to quantitative trading edges.
 
 ---
 

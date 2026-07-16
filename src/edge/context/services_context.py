@@ -20,6 +20,7 @@ class Services:
         context.services.logger
         context.services.event_bus
         context.services.registry
+        context.services.plugin_manager
         context.services.cache
         context.services.metrics
     """
@@ -29,6 +30,8 @@ class Services:
     event_bus: Any = None
 
     registry: Any = None
+
+    plugin_manager: Any = None
 
     cache: Any = None
 

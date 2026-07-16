@@ -10,7 +10,7 @@ Status: Active
 
 This document is a practical guide for setting up EDGE_ENGINE on a new Windows PC.
 
-It is written so that a contributor can prepare the environment without needing external help.
+It is written so that a contributor can prepare the environment without needing external assistance.
 
 ---
 
@@ -21,6 +21,8 @@ Install the following tools first:
 * Git
 * Python
 * Visual Studio Code
+
+A working setup is required before proceeding with repository review or implementation.
 
 ---
 
@@ -129,7 +131,7 @@ pytest
 
 Expected result:
 
-* 46 tests passed
+* the test suite completes successfully
 
 ---
 

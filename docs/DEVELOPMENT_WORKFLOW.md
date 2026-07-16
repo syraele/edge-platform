@@ -1,6 +1,6 @@
 # EDGE_ENGINE Development Workflow
 
-Version: 1.1
+Version: 1.2
 
 Status: Active
 
@@ -10,7 +10,7 @@ Status: Active
 
 This document defines the official development workflow adopted by EDGE_ENGINE.
 
-Its objective is to guarantee that every milestone is implemented consistently, reviewed systematically and integrated into the repository without compromising architectural integrity.
+Its objective is to guarantee that every milestone is implemented consistently, reviewed systematically, and integrated into the repository without compromising architectural integrity.
 
 This document complements:
 
@@ -47,6 +47,8 @@ Implementation is allowed only after the active milestone specification has been
 
 If no approved specification exists, the milestone remains in the **Specification** phase.
 
+A milestone is not considered ready for implementation until the repository contains a complete specification with clear responsibilities, boundaries, acceptance criteria, and testing expectations.
+
 ---
 
 ## Functional Block Development
@@ -77,6 +79,8 @@ Technical Review
 Implementation Plan
         ↓
 Milestone Specification Review & Approval
+        ↓
+Test-First Implementation
         ↓
 Functional Block Implementation
         ↓
@@ -133,7 +137,8 @@ The plan identifies:
 * files to create;
 * files to modify;
 * expected tests;
-* repository impact.
+* repository impact;
+* validation strategy.
 
 No implementation starts before the plan has been reviewed.
 
@@ -160,6 +165,24 @@ The specification becomes the authoritative reference for implementation.
 
 Implementation must never introduce responsibilities that are not documented in the approved specification.
 
+If the specification is incomplete, ambiguous, or missing review criteria, the milestone must remain in the Specification phase until the gaps are resolved.
+
+---
+
+# Test-First Implementation
+
+Every implementation must begin with a testable expectation.
+
+Before writing production code:
+
+1. derive the expected behavior from the approved specification;
+2. add or update a targeted regression test;
+3. run the relevant test and confirm that it fails;
+4. implement the minimum change required;
+5. re-run the targeted test and the relevant regression suite.
+
+This workflow ensures that implementation remains grounded in observable behavior rather than assumption.
+
 ---
 
 # Functional Block Implementation
@@ -168,7 +191,7 @@ Implement the complete milestone as one coherent block.
 
 Avoid switching continuously between unrelated files.
 
-The objective is architectural consistency.
+The objective is architectural consistency and maintainability.
 
 ---
 
@@ -176,9 +199,15 @@ The objective is architectural consistency.
 
 Every milestone executes the complete regression suite.
 
-A milestone is complete only when all tests pass.
+A milestone is complete only when all relevant tests pass.
 
 Regression is mandatory before every commit.
+
+The required sequence is:
+
+1. run targeted tests for the changed behavior;
+2. run the relevant regression suite;
+3. if the milestone affects shared infrastructure, run the complete regression suite.
 
 ---
 
@@ -206,7 +235,7 @@ Preparation includes:
 * reviewing and approving the specification;
 * updating PROJECT_STATUS.md accordingly.
 
-The objective is that every new development conversation starts with a milestone already **Ready to Implement**.
+The objective is that every new development conversation starts with a milestone already ready to implement.
 
 ---
 

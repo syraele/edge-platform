@@ -12,6 +12,8 @@ This document defines the bootstrap procedure for starting or resuming work on E
 
 Its purpose is to ensure that every development session begins from the current project state rather than reconstructing context through conversation.
 
+The bootstrap procedure establishes a consistent starting point for each work session.
+
 The repository is the single source of truth.
 
 ---
@@ -100,7 +102,7 @@ Repository First:
 * inspect existing implementations;
 * inspect existing tests.
 
-Implementation starts only after understanding the current repository state.
+Implementation starts only after understanding the current repository state and the active milestone context.
 
 ---
 
@@ -241,7 +243,7 @@ Commit
 
 No implementation starts before design approval.
 
-No milestone is complete until all tests pass.
+No milestone is complete until the relevant tests pass and the repository remains synchronized.
 
 ---
 # Milestone Development Strategy

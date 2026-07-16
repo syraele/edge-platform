@@ -4,7 +4,7 @@ Version: 1.0
 
 Status: Frozen (Foundation v2)
 
-Purpose: High-level architectural blueprint that defines the conceptual foundation of EDGE_ENGINE. Every document and every architectural decision must be consistent with this Blueprint.
+Purpose: High-level architectural blueprint that defines the conceptual foundation of EDGE_ENGINE. Every document and every architectural decision must remain consistent with this Blueprint.
 
 ---
 
@@ -16,7 +16,7 @@ EDGE_ENGINE is a system for building, validating, and evolving quantitative know
 
 # 2. Purpose
 
-EDGE_ENGINE exists to transform quantitative research from a collection of isolated experiments into a systematic process for building reliable, reproducible, and reusable quantitative knowledge.
+EDGE_ENGINE exists to transform quantitative research from a collection of isolated experiments into a systematic process for building reliable, reproducible, and reusable quantitative knowledge over time.
 
 ---
 
@@ -108,3 +108,4 @@ EDGE_ENGINE is successful when it is able to build, validate, preserve, and evol
 * The Blueprint remains frozen during milestone development.
 * The documentation derives from the Blueprint.
 * The implementation derives from the documentation.
+* The Blueprint remains the conceptual reference for all future extensions and evolutions.
