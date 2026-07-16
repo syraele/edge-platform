@@ -100,6 +100,7 @@ def test_research_pipeline_executes_complete_session() -> None:
     assert result.knowledge is None
     assert result.started_at is not None
     assert result.completed_at is not None
+    assert result.dataset_provenance is None
     assert result.hypotheses == tuple(session.hypotheses)
     assert result.experiments == tuple(session.experiments)
     assert result.edges == tuple(session.edges)
@@ -135,3 +136,5 @@ def test_research_pipeline_loads_dataset_from_provider_service() -> None:
     assert session.dataset.metadata.symbol == "XAUUSD"
     assert session.dataset_provenance is not None
     assert session.dataset_provenance.provider_id == "historical-archive"
+    assert result.dataset_provenance is not None
+    assert result.dataset_provenance.provider_id == "historical-archive"

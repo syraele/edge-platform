@@ -25,6 +25,7 @@ class PipelineReport:
     completed_at: datetime | None
 
     dataset: Any | None
+    dataset_provenance: Any | None
     market_description: Any | None
     hypotheses: tuple[Any, ...]
     experiments: tuple[Any, ...]
@@ -35,18 +36,6 @@ class PipelineReport:
 
     report_id: str = field(init=False, default_factory=lambda: str(uuid4()))
     created_at: datetime = field(init=False, default_factory=datetime.utcnow)
-    started_at: datetime | None
-    completed_at: datetime | None
-
-    dataset: Any | None
-    market_description: Any | None
-    hypotheses: tuple[Any, ...]
-    experiments: tuple[Any, ...]
-    evidences: tuple[Any, ...]
-    knowledge: Any | None
-    edges: tuple[Any, ...]
-    message: str | None
-
     @classmethod
     def from_session(cls, session: ResearchSession) -> "PipelineReport":
         return cls(
@@ -55,6 +44,7 @@ class PipelineReport:
             started_at=session.started_at,
             completed_at=session.completed_at,
             dataset=session.dataset,
+            dataset_provenance=session.dataset_provenance,
             market_description=session.market_description,
             hypotheses=tuple(session.hypotheses),
             experiments=tuple(session.experiments),

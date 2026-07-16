@@ -133,13 +133,13 @@ Current Phase:
 
 Current Milestone:
 
-**PE-003 – Portfolio Research (Specification)**
+**PE-004 – Optimization Engine (Specification)**
 
 The repository is currently positioned for milestone review and controlled progression toward implementation.
 
 Last completed milestone:
 
-**PE-002 – Advanced Dataset Providers (Completed)**
+**PE-003 – Portfolio Research (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Refine and approve PE-003 before the next implementation cycle begins.**
+**Refine and approve PE-004 before the next implementation cycle begins.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

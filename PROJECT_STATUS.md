@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-002 completed and Platform Evolution advanced to PE-003 specification**
+**Stable — PE-003 completed and Platform Evolution advanced to PE-004 specification**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to prepare PE-003 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
+The immediate focus is to prepare PE-004 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
 
 #### Review and Execution References
 
@@ -76,7 +76,7 @@ The current baseline is implementation-capable and structured for the next Platf
 
 # Current Milestone
 
-## PE-003 — Portfolio Research
+## PE-004 — Optimization Engine
 
 ### Status
 
@@ -84,23 +84,40 @@ The current baseline is implementation-capable and structured for the next Platf
 
 ### Objective
 
-Define portfolio-oriented research capabilities that remain subordinate to validated research evidence, reproducibility, and architectural discipline.
+Define optimization capabilities that remain subordinate to scientific validation, reproducibility, and architectural discipline.
 
 ### Current Focus
 
-* refine PE-003 specification for implementation readiness;
-* define portfolio research boundaries without weakening the research-first model;
-* preserve traceability between portfolio reasoning and underlying evidence;
+* refine PE-004 specification for implementation readiness;
+* define optimization boundaries without weakening the research-first model;
+* preserve traceability between optimization outputs and underlying evidence;
 * maintain consistency with the broader Platform Evolution roadmap;
-* preserve architectural guardrails established in Foundation v2, PE-001, and PE-002.
+* preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
 
 ### Result
 
-* PE-003 specification package available for next implementation cycle.
+* PE-004 specification package available for next implementation cycle.
 
 ---
 
 # Last Completed Milestone
+
+## PE-003 — Portfolio Research
+
+**Completed**
+
+### Result
+
+* Portfolio research aggregation report implemented.
+* Portfolio research service implemented for grouping multiple research reports.
+* Comparison ordering rules implemented for deterministic portfolio-level evaluation.
+* Traceability preserved through research unit identity and dataset provenance aggregation.
+* Duplicate research unit identity validation implemented.
+* Portfolio-focused unit tests and adjacent integration regressions executed and passing.
+
+---
+
+# Previously Completed Milestone
 
 ## PE-002 — Advanced Dataset Providers
 
