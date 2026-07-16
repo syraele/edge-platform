@@ -133,9 +133,9 @@ Current Phase:
 
 Current Milestone:
 
-**PE-006 – Visualization Dashboards (Specification and Execution Planning)**
+**PE-006 – Visualization Dashboards (Implementation Incremental)**
 
-The repository is currently positioned for controlled progression toward PE-006 implementation.
+The repository is currently progressing through incremental PE-006 implementation slices.
 
 Last completed milestone:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Define and approve PE-006 dashboard integration slices before implementation begins.**
+**Continue PE-006 implementation with architecture-safe dashboard extension slices.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

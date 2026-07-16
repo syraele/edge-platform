@@ -32,6 +32,11 @@ from edge.domain.services import (
 from edge.domain.evidence import Evidence
 from edge.ml import MachineLearningCapability, MachineLearningService
 from edge.optimization import OptimizationProblem, OptimizationService
+from edge.visualization import (
+    VisualizationCapability,
+    VisualizationDataReference,
+    VisualizationService,
+)
 from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
 
 
@@ -160,6 +165,22 @@ class StaticMLExecutor:
         return evidence.measurements[capability.input_metric_names[0]] * 2
 
 
+class StaticVisualizationRenderer:
+    def render(self, capability, payload, traceability):
+        return {
+            "capability": capability.capability_id,
+            "sections": list(capability.required_sections),
+            "traceability": [
+                {
+                    "type": reference.reference_type,
+                    "id": reference.reference_id,
+                }
+                for reference in traceability
+            ],
+            "payload": payload,
+        }
+
+
 def test_research_pipeline_executes_optimization_problem() -> None:
     dataset = HistoricalDataset(
         metadata=DatasetMetadata(
@@ -253,3 +274,40 @@ def test_research_pipeline_executes_ml_analysis() -> None:
     assert report.status == "completed"
     assert report.result.output_value == 3.0
     assert session.ml_report is report
+
+
+def test_research_pipeline_executes_visualization() -> None:
+    session = ResearchSession()
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        visualization_service=VisualizationService(StaticVisualizationRenderer()),
+    )
+
+    report = pipeline.execute_visualization(
+        session,
+        VisualizationCapability(
+            capability_id="viz-pipeline-summary",
+            capability_name="Pipeline Summary",
+            required_sections=("summary", "metrics"),
+            assumptions=("Evidence aggregation remains deterministic.",),
+        ),
+        payload={
+            "summary": {"status": "completed"},
+            "metrics": {"evidence_count": 3},
+        },
+        traceability=(
+            VisualizationDataReference(
+                reference_type="pipeline_report",
+                reference_id="session-123",
+                fingerprint="run-fingerprint-1",
+            ),
+        ),
+    )
+
+    assert report.status == "completed"
+    assert report.rendered_sections == ("summary", "metrics")
+    assert report.traceability_count == 1
+    assert report.result.snapshot["capability"] == "viz-pipeline-summary"
+    assert session.visualization_report is report

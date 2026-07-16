@@ -18,6 +18,12 @@ from edge.ml.service import MachineLearningService
 from edge.optimization.problem import OptimizationProblem
 from edge.optimization.report import OptimizationReport
 from edge.optimization.service import OptimizationService
+from edge.visualization import (
+    VisualizationCapability,
+    VisualizationDataReference,
+    VisualizationReport,
+    VisualizationService,
+)
 
 
 class ResearchPipeline:
@@ -36,12 +42,14 @@ class ResearchPipeline:
         dataset_access_service: Any | None = None,
         optimization_service: OptimizationService | None = None,
         ml_service: MachineLearningService | None = None,
+        visualization_service: VisualizationService | None = None,
     ) -> None:
         self._runner = runner
         self._evaluator = evaluator
         self._dataset_access_service = dataset_access_service
         self._optimization_service = optimization_service
         self._ml_service = ml_service
+        self._visualization_service = visualization_service
 
     def execute(
         self,
@@ -105,4 +113,22 @@ class ResearchPipeline:
 
         report = self._ml_service.analyze(capability, evidence)
         session.ml_report = report
+        return report
+
+    def execute_visualization(
+        self,
+        session: ResearchSession,
+        capability: VisualizationCapability,
+        payload: dict[str, Any],
+        traceability: tuple[VisualizationDataReference, ...] = (),
+    ) -> VisualizationReport:
+        if self._visualization_service is None:
+            raise RuntimeError("Visualization service is not configured.")
+
+        report = self._visualization_service.render(
+            capability=capability,
+            payload=payload,
+            traceability=traceability,
+        )
+        session.visualization_report = report
         return report
