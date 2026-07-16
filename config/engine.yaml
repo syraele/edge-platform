@@ -12,4 +12,5 @@ plugins:
   enabled: []
 
 dataset_providers:
+  normalization_policy: as_is
   enabled: []

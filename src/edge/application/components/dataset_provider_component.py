@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from edge.data.providers import DatasetProviderLoader, DatasetProviderRegistry
+from edge.data.validation import build_normalization_policy
 
 
 class DatasetProviderComponent:
@@ -18,6 +19,11 @@ class DatasetProviderComponent:
     def initialize(self) -> None:
         providers_cfg = self._engine_config.get("dataset_providers", {})
         enabled_providers = providers_cfg.get("enabled", [])
+        normalization_policy_name = providers_cfg.get("normalization_policy")
+
+        self._registry.set_normalization_policy(
+            build_normalization_policy(normalization_policy_name)
+        )
 
         for provider in self._loader.discover(enabled_providers):
             self._registry.register(provider)

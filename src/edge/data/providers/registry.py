@@ -49,6 +49,12 @@ class DatasetProviderRegistry:
 
         self._providers[provider_id] = provider
 
+    def set_normalization_policy(
+        self,
+        normalization_policy: DatasetNormalizationPolicy,
+    ) -> None:
+        self._normalization_policy = normalization_policy
+
     def list_providers(self) -> list[str]:
         return sorted(self._providers.keys())
 

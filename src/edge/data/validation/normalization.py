@@ -43,3 +43,13 @@ class SortedDeduplicatedNormalizationPolicy(DatasetNormalizationPolicy):
             metadata=dataset.metadata,
             bars=tuple(deduplicated[timestamp] for timestamp in sorted(deduplicated)),
         )
+
+
+def build_normalization_policy(name: str | None) -> DatasetNormalizationPolicy:
+    if name in (None, "", "as_is"):
+        return AsIsNormalizationPolicy()
+
+    if name == "sorted_deduplicated":
+        return SortedDeduplicatedNormalizationPolicy()
+
+    raise ValueError(f"Unknown dataset normalization policy '{name}'")
