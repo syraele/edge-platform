@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
+from edge.data.validation import AsIsNormalizationPolicy, DatasetNormalizationPolicy
+
 from .base import DatasetProvider
 from .provenance import DatasetProvenance, ProvenancedDataset
 from .query import DatasetQuery
@@ -30,8 +32,12 @@ class DatasetProviderLoadError(DatasetProviderError):
 class DatasetProviderRegistry:
     """Registry and resolver for advanced dataset providers."""
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        normalization_policy: DatasetNormalizationPolicy | None = None,
+    ) -> None:
         self._providers: dict[str, DatasetProvider] = {}
+        self._normalization_policy = normalization_policy or AsIsNormalizationPolicy()
 
     def register(self, provider: DatasetProvider) -> None:
         provider_id = self._validate_provider(provider)
@@ -139,6 +145,7 @@ class DatasetProviderRegistry:
         query: DatasetQuery,
     ) -> ProvenancedDataset:
         dataset = provider.load(query)
+        dataset = self._normalization_policy.normalize(dataset)
 
         self._validate_dataset_compatibility(dataset, query)
 
@@ -157,7 +164,7 @@ class DatasetProviderRegistry:
             requested_end=query.end,
             dataset_start=dataset_start,
             dataset_end=dataset_end,
-            normalization="as_is",
+            normalization=self._normalization_policy.normalization_name,
         )
 
         return ProvenancedDataset(dataset=dataset, provenance=provenance)

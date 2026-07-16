@@ -14,6 +14,7 @@ from edge.data import (
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.data.models.bar import Bar
 from edge.data.models.dataset_metadata import DatasetMetadata
+from edge.data.validation import SortedDeduplicatedNormalizationPolicy
 
 
 class StaticDatasetProvider(DatasetProvider):
@@ -90,6 +91,43 @@ class EarlyDatasetProvider(StaticDatasetProvider):
                 source=query.source or self.provider_id,
             ),
             bars=(bar,),
+        )
+
+
+class UnorderedDuplicateDatasetProvider(StaticDatasetProvider):
+    def load(self, query: DatasetQuery) -> HistoricalDataset:
+        first = Bar(
+            timestamp=datetime(2024, 1, 1, 2, 0, tzinfo=UTC),
+            open=100.0,
+            high=101.0,
+            low=99.0,
+            close=100.5,
+            volume=10.0,
+        )
+        duplicate = Bar(
+            timestamp=datetime(2024, 1, 1, 1, 0, tzinfo=UTC),
+            open=110.0,
+            high=111.0,
+            low=109.0,
+            close=110.5,
+            volume=11.0,
+        )
+        original = Bar(
+            timestamp=datetime(2024, 1, 1, 1, 0, tzinfo=UTC),
+            open=90.0,
+            high=91.0,
+            low=89.0,
+            close=90.5,
+            volume=9.0,
+        )
+
+        return HistoricalDataset(
+            metadata=DatasetMetadata(
+                symbol=query.symbol,
+                timeframe=query.timeframe,
+                source=query.source or self.provider_id,
+            ),
+            bars=(first, duplicate, original),
         )
 
 
@@ -210,3 +248,18 @@ def test_registry_load_with_fallback_raises_when_all_attempts_fail():
             ),
             fallback_provider_ids=["backup-provider"],
         )
+
+
+def test_registry_applies_sorted_deduplicated_normalization_policy():
+    registry = DatasetProviderRegistry(
+        normalization_policy=SortedDeduplicatedNormalizationPolicy(),
+    )
+    registry.register(UnorderedDuplicateDatasetProvider("unordered-provider"))
+
+    result = registry.load(DatasetQuery(symbol="XAUUSD", timeframe="H1"))
+
+    assert result.dataset.size == 2
+    assert result.dataset.first_bar.timestamp == datetime(2024, 1, 1, 1, 0, tzinfo=UTC)
+    assert result.dataset.last_bar.timestamp == datetime(2024, 1, 1, 2, 0, tzinfo=UTC)
+    assert result.dataset.first_bar.open == 90.0
+    assert result.provenance.normalization == "sorted_deduplicated"
