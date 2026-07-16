@@ -133,13 +133,13 @@ Current Phase:
 
 Current Milestone:
 
-**PE-004 – Optimization Engine (Specification)**
+**PE-005 – Machine Learning Integration (Specification)**
 
 The repository is currently positioned for milestone review and controlled progression toward implementation.
 
 Last completed milestone:
 
-**PE-003 – Portfolio Research (Completed)**
+**PE-004 – Optimization Engine (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Refine and approve PE-004 before the next implementation cycle begins.**
+**Refine and approve PE-005 before the next implementation cycle begins.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

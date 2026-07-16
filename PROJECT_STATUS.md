@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-003 completed and Platform Evolution advanced to PE-004 specification**
+**Stable — PE-004 completed and Platform Evolution advanced to PE-005 specification**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to prepare PE-004 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
+The immediate focus is to prepare PE-005 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
 
 #### Review and Execution References
 
@@ -76,7 +76,7 @@ The current baseline is implementation-capable and structured for the next Platf
 
 # Current Milestone
 
-## PE-004 — Optimization Engine
+## PE-005 — Machine Learning Integration
 
 ### Status
 
@@ -84,23 +84,45 @@ The current baseline is implementation-capable and structured for the next Platf
 
 ### Objective
 
-Define optimization capabilities that remain subordinate to scientific validation, reproducibility, and architectural discipline.
+Define machine-learning-assisted research capabilities that remain subordinate to scientific validation, reproducibility, and architectural discipline.
 
 ### Current Focus
 
-* refine PE-004 specification for implementation readiness;
-* define optimization boundaries without weakening the research-first model;
-* preserve traceability between optimization outputs and underlying evidence;
+* refine PE-005 specification for implementation readiness;
+* define ML integration boundaries without weakening the research-first model;
+* preserve traceability between ML-assisted outputs and underlying evidence;
 * maintain consistency with the broader Platform Evolution roadmap;
 * preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
 
 ### Result
 
-* PE-004 specification package available for next implementation cycle.
+* PE-005 specification package available for next implementation cycle.
 
 ---
 
 # Last Completed Milestone
+
+## PE-004 — Optimization Engine
+
+**Completed**
+
+### Result
+
+* Optimization problem model implemented.
+* Optimization report and candidate result models implemented.
+* Optimization service implemented for deterministic multi-experiment evaluation.
+* Objective-based ranking implemented for both maximize and minimize modes.
+* Candidate failure containment implemented without aborting the optimization run.
+* Research pipeline integration implemented for optimization orchestration.
+* Structured optimization reporting implemented for evaluated configurations, best objective value, and failure summaries.
+* Explicit optimization constraints and assumptions implemented with candidate disqualification rules.
+* Deterministic problem and run fingerprints implemented for optimization reproducibility.
+* Explicit optimization run status implemented for successful versus globally invalid optimization outcomes.
+* Optimization-focused unit tests and adjacent integration regressions executed and passing.
+
+---
+
+# Previously Completed Milestone
 
 ## PE-003 — Portfolio Research
 
@@ -114,27 +136,6 @@ Define optimization capabilities that remain subordinate to scientific validatio
 * Traceability preserved through research unit identity and dataset provenance aggregation.
 * Duplicate research unit identity validation implemented.
 * Portfolio-focused unit tests and adjacent integration regressions executed and passing.
-
----
-
-# Previously Completed Milestone
-
-## PE-002 — Advanced Dataset Providers
-
-**Completed**
-
-### Result
-
-* Dataset provider contract implemented.
-* Dataset query and provenance models implemented.
-* Dataset provider registry implemented with provider resolution and traceable loading.
-* Declarative dataset provider discovery implemented through entrypoint loader.
-* Application lifecycle integration implemented for provider registration from engine configuration.
-* Compatibility validation, fallback behavior, temporal validity checks, and provenance coverage implemented.
-* Dataset access service integrated into the research pipeline.
-* Explicit and configurable normalization policies implemented.
-* Runtime provider metadata inspection implemented.
-* Unit and integration tests implemented and passing.
 
 ---
 

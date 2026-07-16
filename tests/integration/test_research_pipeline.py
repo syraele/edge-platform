@@ -29,6 +29,8 @@ from edge.domain.services import (
     ExperimentExecutor,
     ResearchEvaluator,
 )
+from edge.domain.evidence import Evidence
+from edge.optimization import OptimizationProblem, OptimizationService
 from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
 
 
@@ -138,3 +140,83 @@ def test_research_pipeline_loads_dataset_from_provider_service() -> None:
     assert session.dataset_provenance.provider_id == "historical-archive"
     assert result.dataset_provenance is not None
     assert result.dataset_provenance.provider_id == "historical-archive"
+
+
+class StaticOptimizationRunner:
+    def __init__(self, scores: dict[str, float]) -> None:
+        self._scores = scores
+
+    def run(self, experiment: Experiment) -> Evidence:
+        return Evidence(
+            measurements={
+                "score": self._scores[experiment.configuration.name],
+            }
+        )
+
+
+def test_research_pipeline_executes_optimization_problem() -> None:
+    dataset = HistoricalDataset(
+        metadata=DatasetMetadata(
+            symbol="EURUSD",
+            timeframe="M1",
+        ),
+        bars=(
+            Bar(
+                timestamp=datetime(2024, 1, 1),
+                open=1.1000,
+                high=1.1010,
+                low=1.0990,
+                close=1.1005,
+            ),
+        ),
+    )
+
+    market_description = MarketDescription(
+        dataset=dataset,
+        metadata=DescriptorMetadata(
+            created_at=datetime.utcnow(),
+            builder_version="1.0",
+        ),
+        descriptors=(),
+    )
+
+    hypothesis = ResearchHypothesis(
+        market_description=market_description,
+        metadata=HypothesisMetadata(
+            created_at=datetime.utcnow(),
+        ),
+        statement="Optimization integration test",
+    )
+
+    baseline = Experiment(
+        hypothesis=hypothesis,
+        configuration=ResearchConfiguration(name="baseline"),
+        status=ExperimentStatus.CREATED,
+    )
+
+    improved = Experiment(
+        hypothesis=hypothesis,
+        configuration=ResearchConfiguration(name="improved"),
+        status=ExperimentStatus.CREATED,
+    )
+
+    pipeline = ResearchPipeline(
+        runner=StaticOptimizationRunner({"baseline": 1.0, "improved": 2.0}),
+        evaluator=ResearchEvaluator(),
+        optimization_service=OptimizationService(
+            runner=StaticOptimizationRunner({"baseline": 1.0, "improved": 2.0}),
+            evaluator=ResearchEvaluator(),
+        ),
+    )
+
+    result = pipeline.execute_optimization(
+        OptimizationProblem(
+            problem_id="opt-integration",
+            objective_name="score",
+            experiments=(baseline, improved),
+        )
+    )
+
+    assert result.problem_id == "opt-integration"
+    assert result.ranking == ("improved", "baseline")
+    assert result.winner_configuration == "improved"
