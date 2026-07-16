@@ -6,6 +6,8 @@ Research Pipeline
 
 from __future__ import annotations
 
+from typing import Any
+
 from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import ResearchSession
@@ -25,11 +27,17 @@ class ResearchPipeline:
         self,
         runner: ExperimentRunner,
         evaluator: ResearchEvaluator,
+        dataset_access_service: Any | None = None,
     ) -> None:
         self._runner = runner
         self._evaluator = evaluator
+        self._dataset_access_service = dataset_access_service
 
-    def execute(self, session: ResearchSession) -> ResearchSession:
+    def execute(
+        self,
+        session: ResearchSession,
+        dataset_request: dict[str, Any] | None = None,
+    ) -> ResearchSession:
         """
         Execute a complete research session.
 
@@ -40,6 +48,17 @@ class ResearchPipeline:
         session.start()
 
         try:
+            if (
+                dataset_request is not None
+                and self._dataset_access_service is not None
+                and session.dataset is None
+            ):
+                dataset_result = self._dataset_access_service.request_dataset(
+                    **dataset_request,
+                )
+                session.dataset = dataset_result.dataset
+                session.dataset_provenance = dataset_result.provenance
+
             for experiment in session.experiments:
                 evidence = self._runner.run(experiment)
                 session.evidences.append(evidence)

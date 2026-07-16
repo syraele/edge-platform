@@ -7,12 +7,14 @@ Research Pipeline Integration Test
 from datetime import datetime
 
 from edge.application.research.pipeline import ResearchPipeline
+from edge.application.research.dataset_access_service import DatasetAccessService
 from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import (
     ResearchSession,
     SessionStatus,
 )
+from edge.data import DatasetProviderRegistry
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.data.models.bar import Bar
 from edge.data.models.dataset_metadata import DatasetMetadata
@@ -27,6 +29,7 @@ from edge.domain.services import (
     ExperimentExecutor,
     ResearchEvaluator,
 )
+from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
 
 
 def test_research_pipeline_executes_complete_session() -> None:
@@ -101,3 +104,34 @@ def test_research_pipeline_executes_complete_session() -> None:
     assert result.experiments == tuple(session.experiments)
     assert result.edges == tuple(session.edges)
     assert result.message is None
+
+
+def test_research_pipeline_loads_dataset_from_provider_service() -> None:
+    session = ResearchSession()
+
+    provider_registry = DatasetProviderRegistry()
+    provider_registry.register(HistoricalArchiveProvider())
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(
+            ExperimentExecutor(),
+        ),
+        evaluator=ResearchEvaluator(),
+        dataset_access_service=DatasetAccessService(provider_registry),
+    )
+
+    result = pipeline.execute(
+        session,
+        dataset_request={
+            "symbol": "XAUUSD",
+            "timeframe": "H1",
+            "provider_id": "historical-archive",
+        },
+    )
+
+    assert isinstance(result, PipelineReport)
+    assert result.status is SessionStatus.COMPLETED
+    assert session.dataset is not None
+    assert session.dataset.metadata.symbol == "XAUUSD"
+    assert session.dataset_provenance is not None
+    assert session.dataset_provenance.provider_id == "historical-archive"
