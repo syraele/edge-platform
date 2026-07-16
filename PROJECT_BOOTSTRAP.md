@@ -64,7 +64,16 @@ The Blueprint is the highest-level architectural reference.
 
 ## Step 4
 
-Read only the documentation relevant to the active milestone.
+Read the core workflow documents in order:
+
+1. PROJECT_STATUS.md
+2. PROJECT_BOOTSTRAP.md
+3. docs/DEVELOPMENT_SETUP.md
+4. docs/DEVELOPMENT_WORKFLOW.md
+5. FOUNDATION_BLUEPRINT.md
+6. docs/03_ROADMAP.md
+
+Then read only the documentation relevant to the active milestone.
 
 Examples:
 

@@ -67,6 +67,7 @@ The documentation is organized by responsibility.
 
 | Document                | Purpose                              |
 | ----------------------- | ------------------------------------ |
+| AGENTS.md               | Contributor workflow expectations    |
 | FOUNDATION_BLUEPRINT.md | Conceptual foundation of the project |
 | PROJECT_STATUS.md       | Current project status               |
 | PROJECT_BOOTSTRAP.md    | Development bootstrap procedure      |
@@ -103,17 +104,23 @@ Commit
 
 Every milestone preserves the architectural foundation established during Foundation v2.
 
+For the latest workflow guidance, see:
+
+* `AGENTS.md`
+* `docs/DEVELOPMENT_SETUP.md`
+* `docs/WF-001_DEVELOPMENT_WORKFLOW.md`
+
 ---
 
 ## Current Status
 
 Current Phase:
 
-**Foundation v2 Complete**
+**Application Layer & Research Pipeline**
 
 Current Milestone:
 
-**MDF-001 – Market Description Framework**
+**WF-001 – Development Workflow Standardization**
 
 For the latest project status, see `PROJECT_STATUS.md`.
 

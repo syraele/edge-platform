@@ -4,7 +4,7 @@ Version: 2.6
 
 Status: Active
 
-Last Updated: Workflow v1.1 / RP-004 Completed
+Last Updated: WF-001 Documentation Workflow Standardization
 
 ---
 
@@ -34,7 +34,7 @@ Last Updated: Workflow v1.1 / RP-004 Completed
 
 # Current Milestone
 
-## RP-004 — Pipeline Report
+## WF-001 — Development Workflow Standardization
 
 ### Status
 
@@ -42,41 +42,35 @@ Last Updated: Workflow v1.1 / RP-004 Completed
 
 ### Objective
 
-Implement RP-004 Pipeline Report and verify regression.
+Standardize the development workflow and contributor documentation.
 
 ### Result
 
-* Pipeline Report implemented.
-* ResearchPipeline returns immutable PipelineReport.
-* Integration test updated.
-* Full regression completed successfully.
-
-### Regression
-
-**46 / 46 tests passing**
+* AGENTS.md introduced.
+* DEVELOPMENT_SETUP.md introduced.
+* WF-001_DEVELOPMENT_WORKFLOW.md introduced.
+* README.md updated.
+* PROJECT_STATUS.md updated.
+* No production code modified.
+* No tests modified.
 
 ---
 
 # Last Completed Milestone
 
-## RP-004 — Pipeline Report
+## WF-001 — Development Workflow Standardization
 
 **Completed**
 
 ### Result
 
-* Pipeline Report implemented.
-* ResearchPipeline returns immutable PipelineReport.
-* Integration test updated.
-* Full regression completed successfully.
-
-### Commit
-
-`feat(research): complete RP-004 Pipeline Report`
-
-### Regression
-
-**46 / 46 tests passing**
+* AGENTS.md introduced.
+* DEVELOPMENT_SETUP.md introduced.
+* WF-001_DEVELOPMENT_WORKFLOW.md introduced.
+* README.md updated.
+* PROJECT_STATUS.md updated.
+* No production code modified.
+* No tests modified.
 
 ---
 
@@ -258,6 +252,7 @@ Latest updates:
 * Repository First workflow reinforced.
 * Milestone Specification introduced.
 * Specification Approval added to the development process.
+* WF-001 documentation milestone introduced for contributor workflow standardization.
 
 ## Testing
 
@@ -405,3 +400,6 @@ The roadmap is authoritative.
 The repository is the single source of truth.
 
 Implementation is not allowed without an approved Milestone Specification.
+
+The repository is the single source of truth.
+
