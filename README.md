@@ -133,13 +133,13 @@ Current Phase:
 
 Current Milestone:
 
-**PE-005 – Machine Learning Integration (Specification)**
+**PE-006 – Visualization Dashboards (Specification and Execution Planning)**
 
-The repository is currently positioned for milestone review and controlled progression toward implementation.
+The repository is currently positioned for controlled progression toward PE-006 implementation.
 
 Last completed milestone:
 
-**PE-004 – Optimization Engine (Completed)**
+**PE-005 – Machine Learning Integration (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Refine and approve PE-005 before the next implementation cycle begins.**
+**Define and approve PE-006 dashboard integration slices before implementation begins.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

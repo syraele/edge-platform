@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: 2.7
+Version: 2.8
 
 Status: Active
 
-Last Updated: Platform Evolution workflow alignment
+Last Updated: PE-005 completion checkpoint
 
 ---
 
@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-004 completed and PE-005 implementation actively progressing**
+**Stable — PE-005 completed and Platform Evolution advanced to PE-006**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to complete PE-005 while preserving Foundation v2 boundaries and the research-first mission of the platform.
+The immediate focus is to prepare and execute PE-006 while preserving Foundation v2 boundaries and the research-first mission of the platform.
 
 #### Review and Execution References
 
@@ -76,23 +76,36 @@ The current baseline is implementation-capable and structured for the next Platf
 
 # Current Milestone
 
-## PE-005 — Machine Learning Integration
+## PE-006 — Visualization Dashboards
 
 ### Status
 
-**Implementation (Incremental)**
+**Specification and Execution Planning**
 
 ### Objective
 
-Define machine-learning-assisted research capabilities that remain subordinate to scientific validation, reproducibility, and architectural discipline.
+Define visualization capabilities that expose research outputs with traceability, reproducibility context, and architecture-safe boundaries.
 
 ### Current Focus
 
-* refine PE-005 specification for implementation readiness;
-* define and enforce ML integration boundaries without weakening the research-first model;
-* preserve traceability between ML-assisted outputs and underlying evidence;
-* execute incremental validations on ML service and research pipeline integration;
+* define dashboard integration boundaries without introducing presentation logic into domain/application layers;
+* preserve traceability from visualized insights back to evidence, hypotheses, and optimization/ML reports;
+* establish deterministic visualization data contracts for reproducible research review;
+* prepare PE-006 implementation slices with targeted regression strategy;
 * preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
+
+### Result
+
+* PE-006 transition activated after PE-005 closure.
+* Visualization scope prepared for next implementation cycle.
+
+---
+
+# Last Completed Milestone
+
+## PE-005 — Machine Learning Integration
+
+**Completed**
 
 ### Result
 
@@ -105,13 +118,12 @@ Define machine-learning-assisted research capabilities that remain subordinate t
 * Research pipeline integration added for ML-assisted analysis orchestration.
 * Structured ML reporting implemented for inputs, assumptions, output values, and failure summaries.
 * Explicit ML validation rules implemented for capability outputs.
-* PE-005 focused unit tests added and passing.
 * UTC timestamp handling migrated to timezone-aware datetime values across impacted PE flows.
-* Expanded PE-005 regression slice executed and passing.
+* Full regression suite executed successfully (95 passed).
 
 ---
 
-# Last Completed Milestone
+# Previously Completed Milestone
 
 ## PE-004 — Optimization Engine
 
