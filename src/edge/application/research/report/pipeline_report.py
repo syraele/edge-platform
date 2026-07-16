@@ -7,7 +7,7 @@ Pipeline Report
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -35,7 +35,8 @@ class PipelineReport:
     message: str | None
 
     report_id: str = field(init=False, default_factory=lambda: str(uuid4()))
-    created_at: datetime = field(init=False, default_factory=datetime.utcnow)
+    created_at: datetime = field(init=False, default_factory=lambda: datetime.now(UTC))
+
     @classmethod
     def from_session(cls, session: ResearchSession) -> "PipelineReport":
         return cls(

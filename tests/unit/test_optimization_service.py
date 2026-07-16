@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.domain.experiment import Experiment
 from edge.domain.experiment_status import ExperimentStatus
@@ -35,13 +35,13 @@ def _build_experiment(configuration_name: str) -> Experiment:
 
     market_description = MarketDescription(
         dataset=dataset,
-        metadata=DescriptorMetadata(created_at=datetime.utcnow(), builder_version="1.0"),
+        metadata=DescriptorMetadata(created_at=datetime.now(UTC), builder_version="1.0"),
         descriptors=(),
     )
 
     hypothesis = ResearchHypothesis(
         market_description=market_description,
-        metadata=HypothesisMetadata(created_at=datetime.utcnow()),
+        metadata=HypothesisMetadata(created_at=datetime.now(UTC)),
         statement=f"hypothesis-{configuration_name}",
     )
 

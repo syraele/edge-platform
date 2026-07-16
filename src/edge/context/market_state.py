@@ -5,7 +5,7 @@ Market State
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 
 
 @dataclass(slots=True)
@@ -20,6 +20,6 @@ class MarketState:
 
     last_price: float = 0.0
 
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     connected: bool = False

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.domain.evidence import Evidence
 
@@ -38,4 +38,4 @@ class MachineLearningReport:
     output_value: float | None
     failure_message: str | None
     run_fingerprint: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))

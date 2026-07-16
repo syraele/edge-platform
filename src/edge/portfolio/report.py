@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.application.research.report.pipeline_report import PipelineReport
 
@@ -22,4 +22,4 @@ class PortfolioResearchReport:
     knowledge_count: int
     edge_count: int
 
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))

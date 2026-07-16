@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -19,7 +19,7 @@ class ResearchSession:
     """
 
     session_id: str = field(default_factory=lambda: str(uuid4()))
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     started_at: datetime | None = None
     completed_at: datetime | None = None
 
@@ -45,7 +45,7 @@ class ResearchSession:
             raise RuntimeError("ResearchSession can only be started once.")
 
         self.status = SessionStatus.RUNNING
-        self.started_at = datetime.utcnow()
+        self.started_at = datetime.now(UTC)
 
     def complete(self) -> None:
         """Mark the session as successfully completed."""
@@ -53,7 +53,7 @@ class ResearchSession:
             raise RuntimeError("Only a running session can be completed.")
 
         self.status = SessionStatus.COMPLETED
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(UTC)
 
     def fail(self, message: str | None = None) -> None:
         """Mark the session as failed."""
@@ -61,5 +61,5 @@ class ResearchSession:
             raise RuntimeError("ResearchSession has already finished.")
 
         self.status = SessionStatus.FAILED
-        self.completed_at = datetime.utcnow()
+        self.completed_at = datetime.now(UTC)
         self.message = message

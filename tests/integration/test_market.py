@@ -4,7 +4,7 @@ EDGE_ENGINE
 Market Package Validation
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.context import create_context
 from edge.market import (
@@ -28,7 +28,7 @@ def test_market_package():
         bid=2300.0,
         ask=2300.5,
         last=2300.2,
-        time=datetime.utcnow(),
+        time=datetime.now(UTC),
     )
 
     assert tick.last == 2300.2

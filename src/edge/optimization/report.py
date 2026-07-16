@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.domain.evidence import Evidence
 from edge.domain.experiment import Experiment
@@ -47,4 +47,4 @@ class OptimizationReport:
     failed_candidates: int
     failure_messages: tuple[str, ...]
     run_fingerprint: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))

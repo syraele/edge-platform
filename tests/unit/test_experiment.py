@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.data.models.bar import Bar
@@ -32,7 +32,7 @@ def test_create_experiment():
     market_description = MarketDescription(
         dataset=dataset,
         metadata=DescriptorMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
             builder_version="1.0",
         ),
         descriptors=(),
@@ -41,7 +41,7 @@ def test_create_experiment():
     hypothesis = ResearchHypothesis(
         market_description=market_description,
         metadata=HypothesisMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
         ),
         statement="The market trends after high volatility.",
     )

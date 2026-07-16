@@ -4,7 +4,7 @@ EDGE_ENGINE
 Research Pipeline Integration Test
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.application.research.pipeline import ResearchPipeline
 from edge.application.research.dataset_access_service import DatasetAccessService
@@ -60,7 +60,7 @@ def test_research_pipeline_executes_complete_session() -> None:
     market_description = MarketDescription(
         dataset=dataset,
         metadata=DescriptorMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
             builder_version="1.0",
         ),
         descriptors=(),
@@ -69,7 +69,7 @@ def test_research_pipeline_executes_complete_session() -> None:
     hypothesis = ResearchHypothesis(
         market_description=market_description,
         metadata=HypothesisMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
         ),
         statement="Pipeline integration test",
     )
@@ -180,7 +180,7 @@ def test_research_pipeline_executes_optimization_problem() -> None:
     market_description = MarketDescription(
         dataset=dataset,
         metadata=DescriptorMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
             builder_version="1.0",
         ),
         descriptors=(),
@@ -189,7 +189,7 @@ def test_research_pipeline_executes_optimization_problem() -> None:
     hypothesis = ResearchHypothesis(
         market_description=market_description,
         metadata=HypothesisMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
         ),
         statement="Optimization integration test",
     )

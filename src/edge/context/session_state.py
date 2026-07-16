@@ -5,7 +5,7 @@ Session Information
 """
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import uuid4
 
 
@@ -17,7 +17,7 @@ class SessionInfo:
 
     id: str = field(default_factory=lambda: str(uuid4()))
 
-    started_at: datetime = field(default_factory=datetime.utcnow)
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     engine_version: str = "0.1.0"
 

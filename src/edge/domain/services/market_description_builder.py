@@ -4,7 +4,7 @@ EDGE_ENGINE
 Market Description Builder
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.domain.descriptor_metadata import DescriptorMetadata
@@ -29,7 +29,7 @@ class MarketDescriptionBuilder:
         Build a MarketDescription from a HistoricalDataset.
         """
         metadata = DescriptorMetadata(
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
             builder_version=self.VERSION,
             description_type="baseline",
         )

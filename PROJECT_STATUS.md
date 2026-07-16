@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-004 completed and Platform Evolution advanced to PE-005 specification**
+**Stable — PE-004 completed and PE-005 implementation actively progressing**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to prepare PE-005 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
+The immediate focus is to complete PE-005 while preserving Foundation v2 boundaries and the research-first mission of the platform.
 
 #### Review and Execution References
 
@@ -89,9 +89,9 @@ Define machine-learning-assisted research capabilities that remain subordinate t
 ### Current Focus
 
 * refine PE-005 specification for implementation readiness;
-* define ML integration boundaries without weakening the research-first model;
+* define and enforce ML integration boundaries without weakening the research-first model;
 * preserve traceability between ML-assisted outputs and underlying evidence;
-* maintain consistency with the broader Platform Evolution roadmap;
+* execute incremental validations on ML service and research pipeline integration;
 * preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
 
 ### Result
@@ -106,6 +106,8 @@ Define machine-learning-assisted research capabilities that remain subordinate t
 * Structured ML reporting implemented for inputs, assumptions, output values, and failure summaries.
 * Explicit ML validation rules implemented for capability outputs.
 * PE-005 focused unit tests added and passing.
+* UTC timestamp handling migrated to timezone-aware datetime values across impacted PE flows.
+* Expanded PE-005 regression slice executed and passing.
 
 ---
 
