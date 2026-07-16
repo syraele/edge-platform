@@ -27,6 +27,7 @@ class ResearchSession:
 
     dataset: Any | None = None
     dataset_provenance: Any | None = None
+    ml_report: Any | None = None
     market_description: Any | None = None
 
     hypotheses: list[Any] = field(default_factory=list)

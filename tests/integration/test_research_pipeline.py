@@ -30,6 +30,7 @@ from edge.domain.services import (
     ResearchEvaluator,
 )
 from edge.domain.evidence import Evidence
+from edge.ml import MachineLearningCapability, MachineLearningService
 from edge.optimization import OptimizationProblem, OptimizationService
 from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
 
@@ -154,6 +155,11 @@ class StaticOptimizationRunner:
         )
 
 
+class StaticMLExecutor:
+    def execute(self, capability, evidence):
+        return evidence.measurements[capability.input_metric_names[0]] * 2
+
+
 def test_research_pipeline_executes_optimization_problem() -> None:
     dataset = HistoricalDataset(
         metadata=DatasetMetadata(
@@ -220,3 +226,30 @@ def test_research_pipeline_executes_optimization_problem() -> None:
     assert result.problem_id == "opt-integration"
     assert result.ranking == ("improved", "baseline")
     assert result.winner_configuration == "improved"
+
+
+def test_research_pipeline_executes_ml_analysis() -> None:
+    session = ResearchSession()
+    evidence = Evidence(measurements={"profit_factor": 1.5})
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        ml_service=MachineLearningService(StaticMLExecutor()),
+    )
+
+    report = pipeline.execute_ml_analysis(
+        session,
+        MachineLearningCapability(
+            capability_id="ml-profit",
+            capability_name="Profit Factor Amplifier",
+            input_metric_names=("profit_factor",),
+            output_name="ml_score",
+            assumptions=("Profit factor remains informative.",),
+        ),
+        evidence,
+    )
+
+    assert report.status == "completed"
+    assert report.result.output_value == 3.0
+    assert session.ml_report is report

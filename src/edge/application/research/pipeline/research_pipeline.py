@@ -12,6 +12,9 @@ from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import ResearchSession
 from edge.domain.services.research_evaluator import ResearchEvaluator
+from edge.ml.capability import MachineLearningCapability
+from edge.ml.report import MachineLearningReport
+from edge.ml.service import MachineLearningService
 from edge.optimization.problem import OptimizationProblem
 from edge.optimization.report import OptimizationReport
 from edge.optimization.service import OptimizationService
@@ -32,11 +35,13 @@ class ResearchPipeline:
         evaluator: ResearchEvaluator,
         dataset_access_service: Any | None = None,
         optimization_service: OptimizationService | None = None,
+        ml_service: MachineLearningService | None = None,
     ) -> None:
         self._runner = runner
         self._evaluator = evaluator
         self._dataset_access_service = dataset_access_service
         self._optimization_service = optimization_service
+        self._ml_service = ml_service
 
     def execute(
         self,
@@ -88,3 +93,16 @@ class ResearchPipeline:
             raise RuntimeError("Optimization service is not configured.")
 
         return self._optimization_service.optimize(problem)
+
+    def execute_ml_analysis(
+        self,
+        session: ResearchSession,
+        capability: MachineLearningCapability,
+        evidence,
+    ) -> MachineLearningReport:
+        if self._ml_service is None:
+            raise RuntimeError("Machine learning service is not configured.")
+
+        report = self._ml_service.analyze(capability, evidence)
+        session.ml_report = report
+        return report
