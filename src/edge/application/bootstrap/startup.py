@@ -6,6 +6,7 @@ Application Startup
 
 from edge.application.lifecycle.manager import LifecycleManager
 from edge.application.components.config_component import ConfigComponent
+from edge.application.components.plugin_component import PluginComponent
 
 from edge.context import create_context
 from edge.core.engine import EdgeEngine
@@ -16,16 +17,25 @@ class EdgeApplication:
     Main application bootstrap.
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        market_config_path: str = "config/market.yaml",
+        engine_config_path: str = "config/engine.yaml",
+    ):
 
         self.lifecycle = LifecycleManager()
 
         self.config = ConfigComponent(
-            "config/market.yaml"
+            market_config_path
+        )
+
+        self.engine_config = ConfigComponent(
+            engine_config_path
         )
 
         # Load configuration
         self.config.initialize()
+        self.engine_config.initialize()
 
         cfg = self.config.get_config()
 
@@ -42,12 +52,21 @@ class EdgeApplication:
             self.context
         )
 
+        self.plugins = PluginComponent(
+            manager=self.context.services.plugin_manager,
+            engine_config=self.engine_config.get_config(),
+        )
+
         self.lifecycle.register(
             self.config
         )
 
         self.lifecycle.register(
             self.engine
+        )
+
+        self.lifecycle.register(
+            self.plugins
         )
 
 

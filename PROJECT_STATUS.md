@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-001 implementation phase active with incremental delivery in progress**
+**Stable — PE-001 completed and Platform Evolution advanced to PE-002 specification**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to implement PE-001 incrementally (test-first), starting from the plugin contract and lifecycle manager while preserving Foundation v2 boundaries.
+The immediate focus is to prepare and refine PE-002 as the next implementation candidate while preserving Foundation v2 boundaries.
 
 #### Review and Execution References
 
@@ -70,44 +70,54 @@ The immediate focus is to implement PE-001 incrementally (test-first), starting 
 
 **Synchronized**
 
-The current baseline is documentation-oriented and structured to support the next review decision for the Platform Evolution phase.
+The current baseline is implementation-capable and structured for the next Platform Evolution milestone.
 
 ---
 
 # Current Milestone
 
-## PE-001 — Plugin System
+## PE-002 — Advanced Dataset Providers
 
 ### Status
 
-**Implementation (Incremental)**
+**Specification**
 
 ### Objective
 
-Define the architectural extension mechanism for future platform capabilities while preserving Foundation v2 boundaries and the research purpose of the platform.
+Define provider-oriented dataset extension capabilities that preserve reproducibility, provenance, and compatibility with the Core architecture.
 
 ### Current Focus
 
-* finalize PE-001 as a reviewable and implementation-ready architectural specification;
-* define the plugin contract, lifecycle, boundaries, and Core protection rules;
-* prepare the milestone for review before implementation begins;
+* refine PE-002 specification for implementation readiness;
+* define provider contracts and compatibility constraints;
+* preserve reproducibility and dataset provenance rules;
 * maintain consistency with the broader Platform Evolution roadmap;
-* use the review package as the governance entry point for the milestone review sequence;
-* preserve an implementation path that stays within the architectural guardrails of Foundation v2.
+* preserve architectural guardrails established in Foundation v2 and PE-001.
 
 ### Result
 
-* PE-001 specification documented.
-* PE-001 strengthened into a reviewable and implementation-ready architectural specification.
-* Initial plugin implementation delivered: plugin contract, lifecycle manager, context integration.
-* Initial PE-001 unit tests added and verified.
-* Workflow documentation strengthened around specification approval and test-first implementation.
-* Repository guidance aligned with the Platform Evolution direction.
-* Production code and tests updated for PE-001 implementation increment.
+* PE-002 specification package available for next implementation cycle.
 
 ---
 
 # Last Completed Milestone
+
+## PE-001 — Plugin System
+
+**Completed**
+
+### Result
+
+* Plugin contract implemented.
+* Plugin manager lifecycle implemented (register, activate, deactivate, remove).
+* Plugin discovery loader implemented from declarative entrypoints.
+* Bootstrap lifecycle integration implemented (discover/register/activate/deactivate).
+* Context-level plugin manager exposure integrated through shared services.
+* Unit and lifecycle integration tests implemented and passing.
+
+---
+
+# Previously Completed Milestone
 
 ## WF-001 — Development Workflow Standardization
 

@@ -58,6 +58,26 @@ class PluginManager:
         plugin.deactivate(context)
         self._active.remove(plugin_id)
 
+    def activate_all(self, context: Any | None = None) -> None:
+        activated_now: list[str] = []
+
+        try:
+            for plugin_id in self.list_plugins():
+                if plugin_id in self._active:
+                    continue
+
+                self.activate(plugin_id, context)
+                activated_now.append(plugin_id)
+        except Exception:
+            # Keep platform state predictable if one plugin fails to activate.
+            for plugin_id in reversed(activated_now):
+                self.deactivate(plugin_id, context)
+            raise
+
+    def deactivate_all(self, context: Any | None = None) -> None:
+        for plugin_id in sorted(self._active, reverse=True):
+            self.deactivate(plugin_id, context)
+
     def remove(self, plugin_id: str, context: Any | None = None) -> None:
         if plugin_id not in self._plugins:
             raise PluginNotFoundError(f"Plugin '{plugin_id}' is not registered")

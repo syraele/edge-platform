@@ -33,6 +33,21 @@ class FailingPlugin(EdgePlugin):
         return None
 
 
+class OrderedPlugin(EdgePlugin):
+    version = "1.0.0"
+
+    def __init__(self, plugin_id: str) -> None:
+        self.plugin_id = plugin_id
+        self.activated = 0
+        self.deactivated = 0
+
+    def activate(self, context=None) -> None:
+        self.activated += 1
+
+    def deactivate(self, context=None) -> None:
+        self.deactivated += 1
+
+
 def test_register_requires_non_empty_plugin_id():
     class InvalidPlugin(EdgePlugin):
         plugin_id = ""
@@ -91,3 +106,19 @@ def test_remove_deactivates_active_plugin():
 
     assert manager.list_plugins() == []
     assert plugin.deactivated == 1
+
+
+def test_activate_all_rolls_back_on_failure():
+    manager = PluginManager()
+    stable_plugin = OrderedPlugin("a-stable")
+    failing_plugin = FailingPlugin()
+
+    manager.register(stable_plugin)
+    manager.register(failing_plugin)
+
+    with pytest.raises(PluginActivationError):
+        manager.activate_all()
+
+    assert manager.is_active(stable_plugin.plugin_id) is False
+    assert stable_plugin.activated == 1
+    assert stable_plugin.deactivated == 1
