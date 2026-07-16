@@ -19,6 +19,10 @@ class DatasetProviderNotFoundError(DatasetProviderError, LookupError):
     """Raised when no compatible provider can satisfy a query."""
 
 
+class DatasetProviderCompatibilityError(DatasetProviderError, ValueError):
+    """Raised when returned dataset is incompatible with requested query."""
+
+
 class DatasetProviderRegistry:
     """Registry and resolver for advanced dataset providers."""
 
@@ -49,6 +53,17 @@ class DatasetProviderRegistry:
         return provider
 
     def resolve(self, query: DatasetQuery) -> DatasetProvider:
+        if query.provider_id:
+            provider = self.get(query.provider_id)
+
+            if provider.supports(query):
+                return provider
+
+            raise DatasetProviderNotFoundError(
+                f"Dataset provider '{query.provider_id}' does not support "
+                f"{query.symbol}/{query.timeframe}"
+            )
+
         for provider_id in self.list_providers():
             provider = self._providers[provider_id]
 
@@ -63,6 +78,8 @@ class DatasetProviderRegistry:
         provider = self.resolve(query)
         dataset = provider.load(query)
 
+        self._validate_dataset_compatibility(dataset, query)
+
         provenance = DatasetProvenance(
             provider_id=provider.provider_id,
             provider_version=getattr(provider, "provider_version", "0.0.0"),
@@ -72,6 +89,18 @@ class DatasetProviderRegistry:
         )
 
         return ProvenancedDataset(dataset=dataset, provenance=provenance)
+
+    @staticmethod
+    def _validate_dataset_compatibility(dataset, query: DatasetQuery) -> None:
+        if dataset.metadata.symbol != query.symbol:
+            raise DatasetProviderCompatibilityError(
+                "Dataset symbol does not match query symbol"
+            )
+
+        if dataset.metadata.timeframe != query.timeframe:
+            raise DatasetProviderCompatibilityError(
+                "Dataset timeframe does not match query timeframe"
+            )
 
     @staticmethod
     def _validate_provider(provider: DatasetProvider) -> str:

@@ -4,6 +4,7 @@ import pytest
 
 from edge.data import (
     DatasetProvider,
+    DatasetProviderCompatibilityError,
     DatasetProviderNotFoundError,
     DatasetProviderRegistry,
     DatasetProviderValidationError,
@@ -44,6 +45,27 @@ class StaticDatasetProvider(DatasetProvider):
         )
 
 
+class IncompatibleDatasetProvider(StaticDatasetProvider):
+    def load(self, query: DatasetQuery) -> HistoricalDataset:
+        bar = Bar(
+            timestamp=datetime(2024, 1, 1, tzinfo=UTC),
+            open=100.0,
+            high=101.0,
+            low=99.0,
+            close=100.5,
+            volume=10.0,
+        )
+
+        return HistoricalDataset(
+            metadata=DatasetMetadata(
+                symbol="EURUSD",
+                timeframe=query.timeframe,
+                source=query.source or self.provider_id,
+            ),
+            bars=(bar,),
+        )
+
+
 def test_registry_rejects_duplicate_provider_id():
     registry = DatasetProviderRegistry()
 
@@ -73,3 +95,27 @@ def test_registry_load_returns_provenanced_dataset():
     assert result.provenance.provider_id == "history-provider"
     assert result.provenance.provider_version == "1.2.0"
     assert result.provenance.dataset_source == "archive-v1"
+
+
+def test_registry_load_with_explicit_provider_id():
+    registry = DatasetProviderRegistry()
+    registry.register(StaticDatasetProvider("provider-a", supported_symbol="XAUUSD"))
+    registry.register(StaticDatasetProvider("provider-b", supported_symbol="XAUUSD"))
+
+    result = registry.load(
+        DatasetQuery(
+            symbol="XAUUSD",
+            timeframe="H1",
+            provider_id="provider-b",
+        )
+    )
+
+    assert result.provenance.provider_id == "provider-b"
+
+
+def test_registry_raises_when_dataset_incompatible_with_query():
+    registry = DatasetProviderRegistry()
+    registry.register(IncompatibleDatasetProvider("bad-provider"))
+
+    with pytest.raises(DatasetProviderCompatibilityError):
+        registry.load(DatasetQuery(symbol="XAUUSD", timeframe="H1"))

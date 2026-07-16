@@ -103,6 +103,8 @@ Define provider-oriented dataset extension capabilities that preserve reproducib
 * Dataset provider registry integrated in shared context services.
 * Declarative dataset provider discovery implemented through entrypoint loader.
 * Application lifecycle integration implemented for provider registration from engine configuration.
+* Compatibility validation implemented for dataset/query alignment.
+* Application-facing dataset access service implemented and registered.
 * PE-002 focused unit and integration tests added and passing.
 
 ---

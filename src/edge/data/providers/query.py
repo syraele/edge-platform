@@ -13,3 +13,4 @@ class DatasetQuery:
     start: datetime | None = None
     end: datetime | None = None
     source: str | None = None
+    provider_id: str | None = None

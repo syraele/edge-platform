@@ -3,6 +3,7 @@ from .loader import DatasetProviderDiscoveryError, DatasetProviderLoader
 from .provenance import DatasetProvenance, ProvenancedDataset
 from .query import DatasetQuery
 from .registry import (
+    DatasetProviderCompatibilityError,
     DatasetProviderError,
     DatasetProviderNotFoundError,
     DatasetProviderRegistry,
@@ -18,6 +19,7 @@ __all__ = [
     "ProvenancedDataset",
     "DatasetProviderRegistry",
     "DatasetProviderError",
+    "DatasetProviderCompatibilityError",
     "DatasetProviderValidationError",
     "DatasetProviderNotFoundError",
 ]
