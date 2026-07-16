@@ -5,6 +5,7 @@ import pytest
 from edge.data import (
     DatasetProvider,
     DatasetProviderCompatibilityError,
+    DatasetProviderLoadError,
     DatasetProviderNotFoundError,
     DatasetProviderRegistry,
     DatasetProviderValidationError,
@@ -66,6 +67,11 @@ class IncompatibleDatasetProvider(StaticDatasetProvider):
         )
 
 
+class FailingDatasetProvider(StaticDatasetProvider):
+    def load(self, query: DatasetQuery) -> HistoricalDataset:
+        raise RuntimeError("provider failure")
+
+
 def test_registry_rejects_duplicate_provider_id():
     registry = DatasetProviderRegistry()
 
@@ -119,3 +125,36 @@ def test_registry_raises_when_dataset_incompatible_with_query():
 
     with pytest.raises(DatasetProviderCompatibilityError):
         registry.load(DatasetQuery(symbol="XAUUSD", timeframe="H1"))
+
+
+def test_registry_load_with_fallback_uses_next_provider_after_failure():
+    registry = DatasetProviderRegistry()
+    registry.register(FailingDatasetProvider("primary-provider"))
+    registry.register(StaticDatasetProvider("backup-provider"))
+
+    result = registry.load_with_fallback(
+        DatasetQuery(
+            symbol="XAUUSD",
+            timeframe="H1",
+            provider_id="primary-provider",
+        ),
+        fallback_provider_ids=["backup-provider"],
+    )
+
+    assert result.provenance.provider_id == "backup-provider"
+
+
+def test_registry_load_with_fallback_raises_when_all_attempts_fail():
+    registry = DatasetProviderRegistry()
+    registry.register(FailingDatasetProvider("primary-provider"))
+    registry.register(IncompatibleDatasetProvider("backup-provider"))
+
+    with pytest.raises(DatasetProviderLoadError):
+        registry.load_with_fallback(
+            DatasetQuery(
+                symbol="XAUUSD",
+                timeframe="H1",
+                provider_id="primary-provider",
+            ),
+            fallback_provider_ids=["backup-provider"],
+        )

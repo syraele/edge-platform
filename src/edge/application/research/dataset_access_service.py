@@ -20,6 +20,7 @@ class DatasetAccessService:
         end: datetime | None = None,
         source: str | None = None,
         provider_id: str | None = None,
+        fallback_provider_ids: list[str] | None = None,
     ):
         query = DatasetQuery(
             symbol=symbol,
@@ -29,5 +30,11 @@ class DatasetAccessService:
             source=source,
             provider_id=provider_id,
         )
+
+        if fallback_provider_ids:
+            return self._registry.load_with_fallback(
+                query,
+                fallback_provider_ids=fallback_provider_ids,
+            )
 
         return self._registry.load(query)

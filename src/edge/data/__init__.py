@@ -1,6 +1,7 @@
 from .providers import (
 	DatasetProvider,
 	DatasetProviderCompatibilityError,
+	DatasetProviderLoadError,
 	DatasetProviderNotFoundError,
 	DatasetProviderRegistry,
 	DatasetProviderValidationError,
@@ -12,6 +13,7 @@ __all__ = [
 	"DatasetQuery",
 	"DatasetProviderRegistry",
 	"DatasetProviderCompatibilityError",
+	"DatasetProviderLoadError",
 	"DatasetProviderValidationError",
 	"DatasetProviderNotFoundError",
 ]

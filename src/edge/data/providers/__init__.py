@@ -5,6 +5,7 @@ from .query import DatasetQuery
 from .registry import (
     DatasetProviderCompatibilityError,
     DatasetProviderError,
+    DatasetProviderLoadError,
     DatasetProviderNotFoundError,
     DatasetProviderRegistry,
     DatasetProviderValidationError,
@@ -20,6 +21,7 @@ __all__ = [
     "DatasetProviderRegistry",
     "DatasetProviderError",
     "DatasetProviderCompatibilityError",
+    "DatasetProviderLoadError",
     "DatasetProviderValidationError",
     "DatasetProviderNotFoundError",
 ]

@@ -23,6 +23,10 @@ class DatasetProviderCompatibilityError(DatasetProviderError, ValueError):
     """Raised when returned dataset is incompatible with requested query."""
 
 
+class DatasetProviderLoadError(DatasetProviderError):
+    """Raised when dataset loading fails across provider attempts."""
+
+
 class DatasetProviderRegistry:
     """Registry and resolver for advanced dataset providers."""
 
@@ -76,6 +80,62 @@ class DatasetProviderRegistry:
 
     def load(self, query: DatasetQuery) -> ProvenancedDataset:
         provider = self.resolve(query)
+        return self._load_from_provider(provider, query)
+
+    def load_with_fallback(
+        self,
+        query: DatasetQuery,
+        fallback_provider_ids: list[str] | None = None,
+    ) -> ProvenancedDataset:
+        candidate_provider_ids: list[str] = []
+
+        if query.provider_id:
+            candidate_provider_ids.append(query.provider_id)
+        else:
+            for provider_id in self.list_providers():
+                provider = self._providers[provider_id]
+                if provider.supports(query):
+                    candidate_provider_ids.append(provider_id)
+
+        for provider_id in fallback_provider_ids or []:
+            if provider_id not in candidate_provider_ids:
+                candidate_provider_ids.append(provider_id)
+
+        if not candidate_provider_ids:
+            raise DatasetProviderNotFoundError(
+                f"No dataset provider available for {query.symbol}/{query.timeframe}"
+            )
+
+        last_error: Exception | None = None
+        attempted: list[str] = []
+
+        for provider_id in candidate_provider_ids:
+            provider = self.get(provider_id)
+
+            if not provider.supports(query):
+                continue
+
+            attempted.append(provider_id)
+
+            try:
+                return self._load_from_provider(provider, query)
+            except Exception as exc:  # noqa: BLE001 - fallback requires broad capture.
+                last_error = exc
+
+        if not attempted:
+            raise DatasetProviderNotFoundError(
+                f"No compatible dataset provider available for {query.symbol}/{query.timeframe}"
+            )
+
+        raise DatasetProviderLoadError(
+            f"All provider attempts failed for {query.symbol}/{query.timeframe}: {attempted}"
+        ) from last_error
+
+    def _load_from_provider(
+        self,
+        provider: DatasetProvider,
+        query: DatasetQuery,
+    ) -> ProvenancedDataset:
         dataset = provider.load(query)
 
         self._validate_dataset_compatibility(dataset, query)
