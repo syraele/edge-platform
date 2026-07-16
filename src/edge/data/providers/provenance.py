@@ -14,6 +14,10 @@ class DatasetProvenance:
     provider_version: str
     dataset_source: str
     retrieved_at: datetime
+    requested_start: datetime | None = None
+    requested_end: datetime | None = None
+    dataset_start: datetime | None = None
+    dataset_end: datetime | None = None
     normalization: str = "as_is"
 
 

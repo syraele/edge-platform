@@ -1,3 +1,5 @@
+from datetime import UTC, datetime
+
 from edge.application.research.dataset_access_service import DatasetAccessService
 from edge.data import DatasetProviderRegistry
 from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
@@ -24,6 +26,23 @@ def test_dataset_access_service_requests_provenanced_dataset():
 
     assert result.dataset.metadata.symbol == "XAUUSD"
     assert result.provenance.provider_id == "historical-archive"
+
+
+def test_dataset_access_service_preserves_requested_time_window_in_provenance():
+    registry = DatasetProviderRegistry()
+    registry.register(HistoricalArchiveProvider())
+
+    service = DatasetAccessService(registry)
+
+    result = service.request_dataset(
+        symbol="XAUUSD",
+        timeframe="H1",
+        start=datetime(2024, 1, 1, tzinfo=UTC),
+        end=datetime(2024, 1, 1, tzinfo=UTC),
+    )
+
+    assert result.provenance.requested_start == datetime(2024, 1, 1, tzinfo=UTC)
+    assert result.provenance.requested_end == datetime(2024, 1, 1, tzinfo=UTC)
 
 
 def test_dataset_access_service_honors_explicit_provider_id():

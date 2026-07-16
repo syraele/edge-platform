@@ -79,6 +79,7 @@ class DatasetProviderRegistry:
         )
 
     def load(self, query: DatasetQuery) -> ProvenancedDataset:
+        self._validate_query(query)
         provider = self.resolve(query)
         return self._load_from_provider(provider, query)
 
@@ -87,6 +88,7 @@ class DatasetProviderRegistry:
         query: DatasetQuery,
         fallback_provider_ids: list[str] | None = None,
     ) -> ProvenancedDataset:
+        self._validate_query(query)
         candidate_provider_ids: list[str] = []
 
         if query.provider_id:
@@ -140,11 +142,21 @@ class DatasetProviderRegistry:
 
         self._validate_dataset_compatibility(dataset, query)
 
+        dataset_start = None
+        dataset_end = None
+        if not dataset.is_empty:
+            dataset_start = dataset.first_bar.timestamp
+            dataset_end = dataset.last_bar.timestamp
+
         provenance = DatasetProvenance(
             provider_id=provider.provider_id,
             provider_version=getattr(provider, "provider_version", "0.0.0"),
             dataset_source=query.source or dataset.metadata.source,
             retrieved_at=datetime.now(UTC),
+            requested_start=query.start,
+            requested_end=query.end,
+            dataset_start=dataset_start,
+            dataset_end=dataset_end,
             normalization="as_is",
         )
 
@@ -160,6 +172,27 @@ class DatasetProviderRegistry:
         if dataset.metadata.timeframe != query.timeframe:
             raise DatasetProviderCompatibilityError(
                 "Dataset timeframe does not match query timeframe"
+            )
+
+        if not dataset.is_empty:
+            first_timestamp = dataset.first_bar.timestamp
+            last_timestamp = dataset.last_bar.timestamp
+
+            if query.start is not None and first_timestamp < query.start:
+                raise DatasetProviderCompatibilityError(
+                    "Dataset starts before requested start time"
+                )
+
+            if query.end is not None and last_timestamp > query.end:
+                raise DatasetProviderCompatibilityError(
+                    "Dataset ends after requested end time"
+                )
+
+    @staticmethod
+    def _validate_query(query: DatasetQuery) -> None:
+        if query.start is not None and query.end is not None and query.start > query.end:
+            raise DatasetProviderCompatibilityError(
+                "Dataset query start time must not be after end time"
             )
 
     @staticmethod

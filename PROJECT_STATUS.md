@@ -107,6 +107,7 @@ Define provider-oriented dataset extension capabilities that preserve reproducib
 * Application-facing dataset access service implemented and registered.
 * Failure and fallback behavior implemented for multi-provider dataset loading.
 * Research pipeline integration added for provider-driven dataset requests with session provenance attachment.
+* Temporal validity checks and dataset coverage provenance implemented for provider-loaded datasets.
 * PE-002 focused unit and integration tests added and passing.
 
 ---

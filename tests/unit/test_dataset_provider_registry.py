@@ -72,6 +72,27 @@ class FailingDatasetProvider(StaticDatasetProvider):
         raise RuntimeError("provider failure")
 
 
+class EarlyDatasetProvider(StaticDatasetProvider):
+    def load(self, query: DatasetQuery) -> HistoricalDataset:
+        bar = Bar(
+            timestamp=datetime(2023, 12, 31, 23, 0, tzinfo=UTC),
+            open=100.0,
+            high=101.0,
+            low=99.0,
+            close=100.5,
+            volume=10.0,
+        )
+
+        return HistoricalDataset(
+            metadata=DatasetMetadata(
+                symbol=query.symbol,
+                timeframe=query.timeframe,
+                source=query.source or self.provider_id,
+            ),
+            bars=(bar,),
+        )
+
+
 def test_registry_rejects_duplicate_provider_id():
     registry = DatasetProviderRegistry()
 
@@ -101,6 +122,8 @@ def test_registry_load_returns_provenanced_dataset():
     assert result.provenance.provider_id == "history-provider"
     assert result.provenance.provider_version == "1.2.0"
     assert result.provenance.dataset_source == "archive-v1"
+    assert result.provenance.dataset_start == datetime(2024, 1, 1, tzinfo=UTC)
+    assert result.provenance.dataset_end == datetime(2024, 1, 1, tzinfo=UTC)
 
 
 def test_registry_load_with_explicit_provider_id():
@@ -125,6 +148,35 @@ def test_registry_raises_when_dataset_incompatible_with_query():
 
     with pytest.raises(DatasetProviderCompatibilityError):
         registry.load(DatasetQuery(symbol="XAUUSD", timeframe="H1"))
+
+
+def test_registry_raises_when_query_time_window_is_invalid():
+    registry = DatasetProviderRegistry()
+    registry.register(StaticDatasetProvider("history-provider"))
+
+    with pytest.raises(DatasetProviderCompatibilityError):
+        registry.load(
+            DatasetQuery(
+                symbol="XAUUSD",
+                timeframe="H1",
+                start=datetime(2024, 1, 2, tzinfo=UTC),
+                end=datetime(2024, 1, 1, tzinfo=UTC),
+            )
+        )
+
+
+def test_registry_raises_when_dataset_precedes_requested_start():
+    registry = DatasetProviderRegistry()
+    registry.register(EarlyDatasetProvider("early-provider"))
+
+    with pytest.raises(DatasetProviderCompatibilityError):
+        registry.load(
+            DatasetQuery(
+                symbol="XAUUSD",
+                timeframe="H1",
+                start=datetime(2024, 1, 1, tzinfo=UTC),
+            )
+        )
 
 
 def test_registry_load_with_fallback_uses_next_provider_after_failure():
