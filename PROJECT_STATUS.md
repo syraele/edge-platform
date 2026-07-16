@@ -16,7 +16,7 @@ Last Updated: Platform Evolution workflow alignment
 
 ## Project State
 
-**Stable — PE-001 completed and Platform Evolution advanced to PE-002 specification**
+**Stable — PE-002 completed and Platform Evolution advanced to PE-003 specification**
 
 ## Platform Evolution Roadmap
 
@@ -46,7 +46,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to implement PE-002 incrementally (test-first), starting from provider contract, provenance model, and registry integration while preserving Foundation v2 boundaries.
+The immediate focus is to prepare PE-003 as the next implementation candidate while preserving Foundation v2 boundaries and the research-first mission of the platform.
 
 #### Review and Execution References
 
@@ -76,45 +76,52 @@ The current baseline is implementation-capable and structured for the next Platf
 
 # Current Milestone
 
-## PE-002 — Advanced Dataset Providers
+## PE-003 — Portfolio Research
 
 ### Status
 
-**Implementation (Incremental)**
+**Specification**
 
 ### Objective
 
-Define provider-oriented dataset extension capabilities that preserve reproducibility, provenance, and compatibility with the Core architecture.
+Define portfolio-oriented research capabilities that remain subordinate to validated research evidence, reproducibility, and architectural discipline.
 
 ### Current Focus
 
-* refine PE-002 specification for implementation readiness;
-* define provider contracts and compatibility constraints;
-* preserve reproducibility and dataset provenance rules;
+* refine PE-003 specification for implementation readiness;
+* define portfolio research boundaries without weakening the research-first model;
+* preserve traceability between portfolio reasoning and underlying evidence;
 * maintain consistency with the broader Platform Evolution roadmap;
-* preserve architectural guardrails established in Foundation v2 and PE-001.
+* preserve architectural guardrails established in Foundation v2, PE-001, and PE-002.
 
 ### Result
 
-* PE-002 specification package available.
-* Dataset provider contract implemented.
-* Dataset query and provenance models implemented.
-* Dataset provider registry implemented with provider resolution and traceable loading.
-* Dataset provider registry integrated in shared context services.
-* Declarative dataset provider discovery implemented through entrypoint loader.
-* Application lifecycle integration implemented for provider registration from engine configuration.
-* Compatibility validation implemented for dataset/query alignment.
-* Application-facing dataset access service implemented and registered.
-* Failure and fallback behavior implemented for multi-provider dataset loading.
-* Research pipeline integration added for provider-driven dataset requests with session provenance attachment.
-* Temporal validity checks and dataset coverage provenance implemented for provider-loaded datasets.
-* Explicit dataset normalization policy introduced for compatibility-safe provider ingestion.
-* Dataset normalization policy can now be selected through engine configuration.
-* PE-002 focused unit and integration tests added and passing.
+* PE-003 specification package available for next implementation cycle.
 
 ---
 
 # Last Completed Milestone
+
+## PE-002 — Advanced Dataset Providers
+
+**Completed**
+
+### Result
+
+* Dataset provider contract implemented.
+* Dataset query and provenance models implemented.
+* Dataset provider registry implemented with provider resolution and traceable loading.
+* Declarative dataset provider discovery implemented through entrypoint loader.
+* Application lifecycle integration implemented for provider registration from engine configuration.
+* Compatibility validation, fallback behavior, temporal validity checks, and provenance coverage implemented.
+* Dataset access service integrated into the research pipeline.
+* Explicit and configurable normalization policies implemented.
+* Runtime provider metadata inspection implemented.
+* Unit and integration tests implemented and passing.
+
+---
+
+# Previously Completed Milestone
 
 ## PE-001 — Plugin System
 

@@ -133,13 +133,13 @@ Current Phase:
 
 Current Milestone:
 
-**PE-002 – Advanced Dataset Providers (Specification)**
+**PE-003 – Portfolio Research (Specification)**
 
 The repository is currently positioned for milestone review and controlled progression toward implementation.
 
 Last completed milestone:
 
-**PE-001 – Plugin System (Completed)**
+**PE-002 – Advanced Dataset Providers (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Refine and approve PE-002 before the next implementation cycle begins.**
+**Refine and approve PE-003 before the next implementation cycle begins.**
 
 For the latest project status, see PROJECT_STATUS.md.
 
