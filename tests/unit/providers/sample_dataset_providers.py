@@ -9,6 +9,9 @@ from edge.data.models.dataset_metadata import DatasetMetadata
 class HistoricalArchiveProvider(DatasetProvider):
     provider_id = "historical-archive"
     provider_version = "2.0.0"
+    provider_name = "Historical Archive Provider"
+    dataset_source = "archive-store"
+    supported_symbols = ("XAUUSD", "EURUSD")
 
     def supports(self, query: DatasetQuery) -> bool:
         return query.symbol in {"XAUUSD", "EURUSD"}
@@ -36,6 +39,9 @@ class HistoricalArchiveProvider(DatasetProvider):
 class UnorderedArchiveProvider(DatasetProvider):
     provider_id = "unordered-archive"
     provider_version = "2.1.0"
+    provider_name = "Unordered Archive Provider"
+    dataset_source = "unordered-archive-store"
+    supported_symbols = ("XAUUSD",)
 
     def supports(self, query: DatasetQuery) -> bool:
         return query.symbol == "XAUUSD"

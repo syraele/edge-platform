@@ -263,3 +263,21 @@ def test_registry_applies_sorted_deduplicated_normalization_policy():
     assert result.dataset.last_bar.timestamp == datetime(2024, 1, 1, 2, 0, tzinfo=UTC)
     assert result.dataset.first_bar.open == 90.0
     assert result.provenance.normalization == "sorted_deduplicated"
+
+
+def test_registry_describe_returns_provider_metadata():
+    registry = DatasetProviderRegistry()
+    provider = StaticDatasetProvider("history-provider")
+    provider.provider_name = "History Provider"
+    provider.dataset_source = "archive-v1"
+    provider.supported_symbols = ("XAUUSD",)
+
+    registry.register(provider)
+
+    descriptor = registry.describe("history-provider")
+
+    assert descriptor.provider_id == "history-provider"
+    assert descriptor.provider_version == "1.2.0"
+    assert descriptor.provider_name == "History Provider"
+    assert descriptor.dataset_source == "archive-v1"
+    assert descriptor.supported_symbols == ("XAUUSD",)

@@ -1,4 +1,5 @@
 from .base import DatasetProvider
+from .descriptor import DatasetProviderDescriptor
 from .loader import DatasetProviderDiscoveryError, DatasetProviderLoader
 from .provenance import DatasetProvenance, ProvenancedDataset
 from .query import DatasetQuery
@@ -13,6 +14,7 @@ from .registry import (
 
 __all__ = [
     "DatasetProvider",
+    "DatasetProviderDescriptor",
     "DatasetProviderLoader",
     "DatasetProviderDiscoveryError",
     "DatasetQuery",

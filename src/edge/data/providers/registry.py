@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from edge.data.validation import AsIsNormalizationPolicy, DatasetNormalizationPolicy
 
 from .base import DatasetProvider
+from .descriptor import DatasetProviderDescriptor
 from .provenance import DatasetProvenance, ProvenancedDataset
 from .query import DatasetQuery
 
@@ -67,6 +68,12 @@ class DatasetProviderRegistry:
             )
 
         return provider
+
+    def describe(self, provider_id: str) -> DatasetProviderDescriptor:
+        return self.get(provider_id).describe()
+
+    def describe_all(self) -> list[DatasetProviderDescriptor]:
+        return [self._providers[provider_id].describe() for provider_id in self.list_providers()]
 
     def resolve(self, query: DatasetQuery) -> DatasetProvider:
         if query.provider_id:

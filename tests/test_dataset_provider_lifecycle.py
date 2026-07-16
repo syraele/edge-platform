@@ -52,6 +52,13 @@ def test_application_registers_dataset_providers_from_config(tmp_path):
     providers = app.context.services.dataset_provider_registry.list_providers()
     assert providers == ["historical-archive"]
 
+    descriptor = app.context.services.dataset_provider_registry.describe(
+        "historical-archive"
+    )
+    assert descriptor.provider_name == "Historical Archive Provider"
+    assert descriptor.dataset_source == "archive-store"
+    assert descriptor.supported_symbols == ("XAUUSD", "EURUSD")
+
     dataset_access_service = app.context.services.registry.get(
         "dataset_access_service"
     )
