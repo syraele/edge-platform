@@ -33,19 +33,23 @@ class ExperimentExecutor:
         algorithms at this stage.
         """
 
-        # Phase 1 - State construction
-        execution_state = {
-            "experiment": experiment,
-            "measurements": {},
-        }
-        # TODO(PR-001): State construction for quantitative execution context.
+        dataset = experiment.hypothesis.market_description.dataset
+        bars = dataset.bars
 
-        # Phase 2 - Similarity search
-        # TODO(PR-001): Similarity search over historical/knowledge context.
+        total_return = 0.0
+        bars_processed = 0
 
-        # Phase 3 - Outcome analysis
-        # TODO(PR-001): Outcome analysis from experiment context and similarity results.
+        for bar in bars:
+            total_return += (bar.close - bar.open) / bar.open
+            bars_processed += 1
 
-        # Phase 4 - Evidence construction
-        # TODO(PR-001): Evidence construction from analyzed quantitative outcomes.
-        return Evidence(measurements=execution_state["measurements"])
+        average_return = (
+            total_return / bars_processed if bars_processed > 0 else 0.0
+        )
+
+        return Evidence(
+            measurements={
+                "bars_processed": float(bars_processed),
+                "average_return": average_return,
+            }
+        )

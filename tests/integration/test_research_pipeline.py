@@ -106,7 +106,8 @@ def test_research_pipeline_executes_complete_session() -> None:
     assert result.session_id == session.session_id
     assert result.status is SessionStatus.COMPLETED
     assert len(result.evidences) == 1
-    assert result.knowledge is None
+    assert result.knowledge is not None
+    assert result.knowledge.statement == "Evidence successfully validated."
     assert result.started_at is not None
     assert result.completed_at is not None
     assert result.dataset_provenance is None
