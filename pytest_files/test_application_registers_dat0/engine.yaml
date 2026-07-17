@@ -1,0 +1,13 @@
+dataset_providers:
+  enabled:
+  - entrypoint: tests.unit.providers.sample_dataset_providers:HistoricalArchiveProvider
+    id: historical-archive
+engine:
+  name: EDGE_ENGINE
+  version: '1.0'
+logging:
+  level: INFO
+mode:
+  type: BACKTEST
+plugins:
+  enabled: []

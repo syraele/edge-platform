@@ -187,9 +187,9 @@ The repository already contains the framework-independent visualization capabili
 
 Implemented a deterministic projection for the core research chain: dataset provenance, session lifecycle, hypotheses, experiments, evidence, knowledge, edges, pipeline-report identity, and explicit extension availability. Unit and integration regression tests cover complete and absent-artifact sessions and confirm that projection creation does not mutate its sources.
 
-### Slice 3 — Platform Evolution Report Adapters
+### Slice 3 — Platform Evolution Report Adapters (implemented)
 
-Extend the projection through explicit adapters for portfolio research, optimization, and ML reports. Each adapter must preserve its source fingerprints, assumptions, failures, and traceability, and must remain optional and independently testable.
+Implemented explicit, optional adapters for portfolio research, optimization, and ML reports. Each adapter preserves source identity, available fingerprints, assumptions, failures, and traceability without exposing report internals to renderers.
 
 ### Slice 4 — Dashboard Composition Contract
 

@@ -1,8 +1,10 @@
 from edge.visualization import (
     VisualizationCapability,
     VisualizationDataReference,
+    VisualizationProjectionBuilder,
     VisualizationService,
 )
+from edge.application.research.session import ResearchSession
 
 
 class StubRenderer:
@@ -14,6 +16,15 @@ class StubRenderer:
         if self._should_raise:
             raise RuntimeError("renderer unavailable")
         return self._output
+
+
+class CountingRenderer:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def render(self, capability, payload, traceability):
+        self.calls += 1
+        return {"capability": capability.capability_id, "payload": payload}
 
 
 def test_visualization_service_returns_traceable_completed_report():
@@ -103,3 +114,23 @@ def test_visualization_capability_fingerprint_is_deterministic():
     )
 
     assert left.fingerprint == right.fingerprint
+
+
+def test_visualization_service_rejects_unavailable_projection_section() -> None:
+    renderer = CountingRenderer()
+    capability = VisualizationCapability(
+        capability_id="viz-dataset",
+        capability_name="Dataset",
+        required_sections=("dataset",),
+    )
+    projection = VisualizationProjectionBuilder().build(
+        ResearchSession(session_id="session-without-dataset")
+    )
+
+    report = VisualizationService(renderer).render_projection(capability, projection)
+
+    assert report.status == "failed"
+    assert report.failure_message == "Unavailable projection sections: ['dataset']"
+    assert report.traceability_count == 1
+    assert report.rendered_sections == ()
+    assert renderer.calls == 0

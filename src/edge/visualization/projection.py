@@ -7,6 +7,9 @@ from typing import Any
 
 from edge.application.research.report import PipelineReport
 from edge.application.research.session import ResearchSession
+from edge.ml.report import MachineLearningReport
+from edge.optimization.report import OptimizationReport
+from edge.portfolio.report import PortfolioResearchReport
 
 from .report import VisualizationDataReference
 
@@ -47,19 +50,40 @@ class VisualizationProjectionBuilder:
         self,
         session: ResearchSession,
         pipeline_report: PipelineReport | None = None,
+        portfolio_report: PortfolioResearchReport | None = None,
+        optimization_report: OptimizationReport | None = None,
+        machine_learning_report: MachineLearningReport | None = None,
     ) -> VisualizationProjection:
-        sections = (
+        machine_learning_report = machine_learning_report or session.ml_report
+        sections = [
             self._build_session_section(session, pipeline_report),
             self._build_dataset_section(session),
             self._build_research_section(session),
-            self._build_extensions_section(session),
+            self._build_extensions_section(machine_learning_report),
+        ]
+        if portfolio_report is not None:
+            sections.append(self._build_portfolio_section(portfolio_report))
+        if optimization_report is not None:
+            sections.append(self._build_optimization_section(optimization_report))
+        if machine_learning_report is not None:
+            sections.append(
+                self._build_machine_learning_section(machine_learning_report)
+            )
+        section_tuple = tuple(sections)
+        traceability = self._build_traceability(
+            session,
+            pipeline_report,
+            portfolio_report,
+            optimization_report,
+            machine_learning_report,
         )
-        traceability = self._build_traceability(session, pipeline_report)
         return VisualizationProjection(
             session_id=session.session_id,
-            sections=sections,
+            sections=section_tuple,
             traceability=traceability,
-            fingerprint=self._build_fingerprint(session.session_id, sections, traceability),
+            fingerprint=self._build_fingerprint(
+                session.session_id, section_tuple, traceability
+            ),
         )
 
     @staticmethod
@@ -117,19 +141,91 @@ class VisualizationProjectionBuilder:
         )
 
     @staticmethod
-    def _build_extensions_section(session: ResearchSession) -> VisualizationSection:
+    def _build_extensions_section(
+        machine_learning_report: MachineLearningReport | None,
+    ) -> VisualizationSection:
         data = {
             "portfolio_available": False,
             "optimization_available": False,
-            "machine_learning_available": session.ml_report is not None,
+            "machine_learning_available": machine_learning_report is not None,
         }
         availability = "available" if any(data.values()) else "unavailable"
         return VisualizationSection("extensions", availability, data)
 
     @staticmethod
+    def _build_portfolio_section(
+        report: PortfolioResearchReport,
+    ) -> VisualizationSection:
+        return VisualizationSection(
+            "portfolio",
+            "available",
+            {
+                "portfolio_id": report.portfolio_id,
+                "research_unit_count": len(report.research_unit_ids),
+                "comparison_order": list(report.comparison_order),
+                "provider_ids": list(report.provider_ids),
+                "dataset_sources": list(report.dataset_sources),
+                "completed_units": report.completed_units,
+                "failed_units": report.failed_units,
+                "evidence_count": report.evidence_count,
+                "knowledge_count": report.knowledge_count,
+                "edge_count": report.edge_count,
+            },
+        )
+
+    @staticmethod
+    def _build_optimization_section(
+        report: OptimizationReport,
+    ) -> VisualizationSection:
+        return VisualizationSection(
+            "optimization",
+            "available",
+            {
+                "problem_id": report.problem_id,
+                "problem_fingerprint": report.problem_fingerprint,
+                "status": report.status,
+                "objective_name": report.objective_name,
+                "maximize": report.maximize,
+                "constraint_count": len(report.constraints),
+                "assumptions": list(report.assumptions),
+                "ranking": list(report.ranking),
+                "winner_configuration": report.winner_configuration,
+                "best_objective_value": report.best_objective_value,
+                "succeeded_candidates": report.succeeded_candidates,
+                "failed_candidates": report.failed_candidates,
+                "failure_messages": list(report.failure_messages),
+                "run_fingerprint": report.run_fingerprint,
+            },
+        )
+
+    @staticmethod
+    def _build_machine_learning_section(
+        report: MachineLearningReport,
+    ) -> VisualizationSection:
+        return VisualizationSection(
+            "machine_learning",
+            "available",
+            {
+                "capability_id": report.capability_id,
+                "capability_fingerprint": report.capability_fingerprint,
+                "status": report.status,
+                "input_metric_names": list(report.input_metric_names),
+                "assumption_count": report.assumption_count,
+                "assumptions": list(report.result.assumptions),
+                "output_name": report.output_name,
+                "output_value": report.output_value,
+                "failure_message": report.failure_message,
+                "run_fingerprint": report.run_fingerprint,
+            },
+        )
+
+    @staticmethod
     def _build_traceability(
         session: ResearchSession,
         pipeline_report: PipelineReport | None,
+        portfolio_report: PortfolioResearchReport | None,
+        optimization_report: OptimizationReport | None,
+        machine_learning_report: MachineLearningReport | None,
     ) -> tuple[VisualizationDataReference, ...]:
         references = [
             VisualizationDataReference(
@@ -142,6 +238,29 @@ class VisualizationProjectionBuilder:
                 VisualizationDataReference(
                     reference_type="pipeline_report",
                     reference_id=pipeline_report.report_id,
+                )
+            )
+        if portfolio_report is not None:
+            references.append(
+                VisualizationDataReference(
+                    reference_type="portfolio_report",
+                    reference_id=portfolio_report.portfolio_id,
+                )
+            )
+        if optimization_report is not None:
+            references.append(
+                VisualizationDataReference(
+                    reference_type="optimization_report",
+                    reference_id=optimization_report.problem_id,
+                    fingerprint=optimization_report.run_fingerprint,
+                )
+            )
+        if machine_learning_report is not None:
+            references.append(
+                VisualizationDataReference(
+                    reference_type="machine_learning_report",
+                    reference_id=machine_learning_report.capability_id,
+                    fingerprint=machine_learning_report.run_fingerprint,
                 )
             )
         return tuple(references)

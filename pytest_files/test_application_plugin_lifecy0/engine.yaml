@@ -1,0 +1,11 @@
+engine:
+  name: EDGE_ENGINE
+  version: '1.0'
+logging:
+  level: INFO
+mode:
+  type: BACKTEST
+plugins:
+  enabled:
+  - entrypoint: tests.unit.plugins.sample_plugins:LifecycleProbePlugin
+    id: lifecycle-probe

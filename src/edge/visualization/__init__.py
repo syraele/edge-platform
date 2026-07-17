@@ -10,9 +10,12 @@ from .projection import (
     VisualizationProjectionBuilder,
     VisualizationSection,
 )
+from .composition import VisualizationComposition, VisualizationCompositionError
 
 __all__ = [
     "VisualizationCapability",
+    "VisualizationComposition",
+    "VisualizationCompositionError",
     "VisualizationDataReference",
     "VisualizationReport",
     "VisualizationResult",
