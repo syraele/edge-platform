@@ -5,6 +5,11 @@ from .report import (
     VisualizationResult,
 )
 from .service import VisualizationError, VisualizationService
+from .projection import (
+    VisualizationProjection,
+    VisualizationProjectionBuilder,
+    VisualizationSection,
+)
 
 __all__ = [
     "VisualizationCapability",
@@ -13,4 +18,7 @@ __all__ = [
     "VisualizationResult",
     "VisualizationService",
     "VisualizationError",
+    "VisualizationProjection",
+    "VisualizationProjectionBuilder",
+    "VisualizationSection",
 ]

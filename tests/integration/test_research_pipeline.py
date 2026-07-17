@@ -35,6 +35,7 @@ from edge.optimization import OptimizationProblem, OptimizationService
 from edge.visualization import (
     VisualizationCapability,
     VisualizationDataReference,
+    VisualizationProjectionBuilder,
     VisualizationService,
 )
 from tests.unit.providers.sample_dataset_providers import HistoricalArchiveProvider
@@ -311,3 +312,19 @@ def test_research_pipeline_executes_visualization() -> None:
     assert report.traceability_count == 1
     assert report.result.snapshot["capability"] == "viz-pipeline-summary"
     assert session.visualization_report is report
+
+
+def test_research_pipeline_session_can_be_projected_for_visualization() -> None:
+    session = ResearchSession(session_id="visualization-projection-session")
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+    )
+
+    report = pipeline.execute(session)
+    projection = VisualizationProjectionBuilder().build(session, report)
+
+    assert report.status is SessionStatus.COMPLETED
+    assert projection.section("session").data["status"] == "completed"
+    assert projection.section("session").data["pipeline_report_id"] == report.report_id
+    assert projection.section("research").data["evidence_count"] == 0

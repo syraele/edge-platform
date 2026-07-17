@@ -2,7 +2,7 @@
 
 Version: 1.0
 
-Status: Specification
+Status: Implementation (Incremental — End-to-End Scope Draft)
 
 Phase: Platform Evolution
 
@@ -146,6 +146,66 @@ The Visualization & Dashboards milestone must produce:
 * documented constraints that preserve the platform’s scientific integrity;
 * a minimal implementation plan that shows how the specification will be introduced into the repository without modifying the Core Domain model.
 
+## End-to-End Research Visibility
+
+PE-006 is the presentation continuation of the complete EDGE_ENGINE research process. It does not introduce a second research workflow and does not reinterpret Domain outcomes. It exposes, in a reviewable form, the artifacts already produced by the existing workflow and Platform Evolution capabilities.
+
+The visualization boundary must be able to represent the following connected research context when it is available:
+
+* dataset identity, metadata, provider provenance, and request context;
+* market description, research hypotheses, experiments, and evidence;
+* validated knowledge and generated edges;
+* pipeline execution status, timestamps, failures, and deterministic report identity;
+* portfolio aggregation and comparison results;
+* optimization problems, evaluated candidates, rankings, constraints, and run fingerprints;
+* machine-learning capabilities, inputs, outputs, assumptions, failures, and run fingerprints;
+* visualization capability identity, assumptions, traceability references, and rendering outcome.
+
+An unavailable artifact must be represented explicitly as unavailable rather than inferred, synthesized, or silently omitted. Visualization is a read-oriented projection of research artifacts; it must not execute experiments, evaluate evidence, optimize candidates, train models, or mutate session, domain, or provider state.
+
+## Canonical Visualization Projection
+
+The next implementation slice must introduce a framework-independent application-level projection that composes available reports into deterministic, named sections. The projection is the only input shape that dashboard-oriented renderers need to understand.
+
+Each section must contain:
+
+* a stable section identifier and display semantics;
+* an explicit availability state;
+* the data required for presentation without domain mutation;
+* traceability references back to the originating report, session, capability, or provenance record;
+* assumptions, failures, and fingerprints where the source artifact exposes them.
+
+The projection must not require every Platform Evolution capability to be configured. A plain research-pipeline run remains visualizable, while optional portfolio, optimization, ML, plugin, and dataset-provider sections appear only from their corresponding artifacts.
+
+## Incremental Delivery Slices
+
+### Slice 1 — Visualization Foundation (implemented)
+
+The repository already contains the framework-independent visualization capability, result/report model, deterministic fingerprinting, renderer failure containment, and ResearchPipeline integration.
+
+### Slice 2 — Research Session Projection (implemented)
+
+Implemented a deterministic projection for the core research chain: dataset provenance, session lifecycle, hypotheses, experiments, evidence, knowledge, edges, pipeline-report identity, and explicit extension availability. Unit and integration regression tests cover complete and absent-artifact sessions and confirm that projection creation does not mutate its sources.
+
+### Slice 3 — Platform Evolution Report Adapters
+
+Extend the projection through explicit adapters for portfolio research, optimization, and ML reports. Each adapter must preserve its source fingerprints, assumptions, failures, and traceability, and must remain optional and independently testable.
+
+### Slice 4 — Dashboard Composition Contract
+
+Define reusable dashboard composition from named projection sections and visualization capabilities. This slice may provide renderer-facing contracts and deterministic snapshots, but must not introduce a web UI framework or generic analytics product unless separately specified and approved.
+
+## Public Interface Additions
+
+The next slice must expose stable, application-layer interfaces for:
+
+* building a visualization projection from a ResearchSession and its available reports;
+* declaring the sections a visualization capability consumes;
+* preserving section-level availability, provenance, traceability, assumptions, failures, and fingerprints;
+* rendering a projection through the existing visualization service without coupling renderers to Domain internals.
+
+No public interface may require a renderer to import or mutate Domain aggregates.
+
 ---
 
 # Visualization Model
@@ -255,6 +315,14 @@ Expected testing considerations include:
 * validation of traceability and interpretability of visual outputs;
 * regression tests confirming that visualization does not weaken the rigor of underlying research results;
 * tests ensuring that visualization behavior does not undermine architectural boundaries.
+
+For the end-to-end scope, regression tests must additionally prove that:
+
+* a core research session is represented without optional Platform Evolution reports;
+* available provenance, evidence, knowledge, edge, optimization, ML, and portfolio artifacts retain their source traceability;
+* absent optional artifacts are explicit and deterministic;
+* changing only visualization composition cannot change research outcomes;
+* renderer failures remain contained and do not corrupt the underlying session or reports.
 
 ---
 

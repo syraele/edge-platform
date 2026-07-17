@@ -42,7 +42,7 @@ If Git is not recognized, restart the terminal or reopen Visual Studio Code.
 
 # 2. Install Python
 
-Install Python and make sure the Python executable is available in the PATH.
+Install Python 3.11 or later and make sure the Python executable is available in the PATH.
 
 Verify the installation:
 
