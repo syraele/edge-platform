@@ -2,9 +2,9 @@
 
 Version: 3.0
 
-Status: Active
+Status: Completed
 
-Last Updated: PE-006 Visualization Dashboards completion
+Last Updated: Roadmap completion through PE-007 and EF-004
 
 ---
 
@@ -12,19 +12,19 @@ Last Updated: PE-006 Visualization Dashboards completion
 
 ## Current Phase
 
-**Platform Evolution**
+**Completed**
 
 ## Project State
 
-**Stable — PE-006 completed and PE-007 prepared for specification review**
+**Stable — all documented roadmap milestones are completed**
 
 ## Platform Evolution Roadmap
 
-The current evolution phase is organized around a sequence of architecture-oriented milestones.
+The Platform Evolution phase was completed in controlled sequence.
 
 ### Active Milestone
 
-* PE-007 – Distributed Research Execution
+* None — documented roadmap completed
 
 ### Milestone Sequence
 
@@ -40,7 +40,7 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 ### Priority
 
-The immediate focus is to complete PE-007 specification review and approval before any distributed-execution implementation begins.
+The immediate focus is to preserve repository consistency and treat future work as a new approved milestone or ADR-driven extension.
 
 #### Review and Execution References
 
@@ -59,19 +59,19 @@ The immediate focus is to complete PE-007 specification review and approval befo
 
 **Synchronized**
 
-The current baseline is implementation-capable and structured for the next Platform Evolution milestone.
+The current baseline is implementation-complete for the documented roadmap and ready for maintenance or future approved evolution.
 
 ---
 
-# Current Milestone
+# Final Completed Milestone
 
 ## PE-007 — Distributed Research Execution
 
 ### Status
 
-**Specification Review Required**
+**Completed**
 
-The architectural specification exists, but it has not yet been approved for implementation. No PE-007 production changes may begin until its execution contract, implementation plan, acceptance criteria, and approval record are complete.
+PE-007 is implemented as a framework-independent distributed workload contract and deterministic aggregation service. The milestone preserves existing single-session `ResearchPipeline` behavior while enabling explicit multi-session coordination through an injected execution adapter.
 
 ### Objective
 
@@ -79,20 +79,23 @@ Define distributed research execution capabilities that preserve reproducibility
 
 ### Current Focus
 
-* review and complete the PE-007 execution contract;
-* define deterministic workload partitioning, coordination, aggregation, and failure-containment rules;
-* preserve traceability from distributed execution outcomes to the originating research artifacts;
-* prepare an approved, test-first implementation plan;
+* preserve deterministic workload identity, partitioning declarations, and execution ordering;
+* preserve traceability from aggregated distributed outcomes to session identities and pipeline reports;
+* contain unit-level failures without corrupting subsequent unit execution;
 * preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
 
 ### Result
 
-* PE-007 is not approved for implementation.
-* The existing specification is the basis for the required technical and governance review.
+* Immutable distributed workload and execution-unit contracts implemented.
+* Distributed research report and unit-result models implemented with deterministic workload and run fingerprints.
+* Distributed research service implemented with workload validation, ordered coordination, and contained unit failures.
+* Integration path validated through the existing `ResearchPipeline` via an injected execution adapter.
+* Distributed-execution unit and integration tests implemented and passing.
+* Full regression suite executed successfully after PE-007, EF-003, and EF-004 completion (122 passed).
 
 ---
 
-# Last Completed Milestone
+# Previously Completed Milestone
 
 ## PE-006 — Visualization Dashboards
 
@@ -110,7 +113,7 @@ Define distributed research execution capabilities that preserve reproducibility
 * Projection-based rendering integrated through VisualizationService and ResearchPipeline while preserving legacy payload rendering.
 * Visualization-focused unit tests implemented and passing.
 * Visualization integration test added to research pipeline and passing.
-* Full regression suite executed successfully after PE-006 completion (109 passed).
+* Full regression suite executed successfully after PE-006 completion (110 passed).
 
 ---
 
@@ -329,13 +332,13 @@ Edge Validation.
 
 ### EF-003
 
-**Pending**
+**Completed**
 
 Edge Lifecycle.
 
 ### EF-004
 
-**Pending**
+**Completed**
 
 Edge Management.
 
@@ -383,21 +386,21 @@ Pipeline Report.
 
 Latest updates:
 
-* PROJECT_STATUS.md reflects PE-006 completion and PE-007 as the next specification-stage milestone.
-* PE-006 dashboard composition and projection-based rendering are synchronized with the implementation.
+* PROJECT_STATUS.md reflects roadmap completion through PE-007 and EF-004.
+* PE-007 distributed workload coordination, EF-003 lifecycle transitions, and EF-004 edge management are synchronized with the implementation.
 * Python 3.11 is the minimum supported runtime because the codebase uses `datetime.UTC`.
-* Historical PE-001 through PE-005 specification status labels are synchronized with their completed milestones.
+* Historical milestone status labels are synchronized with their completed milestones.
 
 ## Testing
 
-Full local regression for PE-006 completion: **110 passing tests** with Python 3.14.6.
+Full local regression for roadmap completion: **122 passing tests** with Python 3.14.6.
 
 ---
 
 # Current Priorities
 
-1. Complete and approve the PE-007 distributed research execution contract and implementation plan.
-2. Preserve Foundation consistency.
+1. Preserve Foundation consistency.
+2. Treat future feature work as a new approved milestone or ADR-governed extension.
 
 ---
 
@@ -405,7 +408,7 @@ Full local regression for PE-006 completion: **110 passing tests** with Python 3
 
 ## Test Suite
 
-Last recorded: **110 passing** after PE-006 completion.
+Last recorded: **122 passing** after roadmap completion.
 
 ## Architecture
 
@@ -417,13 +420,13 @@ Frozen
 
 ## Application Layer
 
-PE-006 visualization capability is completed.
+Platform Evolution distributed coordination and Edge lifecycle/management are completed.
 
-Next governance action: approve the PE-007 distributed research execution contract and implementation plan.
+Next governance action: open any future work only through a new approved milestone or ADR.
 
 ## Documentation
 
-Synchronized with the completed PE-006 milestone and the PE-007 specification-review state.
+Synchronized with roadmap completion through PE-007 and EF-004.
 
 ---
 
@@ -488,7 +491,7 @@ Architectural changes require:
 
 # Next Action
 
-Complete the PE-007 distributed research execution contract and implementation plan, then obtain formal approval before production implementation begins.
+No active implementation milestone. Future repository changes require a new approved milestone or ADR-governed architectural decision.
 
 ---
 
@@ -513,7 +516,7 @@ When starting a new conversation:
 
 Current objective:
 
-Review and approve PE-007 before proceeding with distributed research execution.
+Preserve the completed roadmap baseline and open new work only through approved governance.
 
 Continue development following the documented workflow.
 

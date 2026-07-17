@@ -129,17 +129,17 @@ For the latest workflow guidance, see:
 
 Current Phase:
 
-**Platform Evolution**
+**Completed**
 
 Current Milestone:
 
-**PE-007 – Distributed Research Execution (Specification Review Required)**
+**None – documented roadmap completed**
 
-PE-006 Visualization Dashboards is completed. PE-007 implementation remains blocked until its execution contract, implementation plan, and approval record are complete.
+The documented roadmap is complete through PE-007 Distributed Research Execution and EF-004 Edge Management.
 
 Last completed milestone:
 
-**PE-006 – Visualization Dashboards (Completed)**
+**PE-007 – Distributed Research Execution (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Complete and approve the PE-007 distributed research execution contract and implementation plan.**
+**Preserve the completed baseline and introduce future work only through a new approved milestone or ADR.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

@@ -1,8 +1,8 @@
 # PE-007 — Distributed Research Execution
 
-Version: 1.0
+Version: 1.1
 
-Status: Specification
+Status: Completed
 
 Phase: Platform Evolution
 
@@ -145,6 +145,26 @@ The Distributed Research Execution milestone must produce:
 * documented constraints that preserve the platform’s scientific integrity;
 * a minimal implementation plan that shows how the specification will be introduced into the repository without modifying the Core Domain model.
 
+## Incremental Delivery Scope
+
+PE-007 is completed through a minimal, framework-independent application
+contract that coordinates multiple research-session executions as explicit work
+units.
+
+The approved implementation scope is intentionally narrow:
+
+* declare a deterministic research workload composed of named execution units;
+* coordinate those units through an injected execution adapter rather than a
+    built-in runtime or scheduler;
+* aggregate unit outcomes into a reproducible distributed research report;
+* contain individual unit failures without corrupting successful unit results;
+* preserve traceability to the originating session identities, dataset request
+    inputs, and pipeline reports.
+
+The milestone does not require real parallelism, threads, queues, processes, or
+network distribution. It defines the application contract that such runtimes
+may satisfy later without changing Core research semantics.
+
 ---
 
 # Distributed Execution Model
@@ -162,6 +182,73 @@ At a minimum, the model should describe:
 * dependency expectations toward Core components.
 
 The model must remain generic and architectural rather than tied to a specific distributed runtime.
+
+## Canonical Distributed Workload Contract
+
+The implementation must introduce a canonical workload contract that is the only
+input shape the distributed execution service understands.
+
+The contract must define:
+
+* a stable workload identity;
+* a deterministic ordered collection of execution units;
+* each unit's stable identity;
+* the `ResearchSession` to execute for that unit;
+* optional dataset-request context for the unit;
+* workload assumptions and optional execution-context labels;
+* a deterministic workload fingerprint.
+
+Unit identity must remain unique within a workload. A workload with zero units
+or duplicate unit identities is invalid.
+
+## Execution Coordination Contract
+
+The service must coordinate execution through an injected adapter with a single
+responsibility: execute one declared unit and return the resulting
+`PipelineReport`.
+
+This preserves clean boundaries:
+
+* `ResearchPipeline` keeps responsibility for executing one research session;
+* the distributed service keeps responsibility for workload validation,
+    coordination ordering, failure containment, and aggregation;
+* infrastructure-specific runtimes remain outside the Core and may satisfy the
+    adapter contract later.
+
+The service must invoke the adapter in the workload's declared unit order and
+must record each unit result in that same order.
+
+## Aggregation And Failure Containment
+
+The resulting distributed report must preserve:
+
+* workload identity and fingerprint;
+* the ordered unit results;
+* unit identifiers and session identifiers;
+* completed and failed unit counts;
+* session identities that succeeded and failed;
+* per-unit pipeline-report traceability when available;
+* assumptions and deterministic run fingerprinting.
+
+If a unit execution raises an exception, the service must contain that failure
+as a failed unit result and continue processing subsequent declared units.
+
+The aggregated workload status follows these rules:
+
+1. `completed` when every unit succeeds;
+2. `partial` when at least one unit succeeds and at least one fails;
+3. `failed` when no unit succeeds.
+
+## Reproducibility And Traceability
+
+The workload fingerprint must be derived deterministically from the workload
+identity, ordered unit declarations, dataset-request inputs, assumptions, and
+execution-context labels.
+
+The distributed run fingerprint must be derived deterministically from the
+workload fingerprint and the ordered unit outcomes, including unit identities,
+session identities, per-unit status, per-unit messages, and pipeline-report
+identities where available.
 
 ---
 
@@ -210,6 +297,15 @@ The interface must be sufficient to describe:
 
 The interface must remain abstract and reusable for future distributed research scenarios.
 
+The approved public interface for the first implementation is:
+
+* an immutable `DistributedResearchUnit` value object;
+* an immutable `DistributedResearchWorkload` value object;
+* an immutable `DistributedResearchUnitResult` value object;
+* an immutable `DistributedResearchReport` value object;
+* an application-facing `DistributedResearchService` that accepts an injected
+    execution adapter.
+
 ---
 
 # Implementation Scope
@@ -224,6 +320,11 @@ The milestone should be delivered through:
 * a clearly documented boundary between extension code and Core responsibilities.
 
 No production implementation should be introduced that changes the existing Domain Model or weakens the Core architecture.
+
+The initial repository implementation may add a new `edge.distributed` package,
+unit tests for workload validation and aggregation behaviour, and an
+integration test proving that existing `ResearchPipeline` execution can be used
+through the distributed contract without changing session semantics.
 
 ---
 
@@ -240,6 +341,11 @@ PE-007 is complete when:
 * the milestone remains aligned with Foundation v2 and the Platform Principles;
 * the milestone is approved before implementation begins;
 * the specification is sufficiently explicit that implementation can proceed without introducing undocumented architectural decisions.
+* a declared workload can be coordinated deterministically and reported without
+    changing Domain behavior;
+* contained unit failures preserve subsequent unit execution and aggregated
+    traceability;
+* focused distributed-execution tests and the full regression suite pass.
 
 ---
 
@@ -253,6 +359,19 @@ Expected testing considerations include:
 * validation of result aggregation and traceability;
 * regression tests confirming that distributed research remains reproducible and reviewable;
 * tests ensuring that distributed execution behavior does not undermine architectural boundaries.
+
+For the first implementation, tests must additionally prove that:
+
+* duplicate unit identifiers are rejected;
+* unit failures are contained and reflected in report status/counts;
+* workload and run fingerprinting are deterministic;
+* existing `ResearchPipeline` execution can be coordinated through the
+    distributed contract without mutating unit declarations.
+
+# Approval Record
+
+Approved by the project owner through the instruction to continue the project
+through completion on 2026-07-17.
 
 ---
 

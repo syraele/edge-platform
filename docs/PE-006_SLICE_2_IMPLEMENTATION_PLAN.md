@@ -47,4 +47,4 @@ Portfolio research, optimization, ML, and UI composition are intentionally exclu
 
 # Review Gate
 
-Implemented with targeted and full regression passing. Commit remains pending because the worktree contains unrelated local changes that require scope review.
+Implemented with targeted and full regression passing and later synchronized as part of the completed PE-006 milestone.
