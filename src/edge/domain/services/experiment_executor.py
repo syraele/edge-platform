@@ -26,15 +26,26 @@ class ExperimentExecutor:
         """
         Execute one Experiment.
 
-        This baseline implementation produces a minimal
-        Evidence instance.
+        PR-001 introduces a stable orchestration skeleton for
+        the Quantitative Engine entry point.
 
-        Future milestones will replace this implementation
-        with actual quantitative research execution.
+        The executor remains free of quantitative business
+        algorithms at this stage.
         """
 
-        _ = experiment
+        # Phase 1 - State construction
+        execution_state = {
+            "experiment": experiment,
+            "measurements": {},
+        }
+        # TODO(PR-001): State construction for quantitative execution context.
 
-        return Evidence(
-            measurements={}
-        )
+        # Phase 2 - Similarity search
+        # TODO(PR-001): Similarity search over historical/knowledge context.
+
+        # Phase 3 - Outcome analysis
+        # TODO(PR-001): Outcome analysis from experiment context and similarity results.
+
+        # Phase 4 - Evidence construction
+        # TODO(PR-001): Evidence construction from analyzed quantitative outcomes.
+        return Evidence(measurements=execution_state["measurements"])
