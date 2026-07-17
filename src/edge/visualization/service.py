@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from dataclasses import replace
 from typing import Any
 
 from .capability import VisualizationCapability
@@ -91,8 +92,63 @@ class VisualizationService:
             run_fingerprint=self._build_run_fingerprint(result),
         )
 
+    def render_projection(
+        self,
+        capability: VisualizationCapability,
+        projection: Any,
+    ) -> VisualizationReport:
+        """Render a capability from its required projection sections."""
+
+        from .composition import (
+            VisualizationComposition,
+            VisualizationCompositionError,
+        )
+
+        try:
+            composition = VisualizationComposition.from_projection(
+                capability,
+                projection,
+            )
+        except VisualizationCompositionError as exc:
+            result = VisualizationResult(
+                capability_id=capability.capability_id,
+                capability_fingerprint=capability.fingerprint,
+                rendered_sections=(),
+                snapshot={},
+                traceability=projection.traceability,
+                assumptions=capability.assumptions,
+                message=str(exc),
+            )
+            return VisualizationReport(
+                capability_id=capability.capability_id,
+                capability_fingerprint=capability.fingerprint,
+                status="failed",
+                result=result,
+                rendered_sections=result.rendered_sections,
+                traceability_count=len(result.traceability),
+                assumption_count=len(result.assumptions),
+                failure_message=result.message,
+                run_fingerprint=self._build_run_fingerprint(result),
+            )
+
+        report = self.render(
+            capability,
+            composition.to_payload(),
+            composition.traceability,
+        )
+        return replace(
+            report,
+            run_fingerprint=self._build_run_fingerprint(
+                report.result,
+                composition.fingerprint,
+            ),
+        )
+
     @staticmethod
-    def _build_run_fingerprint(result: VisualizationResult) -> str:
+    def _build_run_fingerprint(
+        result: VisualizationResult,
+        composition_fingerprint: str | None = None,
+    ) -> str:
         payload = {
             "capability_id": result.capability_id,
             "capability_fingerprint": result.capability_fingerprint,
@@ -108,6 +164,7 @@ class VisualizationService:
             ],
             "assumptions": list(result.assumptions),
             "message": result.message,
+            "composition_fingerprint": composition_fingerprint,
         }
         encoded = json.dumps(payload, sort_keys=True).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()

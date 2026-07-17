@@ -328,3 +328,33 @@ def test_research_pipeline_session_can_be_projected_for_visualization() -> None:
     assert projection.section("session").data["status"] == "completed"
     assert projection.section("session").data["pipeline_report_id"] == report.report_id
     assert projection.section("research").data["evidence_count"] == 0
+
+
+def test_research_pipeline_executes_projection_visualization() -> None:
+    session = ResearchSession(session_id="projection-visualization-session")
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        visualization_service=VisualizationService(StaticVisualizationRenderer()),
+    )
+    pipeline_report = pipeline.execute(session)
+    projection = VisualizationProjectionBuilder().build(session, pipeline_report)
+
+    visualization_report = pipeline.execute_visualization_projection(
+        session,
+        VisualizationCapability(
+            capability_id="viz-session",
+            capability_name="Session",
+            required_sections=("session", "research"),
+        ),
+        projection,
+    )
+
+    assert visualization_report.status == "completed"
+    assert visualization_report.rendered_sections == ("session", "research")
+    assert visualization_report.result.snapshot["payload"] == {
+        "session": projection.section("session").data,
+        "research": projection.section("research").data,
+    }
+    assert session.visualization_report is visualization_report
+    assert session.status is SessionStatus.COMPLETED

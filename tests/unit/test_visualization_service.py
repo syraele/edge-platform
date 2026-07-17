@@ -134,3 +134,26 @@ def test_visualization_service_rejects_unavailable_projection_section() -> None:
     assert report.traceability_count == 1
     assert report.rendered_sections == ()
     assert renderer.calls == 0
+
+
+def test_projection_rendering_incorporates_composition_fingerprint() -> None:
+    capability = VisualizationCapability(
+        capability_id="viz-session",
+        capability_name="Session",
+        required_sections=("session",),
+    )
+    projection = VisualizationProjectionBuilder().build(
+        ResearchSession(session_id="projection-fingerprint-session")
+    )
+    service = VisualizationService(StubRenderer(output={"cards": []}))
+
+    projection_report = service.render_projection(capability, projection)
+    payload_report = service.render(
+        capability,
+        {"session": projection.section("session").data},
+        projection.traceability,
+    )
+
+    assert projection_report.status == "completed"
+    assert projection_report.traceability_count == len(projection.traceability)
+    assert projection_report.run_fingerprint != payload_report.run_fingerprint

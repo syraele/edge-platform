@@ -133,13 +133,13 @@ Current Phase:
 
 Current Milestone:
 
-**PE-006 – Visualization Dashboards (Implementation Incremental)**
+**PE-007 – Distributed Research Execution (Specification Review Required)**
 
-The repository is currently progressing through incremental PE-006 implementation slices.
+PE-006 Visualization Dashboards is completed. PE-007 implementation remains blocked until its execution contract, implementation plan, and approval record are complete.
 
 Last completed milestone:
 
-**PE-005 – Machine Learning Integration (Completed)**
+**PE-006 – Visualization Dashboards (Completed)**
 
 Platform Evolution Milestones:
 
@@ -153,7 +153,7 @@ Platform Evolution Milestones:
 
 Next step:
 
-**Continue PE-006 implementation with architecture-safe dashboard extension slices.**
+**Complete and approve the PE-007 distributed research execution contract and implementation plan.**
 
 For the latest project status, see PROJECT_STATUS.md.
 

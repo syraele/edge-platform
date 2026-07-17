@@ -132,3 +132,19 @@ class ResearchPipeline:
         )
         session.visualization_report = report
         return report
+
+    def execute_visualization_projection(
+        self,
+        session: ResearchSession,
+        capability: VisualizationCapability,
+        projection: Any,
+    ) -> VisualizationReport:
+        if self._visualization_service is None:
+            raise RuntimeError("Visualization service is not configured.")
+
+        report = self._visualization_service.render_projection(
+            capability,
+            projection,
+        )
+        session.visualization_report = report
+        return report
