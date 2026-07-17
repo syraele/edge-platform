@@ -22,3 +22,7 @@ class ResearchConfiguration:
     name: str
 
     version: str = "1.0"
+
+    dataset_symbol: str | None = None
+
+    dataset_timeframe: str | None = None
