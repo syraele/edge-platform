@@ -42,6 +42,10 @@ The Platform Evolution roadmap is intended to progress in a controlled sequence:
 
 The immediate focus is to preserve repository consistency and treat future work as a new approved milestone or ADR-driven extension.
 
+### Implemented Extension
+
+* PR-005 – Future Outcome Analysis implemented in ExperimentExecutor with future-return metrics for horizons 1, 5, 10, and 20 while preserving existing Evidence measurements and excluding incomplete horizons from their averages.
+
 #### Review and Execution References
 
 * Review baseline: docs/PLATFORM_EVOLUTION_REVIEW.md
