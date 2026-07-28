@@ -1,34 +1,44 @@
 # EDGE_ENGINE
 
-A Domain-Driven research engine for building, validating, and evolving quantitative knowledge.
+A domain-driven research engine for building, validating, and evolving quantitative knowledge from historical market data.
 
 ---
 
 ## Overview
 
-EDGE_ENGINE is a long-term research platform designed to transform historical market data into validated, reproducible, and reusable quantitative knowledge.
+EDGE_ENGINE is a research platform for turning historical market data into reproducible evidence, validated hypotheses, and reusable quantitative knowledge.
 
-The project applies Domain-Driven Design (DDD), Clean Architecture, and a scientific research methodology to support the systematic construction of quantitative knowledge and the discovery of validated trading edges.
+The repository currently contains a working end-to-end discovery workflow that can run research from the command line, evaluate primitive and compound hypotheses, rank results with edge scoring, and render a human-readable discovery report.
 
-EDGE_ENGINE is **not** a trading platform or an automated trading system.
-
-Its primary objective is the construction and preservation of quantitative knowledge.
+EDGE_ENGINE is not a trading platform or an automated trading system. Its current purpose is the construction and preservation of quantitative knowledge.
 
 ---
 
-## Core Principles
+## Current Implementation Status
 
-The project is built around the following principles:
+The repository currently implements the following capabilities:
 
-* Domain First
-* Scientific Method
-* Evidence Before Opinion
-* Knowledge Must Accumulate
-* Reproducibility by Design
-* Evolution Over Perfection
-* Clean Boundaries
+* A working CLI entrypoint via `python -m edge research ...`
+* An MT5 dataset provider for real market data ingestion
+* A filesystem CSV dataset provider for local test data
+* A primitive catalog and primitive discovery engine
+* A combination engine for level 1 compound hypotheses
+* Compound hypothesis evaluation in the experiment executor
+* Edge scoring for ranking discovery results
+* A human-readable discovery report rendered in the CLI
+* An end-to-end discovery pipeline that produces a discovery report from a dataset query
 
-These principles are formally defined in the Manifesto.
+---
+
+## Quick Start
+
+Run discovery against real MT5 data:
+
+```bash
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+```
+
+The command executes the discovery pipeline and prints a ranked report for human review.
 
 ---
 
@@ -36,151 +46,33 @@ These principles are formally defined in the Manifesto.
 
 ```text
 edge-platform/
-│
-├── FOUNDATION_BLUEPRINT.md
-├── PROJECT_BOOTSTRAP.md
-├── PROJECT_STATUS.md
 ├── README.md
-│
+├── PROJECT_STATUS.md
+├── PROJECT_BOOTSTRAP.md
+├── FOUNDATION_BLUEPRINT.md
 ├── docs/
-│   ├── 00_MANIFESTO.md
-│   ├── 01_ARCHITECTURE.md
-│   ├── 02_RESEARCH_MODEL.md
-│   ├── 03_ROADMAP.md
-│   ├── 04_DOMAIN_MODEL.md
-│   ├── 05_CODING_STANDARD.md
-│   ├── 06_TESTING.md
-│   ├── 07_GIT_WORKFLOW.md
-│   ├── 08_DECISIONS.md
-│   ├── 09_GLOSSARY.md
-│   ├── 10_PLATFORM_PRINCIPLES.md
-│   └── PLATFORM_EVOLUTION_REVIEW.md
-│
 ├── src/
-├── tests/
-└── ...
+└── tests/
 ```
 
 ---
 
 ## Documentation
 
-The documentation is organized by responsibility.
+The repository documentation is organized as follows:
 
-| Document | Purpose |
-| --- | --- |
-| AGENTS.md | Operational guidance for contributors and assistants |
-| FOUNDATION_BLUEPRINT.md | Conceptual foundation of the project |
-| PROJECT_STATUS.md | Current project status and milestone state |
-| PROJECT_BOOTSTRAP.md | Development bootstrap procedure |
-| 00_MANIFESTO.md | Project philosophy and principles |
-| 01_ARCHITECTURE.md | System architecture |
-| 02_RESEARCH_MODEL.md | Research methodology |
-| 03_ROADMAP.md | Project evolution |
-| 04_DOMAIN_MODEL.md | Business domain model |
-| 05_CODING_STANDARD.md | Development standards |
-| 06_TESTING.md | Testing strategy |
-| 07_GIT_WORKFLOW.md | Development workflow |
-| 08_DECISIONS.md | Architecture decision process |
-| 09_GLOSSARY.md | Ubiquitous language |
-| 10_PLATFORM_PRINCIPLES.md | Long-term architectural principles for platform evolution |
-| docs/PLATFORM_EVOLUTION_REVIEW.md | Consolidated review package for Platform Evolution milestones |
-| docs/PE-001_EXECUTION_BRIEF.md | Execution-oriented guide for the next PE-001 implementation step |
-| docs/PE-001_IMPLEMENTATION_PLAN.md | Structured implementation plan for PE-001 |
-| docs/PE-001_DELIVERABLES_CHECKLIST.md | Completion checklist for PE-001 preparation |
-| docs/PE-001_REVIEW_SUMMARY.md | Readiness summary for PE-001 review |
-| docs/PE-001_APPROVAL_NOTE.md | Approval-oriented summary for PE-001 |
-| docs/PLATFORM_EVOLUTION_EXECUTION_PATH.md | Operational execution path for Platform Evolution milestones |
----
-
-## Development Workflow
-
-EDGE_ENGINE follows an incremental development process.
-
-```text
-Milestone
-      ↓
-Repository Review
-      ↓
-Technical Review
-      ↓
-Specification Review & Approval
-      ↓
-Test-First Implementation
-      ↓
-Regression Testing
-      ↓
-Documentation Synchronization
-      ↓
-Commit
-```
-
-Every milestone preserves the architectural foundation established during Foundation v2.
-
-For the latest workflow guidance, see:
-
-* AGENTS.md
-* docs/DEVELOPMENT_SETUP.md
-* docs/DEVELOPMENT_WORKFLOW.md
-
----
-
-## Current Status
-
-Current Phase:
-
-**Completed**
-
-Current Milestone:
-
-**None – documented roadmap completed**
-
-The documented roadmap is complete through PE-007 Distributed Research Execution and EF-004 Edge Management.
-
-Last completed milestone:
-
-**PE-007 – Distributed Research Execution (Completed)**
-
-Platform Evolution Milestones:
-
-* PE-001 – Plugin System
-* PE-002 – Advanced Dataset Providers
-* PE-003 – Portfolio Research
-* PE-004 – Optimization Engine
-* PE-005 – Machine Learning Integration
-* PE-006 – Visualization Dashboards
-* PE-007 – Distributed Research Execution
-
-Next step:
-
-**Preserve the completed baseline and introduce future work only through a new approved milestone or ADR.**
-
-For the latest project status, see PROJECT_STATUS.md.
+* [PROJECT_STATUS.md](PROJECT_STATUS.md) — current milestone status and validation summary
+* [docs/00_MANIFESTO.md](docs/00_MANIFESTO.md) — project philosophy and principles
+* [docs/01_ARCHITECTURE.md](docs/01_ARCHITECTURE.md) — architecture and current implementation boundaries
+* [docs/02_RESEARCH_MODEL.md](docs/02_RESEARCH_MODEL.md) — research methodology
+* [docs/03_ROADMAP.md](docs/03_ROADMAP.md) — current roadmap and next milestone
+* [docs/04_DOMAIN_MODEL.md](docs/04_DOMAIN_MODEL.md) — domain concepts
 
 ---
 
 ## Contributing
 
-Every contribution must remain consistent with:
-
-* the Foundation Blueprint;
-* the Manifesto;
-* the Architecture;
-* the Domain Model;
-* the Coding Standard.
-
-Architectural changes are introduced only through Architecture Decision Records (ADRs).
-
-# Assistant Working Agreement
-
-During normal development the assistant must:
-
-1. Read PROJECT_STATUS.md.
-2. Read FOUNDATION_BLUEPRINT.md.
-3. Read only the documentation relevant to the active milestone.
-4. Treat Foundation v2 as frozen.
-5. Continue implementation from the current milestone.
-6. Avoid proposing architectural redesigns unless explicitly requested or required by an accepted ADR.
+Contributions should remain consistent with the foundation blueprint, the manifesto, and the current architecture. Any significant architectural change must be introduced through an approved milestone or ADR.
 
 ---
 

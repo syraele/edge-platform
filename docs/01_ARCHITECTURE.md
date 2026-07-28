@@ -1,246 +1,100 @@
 # EDGE_ENGINE Architecture
 
-Version: 2.0
+Version: 2.1
 
-Status: Foundation v2
+Status: Current implementation aligned with the repository
 
 ---
 
 # Purpose
 
-This document defines the architectural structure of EDGE_ENGINE.
+This document describes the current architectural structure of the repository and its implementation boundaries.
 
-Its purpose is to describe how the system is organized in order to satisfy the principles defined in the Manifesto and the Foundation Blueprint.
-
-This document defines architectural decisions only.
-
-Business concepts, research methodology, and domain modelling are described in their dedicated documents.
+The architecture remains aligned with the foundation principles: the domain layer contains the research rules, while the application layer orchestrates execution and the infrastructure layer provides data providers.
 
 ---
 
-# Architectural Drivers
-
-The architecture is designed to satisfy the following primary drivers:
-
-* Domain Independence
-* Scientific Reproducibility
-* Extensibility
-* Determinism
-* Testability
-* Maintainability
-* Long-Term Evolution
-
-Every architectural decision must improve one or more of these qualities.
-
----
-
-# Architectural Style
-
-EDGE_ENGINE adopts a combination of well-established architectural patterns.
-
-## Clean Architecture
-
-Business rules are isolated from frameworks, infrastructure and external technologies.
-
-Dependencies always point toward the domain.
-
----
-
-## Domain-Driven Design
-
-The business domain drives the structure of the system.
-
-The Domain Model represents the ubiquitous language of the project.
-
----
-
-## Event-Driven Collaboration
-
-Components communicate through domain events whenever direct dependencies are unnecessary.
-
-This reduces coupling and improves extensibility.
-
----
-
-# System Structure
-
-EDGE_ENGINE is organized into four primary layers.
+# Current Architectural Layers
 
 ```text
-Plugins
-    ↓
-Infrastructure
+CLI
     ↓
 Application
     ↓
 Domain
+    ↓
+Infrastructure
 ```
 
 ## Domain
 
-Contains business rules, domain models and domain services.
+The domain layer contains the core research concepts and services, including:
 
-The Domain Layer has no dependency on external technologies.
+* ResearchHypothesis
+* Experiment and Evidence
+* ExperimentExecutor
+* PrimitiveCatalog
+* PrimitiveDiscoveryEngine
+* CombinationEngine
+* EdgeScoringService
+* DiscoveryReport
 
----
+These components implement the research rules without depending on infrastructure details.
 
 ## Application
 
-Coordinates use cases.
+The application layer coordinates the workflow and preserves the boundaries between orchestration and domain logic. The main application components are:
 
-It orchestrates domain objects but does not implement business rules.
+* ResearchPipeline
+* ExperimentRunner
+* ResearchSession
+* ResearchEvaluator
 
----
+The pipeline accepts a dataset query, resolves providers, executes hypotheses, and builds a discovery report.
 
 ## Infrastructure
 
-Provides implementations for persistence, messaging, configuration, external APIs and other technical concerns.
+The infrastructure layer provides data access implementations:
 
-Infrastructure depends on the Domain, never the opposite.
+* Mt5DatasetProvider
+* FilesystemCsvDatasetProvider
+* DatasetProviderRegistry
 
----
+These components are responsible for loading market data into the repository’s domain models.
 
-## Plugins
+## CLI
 
-Plugins extend the capabilities of the platform without modifying the Core.
+The repository exposes a working command-line entrypoint:
 
-Every plugin communicates through stable contracts.
+```bash
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+```
 
----
-
-# Dependency Rules
-
-The Dependency Rule is the fundamental architectural constraint.
-
-Dependencies may only point toward more stable layers.
-
-Allowed dependencies:
-
-* Plugins → Infrastructure
-* Infrastructure → Application
-* Application → Domain
-
-Forbidden dependencies:
-
-* Domain → Application
-* Domain → Infrastructure
-* Domain → Plugins
-* Application → Infrastructure implementation details
-
-Business rules must remain independent of frameworks.
+The CLI builds a dataset query, runs the pipeline, and renders a human-readable discovery report ranked by edge score.
 
 ---
 
-# Bounded Contexts
+# Design Principles
 
-The system is organized around the following strategic contexts.
+The current implementation remains consistent with the following principles:
 
-## Market Understanding
-
-Responsible for transforming raw market data into meaningful market descriptions.
-
----
-
-## Research
-
-Responsible for hypothesis definition, experimentation and evidence generation.
+* Domain independence
+* Reproducibility
+* Deterministic execution where possible
+* Testability
+* Clear separation between orchestration and business rules
 
 ---
 
-## Knowledge
+# Current Implementation Notes
 
-Responsible for organizing validated knowledge generated by research.
+The repository currently demonstrates the following concrete flow:
 
----
+1. The CLI receives research parameters.
+2. The pipeline creates a dataset query.
+3. The provider registry resolves a dataset provider.
+4. The hypothesis factory generates primitive and compound hypotheses.
+5. The experiment executor evaluates the hypotheses against the dataset.
+6. The discovery report is ranked and printed for human analysis.
 
-## Edge Management
-
-Responsible for managing validated trading edges and their lifecycle.
-
-The detailed domain model for each context is defined in `04_DOMAIN_MODEL.md`.
-
----
-
-# Integration Principles
-
-The following integration principles apply throughout the system.
-
-## Stable Contracts
-
-Communication between components occurs only through well-defined interfaces.
-
----
-
-## Event-Based Collaboration
-
-Components should communicate using events whenever synchronous dependencies are unnecessary.
-
----
-
-## Plugin Isolation
-
-Plugins must never require modifications to the Core.
-
-New functionality should be added by extension rather than modification.
-
----
-
-## Configuration over Hardcoding
-
-Behavior must be configurable whenever appropriate.
-
-Configuration must never replace business rules.
-
----
-
-# Quality Attributes
-
-The architecture is optimized for the following qualities.
-
-## Domain Independence
-
-The business domain is independent from technical concerns.
-
----
-
-## Reproducibility
-
-Research results must be reproducible under identical conditions.
-
----
-
-## Determinism
-
-Equal inputs produce equal outputs.
-
----
-
-## Extensibility
-
-New capabilities should be introduced through extension rather than modification.
-
----
-
-## Testability
-
-Business logic must be testable without infrastructure.
-
----
-
-## Maintainability
-
-The architecture should remain understandable and evolvable over many years.
-
----
-
-# Architectural Constraints
-
-The following constraints are mandatory.
-
-* The Domain Layer must remain technology independent.
-* Business rules must never depend on infrastructure.
-* Cross-cutting concerns must not leak into the Domain.
-* Every architectural decision must respect the Manifesto.
-* Every implementation must remain consistent with the Foundation Blueprint.
-
-Architecture evolves through documented decisions rather than ad-hoc modifications.
+This flow is the implementation currently present in the repository and is the basis for the documented roadmap.

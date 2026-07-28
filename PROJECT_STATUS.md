@@ -1,262 +1,52 @@
 # EDGE_ENGINE Project Status
 
-Version: 3.0
+Version: v1.1.0-alpha
 
-Status: Completed
+Status: Stable
 
-Last Updated: Roadmap completion through PE-007 and EF-004
+Last Updated: 2026-07-28
 
 ---
-
-# Project Overview
 
 ## Current Phase
 
-**Completed**
+**Discovery Engine**
 
 ## Project State
 
-**Stable — all documented roadmap milestones are completed**
+The repository is currently aligned with the implemented discovery workflow. The core research flow is operational end to end and has been validated on real MT5 data.
 
-## Platform Evolution Roadmap
+## Completed Milestones
 
-The Platform Evolution phase was completed in controlled sequence.
+* Foundation
+* Dataset Layer
+* MT5 Integration
+* Research Pipeline
+* Discovery Pipeline
+* CLI
+* Primitive Catalog
+* Primitive Discovery Engine
+* Combination Engine Level 1
+* Compound Hypothesis Evaluation
+* Edge Scoring
+* Human Discovery Report
 
-### Active Milestone
+## Regression
 
-* None — documented roadmap completed
+* 153 tests passed
 
-### Milestone Sequence
+## Validation
 
-The Platform Evolution roadmap is intended to progress in a controlled sequence:
+* End-to-end discovery execution validated on real MT5 data using:
+  `python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22`
 
-1. PE-001 – Plugin System
-2. PE-002 – Advanced Dataset Providers
-3. PE-003 – Portfolio Research
-4. PE-004 – Optimization Engine
-5. PE-005 – Machine Learning Integration
-6. PE-006 – Visualization Dashboards
-7. PE-007 – Distributed Research Execution
+## Current Objective
 
-### Priority
+**DI-006 — Edge Improvement Analysis**
 
-The immediate focus is to preserve repository consistency and treat future work as a new approved milestone or ADR-driven extension.
+## Notes
 
-### Implemented Extension
-
-* PR-005 – Future Outcome Analysis implemented in ExperimentExecutor with future-return metrics for horizons 1, 5, 10, and 20 while preserving existing Evidence measurements and excluding incomplete horizons from their averages.
-* PR-006 – First Autonomous Hypothesis implemented in ExperimentExecutor with a fixed `close > open` hypothesis that emits evidence for hypothesis matches, occurrences, and hypothesis-scoped return metrics without altering the domain models.
-* PR-007 – Hypothesis Factory V1 implemented with a minimal, extensible factory that generates a fixed set of primitive hypotheses through the existing ResearchHypothesis flow without changing the frozen domain models.
-* PR-008 – Discovery Report V1 implemented with a minimal, extensible report model and service that turn hypothesis evidence into an ordered, readable collection of report rows without altering the frozen domain models.
-* PR-010 – First End-to-End Research Execution implemented by extending the existing ResearchPipeline with a discovery workflow that accepts a DatasetQuery, loads data through DatasetProviderRegistry, runs all hypotheses from HypothesisFactory, collects evidence, builds a DiscoveryReport, and stores the result on the ResearchSession.
-
-#### Review and Execution References
-
-* Review baseline: docs/PLATFORM_EVOLUTION_REVIEW.md
-* Platform Evolution execution path: docs/PLATFORM_EVOLUTION_EXECUTION_PATH.md
-
-## Architecture
-
-**Foundation v2 — Frozen**
-
-## Domain Model
-
-**Frozen**
-
-## Repository
-
-**Synchronized**
-
-The current baseline is implementation-complete for the documented roadmap and ready for maintenance or future approved evolution.
-
----
-
-# Final Completed Milestone
-
-## PE-007 — Distributed Research Execution
-
-### Status
-
-**Completed**
-
-PE-007 is implemented as a framework-independent distributed workload contract and deterministic aggregation service. The milestone preserves existing single-session `ResearchPipeline` behavior while enabling explicit multi-session coordination through an injected execution adapter.
-
-### Objective
-
-Define distributed research execution capabilities that preserve reproducibility, traceability, and Foundation v2 boundaries.
-
-### Current Focus
-
-* preserve deterministic workload identity, partitioning declarations, and execution ordering;
-* preserve traceability from aggregated distributed outcomes to session identities and pipeline reports;
-* contain unit-level failures without corrupting subsequent unit execution;
-* preserve architectural guardrails established in Foundation v2 and the preceding Platform Evolution milestones.
-
-### Result
-
-* Immutable distributed workload and execution-unit contracts implemented.
-* Distributed research report and unit-result models implemented with deterministic workload and run fingerprints.
-* Distributed research service implemented with workload validation, ordered coordination, and contained unit failures.
-* Integration path validated through the existing `ResearchPipeline` via an injected execution adapter.
-* Distributed-execution unit and integration tests implemented and passing.
-* Full regression suite executed successfully after PE-007, EF-003, and EF-004 completion (122 passed).
-
----
-
-# Previously Completed Milestone
-
-## PE-006 — Visualization Dashboards
-
-**Completed**
-
-### Result
-
-* Visualization capability model implemented.
-* Visualization result/report model implemented with explicit traceability references.
-* Visualization service implemented for deterministic rendering orchestration and failure containment.
-* Research pipeline integration added for visualization execution and session-level report attachment.
-* Research session visualization projection implemented with deterministic core sections, source traceability, and explicit optional-artifact availability.
-* Optional portfolio, optimization, and ML visualization adapters implemented with source traceability, fingerprints, assumptions, and failure summaries.
-* Dashboard composition implemented for deterministic capability-specific projection sections, availability validation, and composition fingerprints.
-* Projection-based rendering integrated through VisualizationService and ResearchPipeline while preserving legacy payload rendering.
-* Visualization-focused unit tests implemented and passing.
-* Visualization integration test added to research pipeline and passing.
-* Full regression suite executed successfully after PE-006 completion (110 passed).
-
----
-
-## PE-005 — Machine Learning Integration
-
-**Completed**
-
-### Result
-
-* PE-005 specification package available.
-* Machine learning capability model implemented.
-* ML-assisted report and result models implemented.
-* Machine learning service implemented for traceable evidence-driven analysis.
-* Missing-input and executor-failure containment implemented.
-* Deterministic capability and run fingerprints implemented for ML-assisted analysis.
-* Research pipeline integration added for ML-assisted analysis orchestration.
-* Structured ML reporting implemented for inputs, assumptions, output values, and failure summaries.
-* Explicit ML validation rules implemented for capability outputs.
-* UTC timestamp handling migrated to timezone-aware datetime values across impacted PE flows.
-* Full regression suite executed successfully (95 passed).
-
----
-
-# Previously Completed Milestone
-
-## PE-004 — Optimization Engine
-
-**Completed**
-
-### Result
-
-* Optimization problem model implemented.
-* Optimization report and candidate result models implemented.
-* Optimization service implemented for deterministic multi-experiment evaluation.
-* Objective-based ranking implemented for both maximize and minimize modes.
-* Candidate failure containment implemented without aborting the optimization run.
-* Research pipeline integration implemented for optimization orchestration.
-* Structured optimization reporting implemented for evaluated configurations, best objective value, and failure summaries.
-* Explicit optimization constraints and assumptions implemented with candidate disqualification rules.
-* Deterministic problem and run fingerprints implemented for optimization reproducibility.
-* Explicit optimization run status implemented for successful versus globally invalid optimization outcomes.
-* Optimization-focused unit tests and adjacent integration regressions executed and passing.
-
----
-
-# Previously Completed Milestone
-
-## PE-003 — Portfolio Research
-
-**Completed**
-
-### Result
-
-* Portfolio research aggregation report implemented.
-* Portfolio research service implemented for grouping multiple research reports.
-* Comparison ordering rules implemented for deterministic portfolio-level evaluation.
-* Traceability preserved through research unit identity and dataset provenance aggregation.
-* Duplicate research unit identity validation implemented.
-* Portfolio-focused unit tests and adjacent integration regressions executed and passing.
-
----
-
-# Previously Completed Milestone
-
-## PE-001 — Plugin System
-
-**Completed**
-
-### Result
-
-* Plugin contract implemented.
-* Plugin manager lifecycle implemented (register, activate, deactivate, remove).
-* Plugin discovery loader implemented from declarative entrypoints.
-* Bootstrap lifecycle integration implemented (discover/register/activate/deactivate).
-* Context-level plugin manager exposure integrated through shared services.
-* Unit and lifecycle integration tests implemented and passing.
-
----
-
-# Previously Completed Milestone
-
-## WF-001 — Development Workflow Standardization
-
-**Completed**
-
-### Result
-
-* AGENTS.md introduced.
-* DEVELOPMENT_SETUP.md introduced.
-* WF-001_DEVELOPMENT_WORKFLOW.md introduced.
-* README.md updated.
-* PROJECT_STATUS.md updated.
-* No production code modified.
-* No tests modified.
-
----
-
-# Completed Milestones
-
-## Phase 1 — Foundation
-
-### Foundation v1
-
-**Completed**
-
-Initial project architecture established.
-
-### Foundation v2
-
-**Completed**
-
-Complete architectural redesign and documentation consolidation.
-
-Approved documents:
-
-* FOUNDATION_BLUEPRINT.md
-* 00_MANIFESTO.md
-* 01_ARCHITECTURE.md
-* 02_RESEARCH_MODEL.md
-* 03_ROADMAP.md
-* 04_DOMAIN_MODEL.md
-* 05_CODING_STANDARD.md
-* 06_TESTING.md
-* 07_GIT_WORKFLOW.md
-* 08_DECISIONS.md
-* 09_GLOSSARY.md
-* 10_PLATFORM_PRINCIPLES.md
-
----
-
-## Phase 2 — Market Description Framework
-
-### MDF-001
-
-**Completed**
+The current implementation preserves the existing domain model and architecture while extending the research workflow with primitive and compound hypothesis evaluation, ranking, and human-readable reporting.
 
 Market Description baseline.
 
