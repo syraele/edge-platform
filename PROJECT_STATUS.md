@@ -45,6 +45,8 @@ The immediate focus is to preserve repository consistency and treat future work 
 ### Implemented Extension
 
 * PR-005 – Future Outcome Analysis implemented in ExperimentExecutor with future-return metrics for horizons 1, 5, 10, and 20 while preserving existing Evidence measurements and excluding incomplete horizons from their averages.
+* PR-006 – First Autonomous Hypothesis implemented in ExperimentExecutor with a fixed `close > open` hypothesis that emits evidence for hypothesis matches, occurrences, and hypothesis-scoped return metrics without altering the domain models.
+* PR-007 – Hypothesis Factory V1 implemented with a minimal, extensible factory that generates a fixed set of primitive hypotheses through the existing ResearchHypothesis flow without changing the frozen domain models.
 
 #### Review and Execution References
 
