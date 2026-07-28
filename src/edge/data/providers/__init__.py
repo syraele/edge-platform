@@ -1,6 +1,8 @@
 from .base import DatasetProvider
 from .descriptor import DatasetProviderDescriptor
+from .filesystem_csv_provider import FilesystemCsvDatasetProvider
 from .loader import DatasetProviderDiscoveryError, DatasetProviderLoader
+from .mt5_provider import Mt5DatasetProvider
 from .provenance import DatasetProvenance, ProvenancedDataset
 from .query import DatasetQuery
 from .registry import (
@@ -26,4 +28,5 @@ __all__ = [
     "DatasetProviderLoadError",
     "DatasetProviderValidationError",
     "DatasetProviderNotFoundError",
+    "Mt5DatasetProvider",
 ]

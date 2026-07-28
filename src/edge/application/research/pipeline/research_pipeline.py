@@ -11,7 +11,21 @@ from typing import Any
 from edge.application.research.report import PipelineReport
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import ResearchSession
-from edge.domain.services.research_evaluator import ResearchEvaluator
+from edge.data import DatasetProviderRegistry, DatasetQuery
+from edge.data.dataset.historical_dataset import HistoricalDataset
+from edge.domain.descriptor_metadata import DescriptorMetadata
+from edge.domain.experiment import Experiment
+from edge.domain.experiment_status import ExperimentStatus
+from edge.domain.market_description import MarketDescription
+from edge.domain.research_configuration import ResearchConfiguration
+from edge.domain.research_hypothesis import ResearchHypothesis
+from edge.domain.services import (
+    DiscoveryReport,
+    DiscoveryReportService,
+    ExperimentExecutor,
+    HypothesisFactory,
+    ResearchEvaluator,
+)
 from edge.ml.capability import MachineLearningCapability
 from edge.ml.report import MachineLearningReport
 from edge.ml.service import MachineLearningService
@@ -40,6 +54,7 @@ class ResearchPipeline:
         runner: ExperimentRunner,
         evaluator: ResearchEvaluator,
         dataset_access_service: Any | None = None,
+        registry: DatasetProviderRegistry | None = None,
         optimization_service: OptimizationService | None = None,
         ml_service: MachineLearningService | None = None,
         visualization_service: VisualizationService | None = None,
@@ -47,9 +62,12 @@ class ResearchPipeline:
         self._runner = runner
         self._evaluator = evaluator
         self._dataset_access_service = dataset_access_service
+        self._registry = registry
         self._optimization_service = optimization_service
         self._ml_service = ml_service
         self._visualization_service = visualization_service
+        self._hypothesis_factory = HypothesisFactory()
+        self._discovery_report_service = DiscoveryReportService()
 
     def execute(
         self,
@@ -91,6 +109,70 @@ class ResearchPipeline:
 
         except Exception as exc:
             session.fail(str(exc))
+            raise
+
+    def execute_discovery(
+        self,
+        query: DatasetQuery,
+        session: ResearchSession | None = None,
+    ) -> DiscoveryReport:
+        """Execute a full discovery flow from dataset query to discovery report."""
+
+        active_session = session or ResearchSession()
+        active_session.start()
+
+        try:
+            if self._registry is not None:
+                dataset_result = self._registry.load(query)
+            elif self._dataset_access_service is not None:
+                dataset_result = self._dataset_access_service.request_dataset(
+                    symbol=query.symbol,
+                    timeframe=query.timeframe,
+                    start=query.start,
+                    end=query.end,
+                    source=query.source,
+                    provider_id=query.provider_id,
+                )
+            else:
+                raise RuntimeError("Dataset provider registry or dataset access service is not configured.")
+
+            dataset = dataset_result.dataset
+            active_session.dataset = dataset
+            active_session.dataset_provenance = getattr(dataset_result, "provenance", None)
+
+            market_description = MarketDescription(
+                dataset=dataset,
+                metadata=DescriptorMetadata(
+                    created_at=active_session.created_at,
+                    builder_version="1.0",
+                ),
+                descriptors=(),
+            )
+            active_session.market_description = market_description
+
+            hypotheses = self._hypothesis_factory.create_hypotheses(market_description)
+            active_session.hypotheses = hypotheses
+
+            evidences = []
+            for hypothesis in hypotheses:
+                experiment = Experiment(
+                    hypothesis=hypothesis,
+                    configuration=ResearchConfiguration(
+                        name=hypothesis.statement,
+                    ),
+                    status=ExperimentStatus.CREATED,
+                )
+                active_session.experiments.append(experiment)
+                evidence = self._runner.run(experiment)
+                active_session.evidences.append(evidence)
+                evidences.append(evidence)
+
+            report = self._discovery_report_service.create_report(hypotheses, evidences)
+            active_session.discovery_report = report
+            active_session.complete()
+            return report
+        except Exception as exc:
+            active_session.fail(str(exc))
             raise
 
     def execute_optimization(

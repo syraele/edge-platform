@@ -7,6 +7,7 @@ from .providers import (
 	DatasetProviderRegistry,
 	DatasetProviderValidationError,
 	DatasetQuery,
+	FilesystemCsvDatasetProvider,
 )
 
 __all__ = [
@@ -18,5 +19,6 @@ __all__ = [
 	"DatasetProviderLoadError",
 	"DatasetProviderValidationError",
 	"DatasetProviderNotFoundError",
+	"FilesystemCsvDatasetProvider",
 ]
 

@@ -47,6 +47,8 @@ The immediate focus is to preserve repository consistency and treat future work 
 * PR-005 – Future Outcome Analysis implemented in ExperimentExecutor with future-return metrics for horizons 1, 5, 10, and 20 while preserving existing Evidence measurements and excluding incomplete horizons from their averages.
 * PR-006 – First Autonomous Hypothesis implemented in ExperimentExecutor with a fixed `close > open` hypothesis that emits evidence for hypothesis matches, occurrences, and hypothesis-scoped return metrics without altering the domain models.
 * PR-007 – Hypothesis Factory V1 implemented with a minimal, extensible factory that generates a fixed set of primitive hypotheses through the existing ResearchHypothesis flow without changing the frozen domain models.
+* PR-008 – Discovery Report V1 implemented with a minimal, extensible report model and service that turn hypothesis evidence into an ordered, readable collection of report rows without altering the frozen domain models.
+* PR-010 – First End-to-End Research Execution implemented by extending the existing ResearchPipeline with a discovery workflow that accepts a DatasetQuery, loads data through DatasetProviderRegistry, runs all hypotheses from HypothesisFactory, collects evidence, builds a DiscoveryReport, and stores the result on the ResearchSession.
 
 #### Review and Execution References
 

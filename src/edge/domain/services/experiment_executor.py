@@ -38,12 +38,26 @@ class ExperimentExecutor:
 
         total_return = 0.0
         bars_processed = 0
+        hypothesis_matches = 0
+        hypothesis_total_return = 0.0
 
         return_sums = {
             "return_1": 0.0,
             "return_5": 0.0,
             "return_10": 0.0,
             "return_20": 0.0,
+        }
+        hypothesis_return_sums = {
+            "return_1": 0.0,
+            "return_5": 0.0,
+            "return_10": 0.0,
+            "return_20": 0.0,
+        }
+        hypothesis_return_counts = {
+            "return_1": 0,
+            "return_5": 0,
+            "return_10": 0,
+            "return_20": 0,
         }
         return_counts = {
             "return_1": 0,
@@ -52,10 +66,21 @@ class ExperimentExecutor:
             "return_20": 0,
         }
 
+        previous_bar = None
         for index, bar in enumerate(bars):
             total_return += (bar.close - bar.open) / bar.open
             bars_processed += 1
 
+            matches_hypothesis = self._matches_hypothesis(
+                experiment.hypothesis.statement,
+                bar,
+                previous_bar,
+            )
+            if matches_hypothesis:
+                hypothesis_matches += 1
+                hypothesis_total_return += (bar.close - bar.open) / bar.open
+
+            previous_bar = bar
             current_close = bar.close
             if current_close == 0.0:
                 continue
@@ -74,6 +99,10 @@ class ExperimentExecutor:
                 future_return = (future_bar.close - current_close) / current_close
                 return_sums[horizon_name] += future_return
                 return_counts[horizon_name] += 1
+
+                if matches_hypothesis:
+                    hypothesis_return_sums[horizon_name] += future_return
+                    hypothesis_return_counts[horizon_name] += 1
 
         average_return = (
             total_return / bars_processed if bars_processed > 0 else 0.0
@@ -99,6 +128,31 @@ class ExperimentExecutor:
             if return_counts["return_20"] > 0
             else 0.0
         )
+        hypothesis_average_return = (
+            hypothesis_total_return / hypothesis_matches
+            if hypothesis_matches > 0
+            else 0.0
+        )
+        hypothesis_average_return_1 = (
+            hypothesis_return_sums["return_1"] / hypothesis_return_counts["return_1"]
+            if hypothesis_return_counts["return_1"] > 0
+            else 0.0
+        )
+        hypothesis_average_return_5 = (
+            hypothesis_return_sums["return_5"] / hypothesis_return_counts["return_5"]
+            if hypothesis_return_counts["return_5"] > 0
+            else 0.0
+        )
+        hypothesis_average_return_10 = (
+            hypothesis_return_sums["return_10"] / hypothesis_return_counts["return_10"]
+            if hypothesis_return_counts["return_10"] > 0
+            else 0.0
+        )
+        hypothesis_average_return_20 = (
+            hypothesis_return_sums["return_20"] / hypothesis_return_counts["return_20"]
+            if hypothesis_return_counts["return_20"] > 0
+            else 0.0
+        )
 
         return Evidence(
             measurements={
@@ -108,5 +162,31 @@ class ExperimentExecutor:
                 "average_return_5": average_return_5,
                 "average_return_10": average_return_10,
                 "average_return_20": average_return_20,
+                "hypothesis_matches": float(hypothesis_matches),
+                "hypothesis_occurrences": float(hypothesis_matches),
+                "hypothesis_average_return": hypothesis_average_return,
+                "hypothesis_average_return_1": hypothesis_average_return_1,
+                "hypothesis_average_return_5": hypothesis_average_return_5,
+                "hypothesis_average_return_10": hypothesis_average_return_10,
+                "hypothesis_average_return_20": hypothesis_average_return_20,
             }
         )
+
+    @staticmethod
+    def _matches_hypothesis(statement: str, bar, previous_bar) -> bool:
+        normalized_statement = statement.strip().lower()
+
+        if normalized_statement == "close > open":
+            return bar.close > bar.open
+        if normalized_statement == "close < open":
+            return bar.close < bar.open
+        if normalized_statement == "close > previous_close":
+            return previous_bar is not None and bar.close > previous_bar.close
+        if normalized_statement == "close < previous_close":
+            return previous_bar is not None and bar.close < previous_bar.close
+        if normalized_statement == "high > previous_high":
+            return previous_bar is not None and bar.high > previous_bar.high
+        if normalized_statement == "low < previous_low":
+            return previous_bar is not None and bar.low < previous_bar.low
+
+        return False

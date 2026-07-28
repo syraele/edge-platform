@@ -5,6 +5,7 @@ Research Pipeline Integration Test
 """
 
 from datetime import UTC, datetime
+from pathlib import Path
 
 from edge.application.research.pipeline import ResearchPipeline
 from edge.application.research.dataset_access_service import DatasetAccessService
@@ -14,7 +15,8 @@ from edge.application.research.session import (
     ResearchSession,
     SessionStatus,
 )
-from edge.data import DatasetProviderRegistry
+from edge.data import DatasetProviderRegistry, DatasetQuery
+from edge.data.providers.filesystem_csv_provider import FilesystemCsvDatasetProvider
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.data.models.bar import Bar
 from edge.data.models.dataset_metadata import DatasetMetadata
@@ -148,6 +150,41 @@ def test_research_pipeline_loads_dataset_from_provider_service() -> None:
     assert session.dataset_provenance.provider_id == "historical-archive"
     assert result.dataset_provenance is not None
     assert result.dataset_provenance.provider_id == "historical-archive"
+
+
+def test_research_pipeline_executes_end_to_end_discovery_from_query(tmp_path: Path) -> None:
+    csv_path = tmp_path / "eurusd-m1.csv"
+    csv_path.write_text(
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T00:00:00,1.1000,1.1010,1.0990,1.1005,100\n"
+        "2024-01-01T01:00:00,1.2000,1.2050,1.1950,1.2012,110\n",
+        encoding="utf-8",
+    )
+
+    provider_registry = DatasetProviderRegistry()
+    provider_registry.register(FilesystemCsvDatasetProvider(base_path=tmp_path))
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        registry=provider_registry,
+    )
+
+    report = pipeline.execute_discovery(
+        DatasetQuery(symbol="EURUSD", timeframe="M1", source="filesystem-csv")
+    )
+
+    assert len(report.rows) == 6
+    assert report.rows[0].hypothesis_name in {
+        "close > open",
+        "close < open",
+        "close > previous_close",
+        "close < previous_close",
+        "high > previous_high",
+        "low < previous_low",
+    }
+    assert all(row.occurrences >= 0.0 for row in report.rows)
+    assert all(row.average_return_10 >= 0.0 for row in report.rows)
 
 
 class StaticOptimizationRunner:

@@ -37,6 +37,7 @@ class ResearchSession:
 
     knowledge: Any | None = None
     edges: list[Any] = field(default_factory=list)
+    discovery_report: Any | None = None
 
     message: str | None = None
 
