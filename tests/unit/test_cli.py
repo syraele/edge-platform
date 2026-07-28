@@ -73,9 +73,9 @@ def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> 
                 occurrences=10.0,
                 average_return=0.001,
                 average_return_1=0.0,
-                average_return_5=0.0,
-                average_return_10=0.0,
-                average_return_20=0.0,
+                average_return_5=-0.000030892,
+                average_return_10=0.0001985628647,
+                average_return_20=0.000435917183,
             ),
             DiscoveryReportRow(
                 hypothesis_name="close > previous_close",
@@ -125,4 +125,7 @@ def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> 
     assert "close > previous_close" in output
     assert "Rank #2" in output
     assert "close > open" in output
+    assert "-0.000031" in output
+    assert "0.000199" in output
+    assert "0.000436" in output
     assert "Edge Score" in output

@@ -40,9 +40,16 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _format_metric(value: float) -> str:
-    if value == int(value):
-        return str(int(value))
-    return f"{value:.5f}".rstrip("0").rstrip(".")
+    if value == 0:
+        return "0"
+
+    if abs(value) >= 1e-6:
+        return f"{value:.6f}".rstrip("0").rstrip(".")
+
+    if abs(value) >= 1e-9:
+        return f"{value:.9f}".rstrip("0").rstrip(".")
+
+    return format(value, ".6g")
 
 
 def _format_discovery_report(report, query) -> str:
@@ -52,6 +59,7 @@ def _format_discovery_report(report, query) -> str:
     ranking_service = EdgeScoringService()
     ranked_rows = ranking_service.rank_rows(report.rows)
     items = ranked_rows[:10]
+    source_rows_by_name = {row.hypothesis_name: row for row in report.rows}
 
     lines: list[str] = []
     lines.append("=" * 50)
@@ -82,14 +90,16 @@ def _format_discovery_report(report, query) -> str:
         lines.append("Average Return")
         lines.append(_format_metric(item.average_return))
         lines.append("")
+        source_row = source_rows_by_name.get(item.hypothesis_name)
+
         lines.append("Average Return 5")
-        lines.append(_format_metric(0.0))
+        lines.append(_format_metric(source_row.average_return_5 if source_row else 0.0))
         lines.append("")
         lines.append("Average Return 10")
-        lines.append(_format_metric(0.0))
+        lines.append(_format_metric(source_row.average_return_10 if source_row else 0.0))
         lines.append("")
         lines.append("Average Return 20")
-        lines.append(_format_metric(0.0))
+        lines.append(_format_metric(source_row.average_return_20 if source_row else 0.0))
         lines.append("")
         lines.append("Edge Score")
         lines.append(_format_metric(item.score))
