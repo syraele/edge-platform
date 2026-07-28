@@ -174,7 +174,7 @@ def test_research_pipeline_executes_end_to_end_discovery_from_query(tmp_path: Pa
         DatasetQuery(symbol="EURUSD", timeframe="M1", source="filesystem-csv")
     )
 
-    assert len(report.rows) == 6
+    assert len(report.rows) >= 8
     assert report.rows[0].hypothesis_name in {
         "close > open",
         "close < open",

@@ -10,37 +10,34 @@ from edge.domain.hypothesis_metadata import HypothesisMetadata
 from edge.domain.market_description import MarketDescription
 from edge.domain.research_hypothesis import ResearchHypothesis
 
+from .combination_engine import CombinationEngine
+from .primitive_discovery_engine import PrimitiveDiscoveryEngine
+
 
 class HypothesisFactory:
-    """
-    Minimal factory for generating a fixed set of primitive hypotheses.
+    """Generate primitive and combination hypotheses through dedicated engines."""
 
-    The implementation is intentionally small and easily extendable.
-    """
+    def __init__(
+        self,
+        primitive_engine: PrimitiveDiscoveryEngine | None = None,
+        combination_engine: CombinationEngine | None = None,
+    ) -> None:
+        self._primitive_engine = primitive_engine or PrimitiveDiscoveryEngine()
+        self._combination_engine = combination_engine or CombinationEngine()
 
     def create_hypotheses(self, market_description: MarketDescription) -> list[ResearchHypothesis]:
-        """
-        Create a stable collection of primitive hypotheses for the given market.
-        """
+        """Create a stable collection of primitive and combination hypotheses for the given market."""
 
-        statements = (
-            "close > open",
-            "close < open",
-            "close > previous_close",
-            "close < previous_close",
-            "high > previous_high",
-            "low < previous_low",
-        )
+        metadata = HypothesisMetadata(created_at=market_description.metadata.created_at)
+        hypotheses = self._primitive_engine.generate_hypotheses(market_description)
 
-        metadata = HypothesisMetadata(
-            created_at=market_description.metadata.created_at,
-        )
-
-        return [
-            ResearchHypothesis(
-                market_description=market_description,
-                metadata=metadata,
-                statement=statement,
+        for statement in self._combination_engine.generate_combinations():
+            hypotheses.append(
+                ResearchHypothesis(
+                    market_description=market_description,
+                    metadata=metadata,
+                    statement=statement,
+                )
             )
-            for statement in statements
-        ]
+
+        return hypotheses

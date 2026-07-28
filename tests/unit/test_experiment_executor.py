@@ -190,6 +190,128 @@ def test_executor_evaluates_hypothesis_statement_against_dataset() -> None:
     assert evidence.measurements["hypothesis_matches"] == 3.0
 
 
+def test_executor_evaluates_compound_hypothesis_statements() -> None:
+    dataset = HistoricalDataset(
+        metadata=DatasetMetadata(
+            symbol="EURUSD",
+            timeframe="M1",
+        ),
+        bars=(
+            Bar(
+                timestamp=datetime(2024, 1, 1),
+                open=1.1000,
+                high=1.1010,
+                low=1.0990,
+                close=1.1005,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 2),
+                open=1.2000,
+                high=1.2050,
+                low=1.1950,
+                close=1.2012,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 3),
+                open=1.2050,
+                high=1.2060,
+                low=1.2040,
+                close=1.2055,
+            ),
+        ),
+    )
+
+    market_description = MarketDescription(
+        dataset=dataset,
+        metadata=DescriptorMetadata(
+            created_at=datetime.now(UTC),
+            builder_version="1.0",
+        ),
+        descriptors=(),
+    )
+
+    hypothesis = ResearchHypothesis(
+        market_description=market_description,
+        metadata=HypothesisMetadata(
+            created_at=datetime.now(UTC),
+        ),
+        statement="close > open AND close > previous_close",
+    )
+
+    experiment = Experiment(
+        hypothesis=hypothesis,
+        configuration=ResearchConfiguration(name="baseline"),
+        status=ExperimentStatus.CREATED,
+    )
+
+    executor = ExperimentExecutor()
+    evidence = executor.execute(experiment)
+
+    assert evidence.measurements["hypothesis_occurrences"] == 2.0
+    assert evidence.measurements["hypothesis_matches"] == 2.0
+
+
+def test_executor_evaluates_title_cased_compound_hypothesis_statements() -> None:
+    dataset = HistoricalDataset(
+        metadata=DatasetMetadata(
+            symbol="EURUSD",
+            timeframe="M1",
+        ),
+        bars=(
+            Bar(
+                timestamp=datetime(2024, 1, 1),
+                open=1.1000,
+                high=1.1010,
+                low=1.0990,
+                close=1.1005,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 2),
+                open=1.2000,
+                high=1.2050,
+                low=1.1950,
+                close=1.2012,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 3),
+                open=1.2050,
+                high=1.2060,
+                low=1.2040,
+                close=1.2055,
+            ),
+        ),
+    )
+
+    market_description = MarketDescription(
+        dataset=dataset,
+        metadata=DescriptorMetadata(
+            created_at=datetime.now(UTC),
+            builder_version="1.0",
+        ),
+        descriptors=(),
+    )
+
+    hypothesis = ResearchHypothesis(
+        market_description=market_description,
+        metadata=HypothesisMetadata(
+            created_at=datetime.now(UTC),
+        ),
+        statement="Close > Open AND Close > Previous Close",
+    )
+
+    experiment = Experiment(
+        hypothesis=hypothesis,
+        configuration=ResearchConfiguration(name="baseline"),
+        status=ExperimentStatus.CREATED,
+    )
+
+    executor = ExperimentExecutor()
+    evidence = executor.execute(experiment)
+
+    assert evidence.measurements["hypothesis_occurrences"] == 2.0
+    assert evidence.measurements["hypothesis_matches"] == 2.0
+
+
 def test_executor_generates_autonomous_hypothesis_evidence() -> None:
     dataset = HistoricalDataset(
         metadata=DatasetMetadata(

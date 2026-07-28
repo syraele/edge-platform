@@ -46,7 +46,7 @@ def test_hypothesis_factory_creates_primitive_hypotheses() -> None:
     factory = HypothesisFactory()
     hypotheses = factory.create_hypotheses(market_description)
 
-    assert len(hypotheses) == 6
+    assert len(hypotheses) >= 8
     assert all(isinstance(hypothesis, ResearchHypothesis) for hypothesis in hypotheses)
     assert any(hypothesis.statement == "close > open" for hypothesis in hypotheses)
     assert any(hypothesis.statement == "close < open" for hypothesis in hypotheses)

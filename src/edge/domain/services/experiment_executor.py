@@ -176,17 +176,24 @@ class ExperimentExecutor:
     def _matches_hypothesis(statement: str, bar, previous_bar) -> bool:
         normalized_statement = statement.strip().lower()
 
-        if normalized_statement == "close > open":
+        if " and " in normalized_statement:
+            parts = [part.strip() for part in normalized_statement.split(" and ")]
+            return all(
+                ExperimentExecutor._matches_hypothesis(part, bar, previous_bar)
+                for part in parts
+            )
+
+        if normalized_statement in {"close > open", "close > open"}:
             return bar.close > bar.open
-        if normalized_statement == "close < open":
+        if normalized_statement in {"close < open", "close < open"}:
             return bar.close < bar.open
-        if normalized_statement == "close > previous_close":
+        if normalized_statement in {"close > previous close", "close > previous_close"}:
             return previous_bar is not None and bar.close > previous_bar.close
-        if normalized_statement == "close < previous_close":
+        if normalized_statement in {"close < previous close", "close < previous_close"}:
             return previous_bar is not None and bar.close < previous_bar.close
-        if normalized_statement == "high > previous_high":
+        if normalized_statement in {"high > previous high", "high > previous_high"}:
             return previous_bar is not None and bar.high > previous_bar.high
-        if normalized_statement == "low < previous_low":
+        if normalized_statement in {"low < previous low", "low < previous_low"}:
             return previous_bar is not None and bar.low < previous_bar.low
 
         return False

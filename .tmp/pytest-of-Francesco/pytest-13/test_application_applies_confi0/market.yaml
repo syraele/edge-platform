@@ -1,0 +1,7 @@
+market:
+  provider:
+    name: MT5
+  symbol: XAUUSD
+  timeframe:
+    execution: M1
+    main: H1

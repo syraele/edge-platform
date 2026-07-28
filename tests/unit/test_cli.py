@@ -1,6 +1,8 @@
 from datetime import UTC, datetime
 
 import edge.cli.main as cli_main
+from edge.domain.services.edge_scoring import EdgeScoringService
+from edge.domain.services.discovery_report import DiscoveryReport, DiscoveryReportRow
 
 
 class DummyRegistry:
@@ -61,3 +63,66 @@ def test_research_command_builds_query_and_runs_pipeline(monkeypatch, capsys) ->
 
     query = recorded["kwargs"]["registry"].registered[0]
     assert query is not None
+
+
+def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> None:
+    class DummyReport:
+        rows = (
+            DiscoveryReportRow(
+                hypothesis_name="close > open",
+                occurrences=10.0,
+                average_return=0.001,
+                average_return_1=0.0,
+                average_return_5=0.0,
+                average_return_10=0.0,
+                average_return_20=0.0,
+            ),
+            DiscoveryReportRow(
+                hypothesis_name="close > previous_close",
+                occurrences=12.0,
+                average_return=0.002,
+                average_return_1=0.0,
+                average_return_5=0.0,
+                average_return_10=0.0,
+                average_return_20=0.0,
+            ),
+        )
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+
+        def execute_discovery(self, query, session):
+            return DiscoveryReport(rows=DummyReport.rows)
+
+    monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
+    monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
+    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    cli_main.main(
+        [
+            "research",
+            "--provider",
+            "mt5",
+            "--symbol",
+            "XAUUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2026-04-20",
+            "--to",
+            "2026-04-22",
+        ]
+    )
+
+    output = capsys.readouterr().out
+    assert "EDGE_ENGINE Discovery Report" in output
+    assert "Rank #1" in output
+    assert "close > previous_close" in output
+    assert "Rank #2" in output
+    assert "close > open" in output
+    assert "Edge Score" in output

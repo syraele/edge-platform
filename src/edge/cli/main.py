@@ -10,6 +10,7 @@ from edge.application.research.session import ResearchSession
 from edge.data import DatasetProviderRegistry, DatasetQuery
 from edge.data.providers.mt5_provider import Mt5DatasetProvider
 from edge.domain.services import ExperimentExecutor, ResearchEvaluator
+from edge.domain.services.edge_scoring import EdgeScoringService
 
 
 def _parse_date(value: str) -> datetime:
@@ -36,6 +37,67 @@ def build_parser() -> argparse.ArgumentParser:
     research_parser.add_argument("--to", dest="end", required=True)
 
     return parser
+
+
+def _format_metric(value: float) -> str:
+    if value == int(value):
+        return str(int(value))
+    return f"{value:.5f}".rstrip("0").rstrip(".")
+
+
+def _format_discovery_report(report, query) -> str:
+    if not hasattr(report, "rows"):
+        return str(report)
+
+    ranking_service = EdgeScoringService()
+    ranked_rows = ranking_service.rank_rows(report.rows)
+    items = ranked_rows[:10]
+
+    lines: list[str] = []
+    lines.append("=" * 50)
+    lines.append("EDGE_ENGINE Discovery Report")
+    lines.append("=" * 50)
+    lines.append("")
+    lines.append("Dataset:")
+    lines.append(f"Provider : {query.provider_id}")
+    lines.append(f"Symbol   : {query.symbol}")
+    lines.append(f"Timeframe: {query.timeframe}")
+    lines.append("")
+    lines.append("Periodo:")
+    lines.append(query.start.date().isoformat())
+    lines.append(query.end.date().isoformat())
+    lines.append("")
+    lines.append("-" * 50)
+    lines.append("")
+
+    for index, item in enumerate(items, start=1):
+        lines.append(f"Rank #{index}")
+        lines.append("")
+        lines.append("Hypothesis")
+        lines.append(item.hypothesis_name.replace(" AND ", "\nAND\n"))
+        lines.append("")
+        lines.append("Occurrences")
+        lines.append(_format_metric(item.occurrences))
+        lines.append("")
+        lines.append("Average Return")
+        lines.append(_format_metric(item.average_return))
+        lines.append("")
+        lines.append("Average Return 5")
+        lines.append(_format_metric(0.0))
+        lines.append("")
+        lines.append("Average Return 10")
+        lines.append(_format_metric(0.0))
+        lines.append("")
+        lines.append("Average Return 20")
+        lines.append(_format_metric(0.0))
+        lines.append("")
+        lines.append("Edge Score")
+        lines.append(_format_metric(item.score))
+        lines.append("")
+        lines.append("-" * 50)
+        lines.append("")
+
+    return "\n".join(lines).rstrip()
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -68,7 +130,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     report = pipeline.execute_discovery(query, ResearchSession())
-    print(report)
+    print(_format_discovery_report(report, query))
     return 0
 
 
