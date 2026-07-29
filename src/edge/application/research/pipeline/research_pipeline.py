@@ -20,6 +20,7 @@ from edge.domain.market_description import MarketDescription
 from edge.domain.research_configuration import ResearchConfiguration
 from edge.domain.research_hypothesis import ResearchHypothesis
 from edge.domain.services import (
+    CandidateEdgeSelectionService,
     DiscoveryReport,
     DiscoveryReportService,
     ExperimentExecutor,
@@ -58,6 +59,7 @@ class ResearchPipeline:
         optimization_service: OptimizationService | None = None,
         ml_service: MachineLearningService | None = None,
         visualization_service: VisualizationService | None = None,
+        selection_service: CandidateEdgeSelectionService | None = None,
     ) -> None:
         self._runner = runner
         self._evaluator = evaluator
@@ -66,8 +68,9 @@ class ResearchPipeline:
         self._optimization_service = optimization_service
         self._ml_service = ml_service
         self._visualization_service = visualization_service
+        self._selection_service = selection_service or CandidateEdgeSelectionService()
         self._hypothesis_factory = HypothesisFactory()
-        self._discovery_report_service = DiscoveryReportService()
+        self._discovery_report_service = DiscoveryReportService(selection_service=self._selection_service)
 
     def execute(
         self,
@@ -102,7 +105,11 @@ class ResearchPipeline:
                 knowledge = self._evaluator.evaluate(evidence)
 
                 if knowledge is not None:
-                    session.knowledge = knowledge
+                    selected, _ = self._selection_service.select([knowledge])
+                    if selected:
+                        session.knowledge = knowledge
+                    else:
+                        session.knowledge = None
 
             session.complete()
             return PipelineReport.from_session(session)
@@ -169,6 +176,8 @@ class ResearchPipeline:
 
             report = self._discovery_report_service.create_report(hypotheses, evidences)
             active_session.discovery_report = report
+            if report.knowledge is not None:
+                active_session.knowledge = report.knowledge
             active_session.complete()
             return report
         except Exception as exc:

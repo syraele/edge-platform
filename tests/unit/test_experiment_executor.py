@@ -312,6 +312,77 @@ def test_executor_evaluates_title_cased_compound_hypothesis_statements() -> None
     assert evidence.measurements["hypothesis_matches"] == 2.0
 
 
+def test_executor_calculates_hypothesis_quantitative_metrics() -> None:
+    dataset = HistoricalDataset(
+        metadata=DatasetMetadata(
+            symbol="EURUSD",
+            timeframe="M1",
+        ),
+        bars=(
+            Bar(
+                timestamp=datetime(2024, 1, 1),
+                open=1.0000,
+                high=1.0100,
+                low=0.9900,
+                close=1.1000,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 2),
+                open=1.1000,
+                high=1.1100,
+                low=1.0900,
+                close=0.9900,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 3),
+                open=0.9900,
+                high=1.0100,
+                low=0.9800,
+                close=1.2000,
+            ),
+            Bar(
+                timestamp=datetime(2024, 1, 4),
+                open=1.2000,
+                high=1.2100,
+                low=1.1900,
+                close=1.2500,
+            ),
+        ),
+    )
+
+    market_description = MarketDescription(
+        dataset=dataset,
+        metadata=DescriptorMetadata(
+            created_at=datetime.now(UTC),
+            builder_version="1.0",
+        ),
+        descriptors=(),
+    )
+
+    hypothesis = ResearchHypothesis(
+        market_description=market_description,
+        metadata=HypothesisMetadata(
+            created_at=datetime.now(UTC),
+        ),
+        statement="close > open",
+    )
+
+    experiment = Experiment(
+        hypothesis=hypothesis,
+        configuration=ResearchConfiguration(name="baseline"),
+        status=ExperimentStatus.CREATED,
+    )
+
+    executor = ExperimentExecutor()
+    evidence = executor.execute(experiment)
+
+    assert evidence.measurements["hypothesis_win_rate"] == pytest.approx(1.0)
+    assert evidence.measurements["hypothesis_expectancy"] == pytest.approx(0.11792929292929293)
+    assert evidence.measurements["hypothesis_profit_factor"] == pytest.approx(float("inf"))
+    assert evidence.measurements["hypothesis_payoff"] == pytest.approx(0.11792929292929293)
+    assert evidence.measurements["hypothesis_drawdown"] == pytest.approx(0.0)
+
+
 def test_executor_generates_autonomous_hypothesis_evidence() -> None:
     dataset = HistoricalDataset(
         metadata=DatasetMetadata(

@@ -118,3 +118,34 @@ Architecture is not modified by discussion alone.
 The official project architecture changes only through accepted ADRs.
 
 This ensures traceability, stability, and controlled evolution throughout the lifetime of EDGE_ENGINE.
+
+---
+
+# ADR-001
+
+## Status
+
+Accepted
+
+## Context
+
+The platform needed a stable architectural constitution before future evolution could proceed safely.
+
+## Decision
+
+The project freezes a permanent set of architectural principles that MUST govern future milestones and architectural decisions.
+
+## Consequences
+
+The architecture becomes more stable, more governable, and more traceable.
+
+Future evolution MUST remain consistent with the frozen principles.
+
+## Note on ADR Numbering
+
+All future Architecture Decision Records MUST be numbered progressively in sequence:
+
+ADR-001
+ADR-002
+ADR-003
+...

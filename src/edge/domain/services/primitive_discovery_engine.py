@@ -41,5 +41,15 @@ class PrimitiveDiscoveryEngine:
             "low_lt_previous_low": "low < previous_low",
             "open_gt_previous_open": "open > previous_open",
             "open_lt_previous_open": "open < previous_open",
+            "range_gt_previous_range": "range > previous_range",
+            "range_lt_previous_range": "range < previous_range",
+            "body_gt_half_range": "body > half_range",
+            "body_lt_half_range": "body < half_range",
+            "close_gt_previous_open": "close > previous_open",
+            "close_lt_previous_open": "close < previous_open",
+            "close_gt_previous_close_by_pct": "close > previous_close by percentage",
+            "close_lt_previous_close_by_pct": "close < previous_close by percentage",
+            "volatility_gt_previous_volatility": "volatility > previous_volatility",
+            "volatility_lt_previous_volatility": "volatility < previous_volatility",
         }
         return mapping[primitive.id]

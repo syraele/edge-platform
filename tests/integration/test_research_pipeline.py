@@ -28,6 +28,8 @@ from edge.domain.market_description import MarketDescription
 from edge.domain.research_configuration import ResearchConfiguration
 from edge.domain.research_hypothesis import ResearchHypothesis
 from edge.domain.services import (
+    CandidateEdgeSelectionConfig,
+    CandidateEdgeSelectionService,
     ExperimentExecutor,
     ResearchEvaluator,
 )
@@ -185,6 +187,40 @@ def test_research_pipeline_executes_end_to_end_discovery_from_query(tmp_path: Pa
     }
     assert all(row.occurrences >= 0.0 for row in report.rows)
     assert all(row.average_return_10 >= 0.0 for row in report.rows)
+    assert report.knowledge is not None
+    assert report.knowledge.statement == "Evidence successfully validated."
+
+
+def test_research_pipeline_reports_candidate_edge_selection_counts(tmp_path: Path) -> None:
+    csv_path = tmp_path / "eurusd-m1.csv"
+    csv_path.write_text(
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T00:00:00,1.1000,1.1010,1.0990,1.1005,100\n"
+        "2024-01-01T01:00:00,1.2000,1.2050,1.1950,1.2012,110\n",
+        encoding="utf-8",
+    )
+
+    selection_service = CandidateEdgeSelectionService(
+        CandidateEdgeSelectionConfig(min_occurrences=1, min_average_return_abs=0.0)
+    )
+    provider_registry = DatasetProviderRegistry()
+    provider_registry.register(FilesystemCsvDatasetProvider(base_path=tmp_path))
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        selection_service=selection_service,
+        registry=provider_registry,
+    )
+
+    report = pipeline.execute_discovery(
+        DatasetQuery(symbol="EURUSD", timeframe="M1", source="filesystem-csv")
+    )
+
+    assert report.selection_summary is not None
+    assert report.selection_summary.generated_count >= 1
+    assert report.selection_summary.rejected_count >= 0
+    assert report.selection_summary.selected_count >= 0
 
 
 class StaticOptimizationRunner:

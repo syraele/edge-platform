@@ -2,7 +2,7 @@
 
 ## Current Status
 
-The repository is currently in the Discovery Engine phase. The implemented workflow is stable and validated on real MT5 data.
+The repository is currently in the Discovery Research phase. The implemented workflow is stable and validated on real MT5 data.
 
 ---
 
@@ -51,10 +51,104 @@ python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 202
 
 ---
 
-## Next Milestone
+## Completed Milestones
 
-### DI-006 — Edge Improvement Analysis
+### STEP-001 — Architectural Principles Frozen
 
-**PLANNED**
+**COMPLETE**
 
-This is the next milestone in the current roadmap.
+This milestone freezes the enduring architectural principles that govern future evolution of the platform.
+
+### STEP-001B — Development Workflow Frozen
+
+**COMPLETE**
+
+This milestone freezes the official development workflow for all future milestones.
+
+---
+
+## Completed Milestones
+
+### STEP-002 — Core Domain Language
+
+**COMPLETE**
+
+This milestone establishes the official domain language that governs future domain modeling.
+
+---
+
+## Completed Milestones
+
+### STEP-003 — Knowledge Lifecycle
+
+**COMPLETE**
+
+This milestone defines the official lifecycle of Knowledge within the platform.
+
+---
+
+## Completed Milestones
+
+### STEP-004 — Knowledge Aggregate Specification
+
+**COMPLETE**
+
+This milestone defines the official domain specification for the Knowledge Aggregate.
+
+---
+
+## Completed Milestones
+
+### STEP-005 — Knowledge Value Objects
+
+**COMPLETE**
+
+This milestone defines the official domain specification for the Value Objects belonging to the Knowledge Aggregate.
+
+---
+
+## Completed Milestones
+
+### STEP-006 — Knowledge Repository Contract
+
+**COMPLETE**
+
+This milestone defines the official domain contract for the Knowledge Repository.
+
+---
+
+## Completed Milestones
+
+### STEP-006 — Domain Map
+
+**COMPLETE**
+
+This milestone defines the official domain map and aggregate boundaries for EDGE_ENGINE.
+
+---
+
+## Milestone Status
+
+### EDGE-001
+
+**COMPLETED**
+
+Candidate Edge Selection is implemented and integrated into the Discovery Report.
+
+### EDGE-002
+
+**COMPLETED**
+
+The discovery flow now exposes quantitative metrics derived from real trade sequences:
+
+- Win Rate
+- Expectancy
+- Profit Factor
+- Payoff
+- Drawdown
+
+### EDGE-003
+
+**CURRENT**
+
+Introduce a multi-criteria ranking system for research evaluation.

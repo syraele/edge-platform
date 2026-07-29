@@ -40,6 +40,13 @@ class ExperimentExecutor:
         bars_processed = 0
         hypothesis_matches = 0
         hypothesis_total_return = 0.0
+        hypothesis_positive_returns = 0.0
+        hypothesis_negative_returns = 0.0
+        hypothesis_winning_trades = 0
+        hypothesis_losing_trades = 0
+        hypothesis_peak_equity = 0.0
+        hypothesis_equity = 0.0
+        hypothesis_max_drawdown = 0.0
 
         return_sums = {
             "return_1": 0.0,
@@ -79,6 +86,19 @@ class ExperimentExecutor:
             if matches_hypothesis:
                 hypothesis_matches += 1
                 hypothesis_total_return += (bar.close - bar.open) / bar.open
+                trade_return = (bar.close - bar.open) / bar.open
+                if trade_return > 0.0:
+                    hypothesis_winning_trades += 1
+                    hypothesis_positive_returns += trade_return
+                elif trade_return < 0.0:
+                    hypothesis_losing_trades += 1
+                    hypothesis_negative_returns += abs(trade_return)
+
+                hypothesis_equity += trade_return
+                if hypothesis_equity > hypothesis_peak_equity:
+                    hypothesis_peak_equity = hypothesis_equity
+                current_drawdown = (hypothesis_peak_equity - hypothesis_equity) / hypothesis_peak_equity if hypothesis_peak_equity > 0.0 else 0.0
+                hypothesis_max_drawdown = max(hypothesis_max_drawdown, current_drawdown)
 
             previous_bar = bar
             current_close = bar.close
@@ -133,6 +153,27 @@ class ExperimentExecutor:
             if hypothesis_matches > 0
             else 0.0
         )
+        hypothesis_win_rate = (
+            hypothesis_winning_trades / hypothesis_matches
+            if hypothesis_matches > 0
+            else 0.0
+        )
+        hypothesis_expectancy = (
+            (hypothesis_positive_returns - hypothesis_negative_returns) / hypothesis_matches
+            if hypothesis_matches > 0
+            else 0.0
+        )
+        hypothesis_profit_factor = (
+            hypothesis_positive_returns / hypothesis_negative_returns
+            if hypothesis_negative_returns > 0.0
+            else float("inf") if hypothesis_positive_returns > 0.0 else 0.0
+        )
+        hypothesis_payoff = (
+            hypothesis_positive_returns / hypothesis_winning_trades
+            if hypothesis_winning_trades > 0
+            else 0.0
+        )
+        hypothesis_drawdown = hypothesis_max_drawdown
         hypothesis_average_return_1 = (
             hypothesis_return_sums["return_1"] / hypothesis_return_counts["return_1"]
             if hypothesis_return_counts["return_1"] > 0
@@ -165,6 +206,11 @@ class ExperimentExecutor:
                 "hypothesis_matches": float(hypothesis_matches),
                 "hypothesis_occurrences": float(hypothesis_matches),
                 "hypothesis_average_return": hypothesis_average_return,
+                "hypothesis_win_rate": hypothesis_win_rate,
+                "hypothesis_expectancy": hypothesis_expectancy,
+                "hypothesis_profit_factor": hypothesis_profit_factor,
+                "hypothesis_payoff": hypothesis_payoff,
+                "hypothesis_drawdown": hypothesis_drawdown,
                 "hypothesis_average_return_1": hypothesis_average_return_1,
                 "hypothesis_average_return_5": hypothesis_average_return_5,
                 "hypothesis_average_return_10": hypothesis_average_return_10,
