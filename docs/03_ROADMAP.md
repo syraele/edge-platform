@@ -46,7 +46,7 @@ The current implementation includes:
 The CLI entrypoint is operational and can run:
 
 ```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
 ```
 
 ---
@@ -152,3 +152,7 @@ The discovery flow now exposes quantitative metrics derived from real trade sequ
 **CURRENT**
 
 Introduce a multi-criteria ranking system for research evaluation.
+
+### Immediate corrective task
+
+The current implementation must now be corrected so that the final Candidate Edge count is derived from the Knowledge selection result, not from the raw hypothesis rows.

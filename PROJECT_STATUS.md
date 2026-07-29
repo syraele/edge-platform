@@ -34,7 +34,7 @@ Last Updated: 2026-07-29
 
 ## Current Objective
 
-**Advance EDGE-003 with a multi-criteria ranking approach while preserving the frozen foundation and domain model.**
+**Resume the Discovery → Knowledge → Candidate Edge flow correction by aligning the final candidate-edge count with Knowledge-based selection rather than with raw hypotheses.**
 
 ## Last Completed Step
 
@@ -83,7 +83,9 @@ EDGE-002 completed. The repository is stable and ready for EDGE-003.
 
 # Next Action
 
-No active implementation milestone. Future repository changes require a new approved milestone or ADR-governed architectural decision.
+Resume implementation from the candidate-edge selection issue documented in docs/19_RESTART_CHECKPOINT.md.
+
+The current focus is to correct the flow so that the final candidate-edge count is derived from the Knowledge selection result rather than from the raw hypothesis rows.
 
 ---
 
