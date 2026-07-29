@@ -21,25 +21,31 @@ class ValidationResult:
     is_valid: bool
 
     errors: Tuple[str, ...] = ()
+    label: str | None = None
+    score: float | None = None
 
     @classmethod
-    def success(cls) -> "ValidationResult":
+    def success(cls, *, label: str | None = None, score: float | None = None) -> "ValidationResult":
         """
         Create a successful validation result.
         """
         return cls(
             is_valid=True,
             errors=(),
+            label=label,
+            score=score,
         )
 
     @classmethod
-    def failure(cls, *errors: str) -> "ValidationResult":
+    def failure(cls, *errors: str, label: str | None = None, score: float | None = None) -> "ValidationResult":
         """
         Create a failed validation result.
         """
         return cls(
             is_valid=False,
             errors=tuple(errors),
+            label=label,
+            score=score,
         )
 
     @property

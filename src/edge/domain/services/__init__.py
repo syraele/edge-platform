@@ -10,10 +10,11 @@ from .candidate_edge_selection import (
     CandidateEdgeSelectionService,
 )
 from .discovery_report import DiscoveryReport, DiscoveryReportRow, DiscoveryReportService
+from .edge_classifier import EdgeClassifier
+from .edge_manager import EdgeManager
 from .edge_scoring import EdgeScoringService, RankedEdge
 from .experiment_executor import ExperimentExecutor
 from .hypothesis_factory import HypothesisFactory
-from .edge_manager import EdgeManager
 from .research_evaluator import ResearchEvaluator
 
 __all__ = [
@@ -23,6 +24,7 @@ __all__ = [
     "DiscoveryReport",
     "DiscoveryReportRow",
     "DiscoveryReportService",
+    "EdgeClassifier",
     "EdgeManager",
     "ExperimentExecutor",
     "HypothesisFactory",
