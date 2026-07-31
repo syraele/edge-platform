@@ -65,6 +65,7 @@ class CandidateEdgeSelectionService:
         average_return_10 = self._read_metric(metadata, "hypothesis_average_return_10")
         average_return_5 = self._read_metric(metadata, "hypothesis_average_return_5")
         average_return_1 = self._read_metric(metadata, "hypothesis_average_return_1")
+        bars_processed = self._read_metric(metadata, "bars_processed")
 
         if occurrences is None:
             return CandidateEdgeSelectionResult(
@@ -73,14 +74,24 @@ class CandidateEdgeSelectionService:
                 reason="missing_metrics",
             )
 
-        if occurrences < self._config.min_occurrences:
+        dynamic_min_occurrences = max(self._config.min_occurrences, 1)
+        if bars_processed is not None and bars_processed > 100.0:
+            dynamic_min_occurrences = max(dynamic_min_occurrences, 2)
+        if bars_processed is not None and bars_processed > 1000.0:
+            dynamic_min_occurrences = max(dynamic_min_occurrences, 5)
+
+        if occurrences < dynamic_min_occurrences:
             return CandidateEdgeSelectionResult(
                 knowledge=knowledge,
                 is_selected=False,
                 reason="min_occurrences",
             )
 
-        if average_return is not None and abs(average_return) < self._config.min_average_return_abs:
+        dynamic_min_return = self._config.min_average_return_abs
+        if bars_processed is not None and bars_processed > 1000.0:
+            dynamic_min_return = max(dynamic_min_return, 0.000001)
+
+        if average_return is not None and abs(average_return) < dynamic_min_return:
             return CandidateEdgeSelectionResult(
                 knowledge=knowledge,
                 is_selected=False,

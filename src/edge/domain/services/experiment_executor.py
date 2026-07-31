@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from edge.domain.evidence import Evidence
 from edge.domain.experiment import Experiment
+from edge.domain.research_hypothesis import HypothesisPredicate
 
 
 class ExperimentExecutor:
@@ -79,7 +80,7 @@ class ExperimentExecutor:
             bars_processed += 1
 
             matches_hypothesis = self._matches_hypothesis(
-                experiment.hypothesis.statement,
+                experiment.hypothesis,
                 bar,
                 previous_bar,
             )
@@ -219,27 +220,56 @@ class ExperimentExecutor:
         )
 
     @staticmethod
-    def _matches_hypothesis(statement: str, bar, previous_bar) -> bool:
-        normalized_statement = statement.strip().lower()
+    def _matches_hypothesis(hypothesis, bar, previous_bar) -> bool:
+        if hypothesis.predicate is None:
+            return False
 
-        if " and " in normalized_statement:
-            parts = [part.strip() for part in normalized_statement.split(" and ")]
+        if not hypothesis.predicate:
+            return False
+
+        if isinstance(hypothesis.predicate[0], tuple):
             return all(
-                ExperimentExecutor._matches_hypothesis(part, bar, previous_bar)
-                for part in parts
+                ExperimentExecutor._evaluate_predicate_item(predicate, bar, previous_bar)
+                for predicate in hypothesis.predicate
             )
 
-        if normalized_statement in {"close > open", "close > open"}:
+        if isinstance(hypothesis.predicate[0], HypothesisPredicate):
+            return ExperimentExecutor._evaluate_predicate_item((hypothesis.predicate[0], ()), bar, previous_bar)
+
+        return all(
+            ExperimentExecutor._evaluate_predicate_item(predicate, bar, previous_bar)
+            for predicate in hypothesis.predicate
+        )
+
+    @staticmethod
+    def _evaluate_predicate_item(predicate, bar, previous_bar) -> bool:
+        if predicate is None:
+            return False
+
+        if isinstance(predicate, HypothesisPredicate):
+            predicate_type = predicate
+        else:
+            predicate_type, _ = predicate
+
+        if predicate_type == HypothesisPredicate.CLOSE_GT_OPEN:
             return bar.close > bar.open
-        if normalized_statement in {"close < open", "close < open"}:
+        if predicate_type == HypothesisPredicate.CLOSE_LT_OPEN:
             return bar.close < bar.open
-        if normalized_statement in {"close > previous close", "close > previous_close"}:
+        if predicate_type == HypothesisPredicate.CLOSE_GT_PREVIOUS_CLOSE:
             return previous_bar is not None and bar.close > previous_bar.close
-        if normalized_statement in {"close < previous close", "close < previous_close"}:
+        if predicate_type == HypothesisPredicate.CLOSE_LT_PREVIOUS_CLOSE:
             return previous_bar is not None and bar.close < previous_bar.close
-        if normalized_statement in {"high > previous high", "high > previous_high"}:
+        if predicate_type == HypothesisPredicate.HIGH_GT_PREVIOUS_HIGH:
             return previous_bar is not None and bar.high > previous_bar.high
-        if normalized_statement in {"low < previous low", "low < previous_low"}:
+        if predicate_type == HypothesisPredicate.LOW_LT_PREVIOUS_LOW:
             return previous_bar is not None and bar.low < previous_bar.low
+        if predicate_type == HypothesisPredicate.OPEN_GT_PREVIOUS_OPEN:
+            return previous_bar is not None and bar.open > previous_bar.open
+        if predicate_type == HypothesisPredicate.OPEN_LT_PREVIOUS_OPEN:
+            return previous_bar is not None and bar.open < previous_bar.open
+        if predicate_type == HypothesisPredicate.CLOSE_GT_PREVIOUS_OPEN:
+            return previous_bar is not None and bar.close > previous_bar.open
+        if predicate_type == HypothesisPredicate.CLOSE_LT_PREVIOUS_OPEN:
+            return previous_bar is not None and bar.close < previous_bar.open
 
         return False

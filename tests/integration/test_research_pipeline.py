@@ -223,6 +223,49 @@ def test_research_pipeline_reports_candidate_edge_selection_counts(tmp_path: Pat
     assert report.selection_summary.selected_count >= 0
 
 
+def test_research_pipeline_runs_validation_on_separate_dataset(tmp_path: Path) -> None:
+    discovery_csv = tmp_path / "eurusd-m1.csv"
+    discovery_csv.write_text(
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T00:00:00,1.1000,1.1010,1.0990,1.1005,100\n"
+        "2024-01-01T01:00:00,1.2000,1.2050,1.1950,1.2012,110\n",
+        encoding="utf-8",
+    )
+    validation_csv = tmp_path / "eurusd-m1-validation.csv"
+    validation_csv.write_text(
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T02:00:00,1.3000,1.3050,1.2950,1.3010,120\n"
+        "2024-01-01T03:00:00,1.4000,1.4050,1.3950,1.4015,130\n",
+        encoding="utf-8",
+    )
+
+    provider_registry = DatasetProviderRegistry()
+    provider_registry.register(FilesystemCsvDatasetProvider(base_path=tmp_path))
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        registry=provider_registry,
+    )
+
+    report = pipeline.execute_discovery(
+        DatasetQuery(symbol="EURUSD", timeframe="M1", source="filesystem-csv"),
+        validation_query=DatasetQuery(
+            symbol="EURUSD",
+            timeframe="M1",
+            source="filesystem-csv",
+            provider_id="filesystem-csv",
+        ),
+    )
+
+    assert len(report.rows) >= 1
+    first_row = report.rows[0]
+    assert hasattr(first_row, "validation_occurrences")
+    assert hasattr(first_row, "validation_average_return")
+    assert first_row.validation_occurrences >= 0.0
+    assert isinstance(first_row.confirmed, bool)
+
+
 class StaticOptimizationRunner:
     def __init__(self, scores: dict[str, float]) -> None:
         self._scores = scores

@@ -1,10 +1,10 @@
 # EDGE_ENGINE Project Status
 
-Version: v1.1.0-alpha
+Version: v1.1.1-alpha
 
 Status: Stable
 
-Last Updated: 2026-07-29
+Last Updated: 2026-07-31
 
 ---
 
@@ -34,15 +34,15 @@ Last Updated: 2026-07-29
 
 ## Current Objective
 
-**Resume the Discovery → Knowledge → Candidate Edge flow correction by aligning the final candidate-edge count with Knowledge-based selection rather than with raw hypotheses.**
+**Preserve the corrected discovery-report candidate-edge selection flow and keep the repository in a validated, clean state.**
 
 ## Last Completed Step
 
-**EDGE-002 — Quantitative metrics introduced and validated on real trade sequences.**
+**Candidate-edge selection reporting was aligned with Knowledge-based selection and verified through regression tests.**
 
 ## Next Step
 
-**EDGE-003**
+**Continue the roadmap work from the validated discovery pipeline baseline.**
 
 ## Test Status
 
@@ -50,11 +50,11 @@ Last Updated: 2026-07-29
 
 ## Last Regression
 
-**160 passed, 1 warning**
+**37 passed, 1 warning**
 
 ## Documentation Status
 
-**Research status and milestone documentation synchronized**
+**Research status and milestone documentation synchronized after cleanup and validation**
 
 ## Repository Health
 
@@ -62,7 +62,7 @@ Last Updated: 2026-07-29
 
 ## Notes
 
-EDGE-002 completed. The repository is stable and ready for EDGE-003.
+The repository is stable, temporary experiment artifacts were removed, and the current discovery workflow remains validated.
 
 ---
 

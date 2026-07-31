@@ -27,6 +27,7 @@ The repository currently implements the following capabilities:
 * Edge scoring for ranking discovery results
 * A human-readable discovery report rendered in the CLI
 * An end-to-end discovery pipeline that produces a discovery report from a dataset query
+* Candidate-edge selection reporting aligned with Knowledge-based selection results
 
 ---
 
@@ -35,7 +36,7 @@ The repository currently implements the following capabilities:
 Run discovery against real MT5 data:
 
 ```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
 ```
 
 The command executes the discovery pipeline and prints a ranked report for human review.

@@ -25,6 +25,7 @@ from edge.domain.services import (
     DiscoveryReportService,
     ExperimentExecutor,
     HypothesisFactory,
+    MarketDescriptionBuilder,
     ResearchEvaluator,
 )
 from edge.ml.capability import MachineLearningCapability
@@ -69,6 +70,7 @@ class ResearchPipeline:
         self._ml_service = ml_service
         self._visualization_service = visualization_service
         self._selection_service = selection_service or CandidateEdgeSelectionService()
+        self._market_description_builder = MarketDescriptionBuilder()
         self._hypothesis_factory = HypothesisFactory()
         self._discovery_report_service = DiscoveryReportService(selection_service=self._selection_service)
 
@@ -103,13 +105,7 @@ class ResearchPipeline:
                 session.evidences.append(evidence)
 
                 knowledge = self._evaluator.evaluate(evidence)
-
-                if knowledge is not None:
-                    selected, _ = self._selection_service.select([knowledge])
-                    if selected:
-                        session.knowledge = knowledge
-                    else:
-                        session.knowledge = None
+                session.knowledge = knowledge
 
             session.complete()
             return PipelineReport.from_session(session)
@@ -122,6 +118,7 @@ class ResearchPipeline:
         self,
         query: DatasetQuery,
         session: ResearchSession | None = None,
+        validation_query: DatasetQuery | None = None,
     ) -> DiscoveryReport:
         """Execute a full discovery flow from dataset query to discovery report."""
 
@@ -147,13 +144,15 @@ class ResearchPipeline:
             active_session.dataset = dataset
             active_session.dataset_provenance = getattr(dataset_result, "provenance", None)
 
+            market_description = self._market_description_builder.build(dataset)
             market_description = MarketDescription(
-                dataset=dataset,
+                dataset=market_description.dataset,
                 metadata=DescriptorMetadata(
                     created_at=active_session.created_at,
-                    builder_version="1.0",
+                    builder_version=market_description.metadata.builder_version,
+                    description_type=market_description.metadata.description_type,
                 ),
-                descriptors=(),
+                descriptors=market_description.descriptors,
             )
             active_session.market_description = market_description
 
@@ -161,6 +160,8 @@ class ResearchPipeline:
             active_session.hypotheses = hypotheses
 
             evidences = []
+            knowledge_items: list[Any] = []
+            knowledge_by_hypothesis: dict[str, Any] = {}
             for hypothesis in hypotheses:
                 experiment = Experiment(
                     hypothesis=hypothesis,
@@ -173,8 +174,59 @@ class ResearchPipeline:
                 evidence = self._runner.run(experiment)
                 active_session.evidences.append(evidence)
                 evidences.append(evidence)
+                knowledge = self._evaluator.evaluate(evidence)
+                if knowledge is not None:
+                    knowledge_items.append(knowledge)
+                    knowledge_by_hypothesis[hypothesis.statement] = knowledge
 
-            report = self._discovery_report_service.create_report(hypotheses, evidences)
+            validation_evidences: list[Any] | None = None
+            if validation_query is not None:
+                validation_dataset_result = self._registry.load(validation_query) if self._registry is not None else self._dataset_access_service.request_dataset(
+                    symbol=validation_query.symbol,
+                    timeframe=validation_query.timeframe,
+                    start=validation_query.start,
+                    end=validation_query.end,
+                    source=validation_query.source,
+                    provider_id=validation_query.provider_id,
+                )
+                validation_dataset = validation_dataset_result.dataset
+                validation_market_description = self._market_description_builder.build(validation_dataset)
+                validation_market_description = MarketDescription(
+                    dataset=validation_market_description.dataset,
+                    metadata=DescriptorMetadata(
+                        created_at=active_session.created_at,
+                        builder_version=validation_market_description.metadata.builder_version,
+                        description_type=validation_market_description.metadata.description_type,
+                    ),
+                    descriptors=validation_market_description.descriptors,
+                )
+                validation_hypotheses = []
+                for hypothesis in hypotheses:
+                    validation_hypotheses.append(
+                        ResearchHypothesis(
+                            market_description=validation_market_description,
+                            metadata=hypothesis.metadata,
+                            statement=hypothesis.statement,
+                            predicate=hypothesis.predicate,
+                        )
+                    )
+                validation_evidences = []
+                for hypothesis in validation_hypotheses:
+                    validation_experiment = Experiment(
+                        hypothesis=hypothesis,
+                        configuration=ResearchConfiguration(name=hypothesis.statement),
+                        status=ExperimentStatus.CREATED,
+                    )
+                    validation_evidence = self._runner.run(validation_experiment)
+                    validation_evidences.append(validation_evidence)
+
+            report = self._discovery_report_service.create_report(
+                hypotheses,
+                evidences,
+                validation_evidences,
+                knowledge_items=knowledge_items,
+                knowledge_by_hypothesis=knowledge_by_hypothesis,
+            )
             active_session.discovery_report = report
             if report.knowledge is not None:
                 active_session.knowledge = report.knowledge

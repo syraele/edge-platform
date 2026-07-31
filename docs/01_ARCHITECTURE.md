@@ -67,7 +67,7 @@ These components are responsible for loading market data into the repository’s
 The repository exposes a working command-line entrypoint:
 
 ```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
 ```
 
 The CLI builds a dataset query, runs the pipeline, and renders a human-readable discovery report ranked by edge score.
@@ -97,4 +97,4 @@ The repository currently demonstrates the following concrete flow:
 5. The experiment executor evaluates the hypotheses against the dataset.
 6. The discovery report is ranked and printed for human analysis.
 
-This flow is the implementation currently present in the repository and is the basis for the documented roadmap.
+This flow is the implementation currently present in the repository and is the basis for the documented roadmap. The current repository state also includes candidate-edge selection reporting aligned with the Knowledge-based selection step, and the relevant regression suite is passing.

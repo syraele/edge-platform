@@ -13,8 +13,8 @@ registry.register(Mt5DatasetProvider())
 query = DatasetQuery(
     symbol="XAUUSD",
     timeframe="M1",
-    start=datetime(2026, 4, 20, tzinfo=UTC),
-    end=datetime(2026, 4, 22, tzinfo=UTC),
+    start=datetime(2026, 4, 1, tzinfo=UTC),
+    end=datetime(2026, 4, 30, tzinfo=UTC),
 )
 
 pipeline = ResearchPipeline(

@@ -58,7 +58,7 @@ The domain services remain responsible for the actual evaluation rules, includin
 The pipeline is invoked by the CLI through the command:
 
 ```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-20 --to 2026-04-22
+python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
 ```
 
 The CLI builds the query, runs the pipeline, and renders the resulting human-readable report.
@@ -67,4 +67,4 @@ The CLI builds the query, runs the pipeline, and renders the resulting human-rea
 
 # Result
 
-The repository now contains an operational research pipeline that executes the discovery workflow end to end and produces a discovery report suitable for human review.
+The repository now contains an operational research pipeline that executes the discovery workflow end to end, produces a discovery report suitable for human review, and reports candidate-edge selection counts in a way aligned with the Knowledge-based selection step.

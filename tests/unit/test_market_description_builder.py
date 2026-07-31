@@ -36,6 +36,8 @@ def test_market_description_builder_creates_description():
 
     assert isinstance(description, MarketDescription)
     assert description.dataset is dataset
-    assert description.is_empty
-    assert description.size == 0
+    assert not description.is_empty
+    assert description.size >= 3
     assert description.metadata.builder_version == "1.0"
+    assert any(descriptor.name == "bar_count" for descriptor in description.descriptors)
+    assert any(descriptor.name == "average_range" for descriptor in description.descriptors)

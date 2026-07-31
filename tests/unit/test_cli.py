@@ -14,18 +14,17 @@ class DummyRegistry:
         self.registered.append(provider)
 
 
-class DummyPipeline:
-    def __init__(self, **kwargs) -> None:
-        self.kwargs = kwargs
-        self.calls = []
-
-    def execute_discovery(self, query, session):
-        self.calls.append((query, session))
-        return "report"
-
-
 def test_research_command_builds_query_and_runs_pipeline(monkeypatch, capsys) -> None:
     recorded = {}
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+            self.calls = []
+
+        def execute_discovery(self, query, session, validation_query=None):
+            self.calls.append((query, session, validation_query))
+            return "report"
 
     def fake_pipeline(**kwargs):
         recorded["kwargs"] = kwargs
@@ -93,7 +92,7 @@ def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> 
         def __init__(self, **kwargs) -> None:
             self.kwargs = kwargs
 
-        def execute_discovery(self, query, session):
+        def execute_discovery(self, query, session, validation_query=None):
             return DiscoveryReport(rows=DummyReport.rows)
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
@@ -137,7 +136,7 @@ def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> 
     assert "Edge Score" in output
 
 
-def test_research_command_renders_candidate_edge_selection_summary(monkeypatch, capsys) -> None:
+def test_research_command_renders_explicit_candidate_edge(monkeypatch, capsys) -> None:
     class DummyReport:
         rows = (
             DiscoveryReportRow(
@@ -149,15 +148,77 @@ def test_research_command_renders_candidate_edge_selection_summary(monkeypatch, 
                 average_return_10=0.0001985628647,
                 average_return_20=0.000435917183,
             ),
+            DiscoveryReportRow(
+                hypothesis_name="close > previous_close",
+                occurrences=12.0,
+                average_return=0.002,
+                average_return_1=0.0,
+                average_return_5=0.0,
+                average_return_10=0.0,
+                average_return_20=0.0,
+            ),
         )
 
     class DummyPipeline:
         def __init__(self, **kwargs) -> None:
             self.kwargs = kwargs
 
-        def execute_discovery(self, query, session):
+        def execute_discovery(self, query, session, validation_query=None):
+            return DiscoveryReport(rows=DummyReport.rows)
+
+    monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
+    monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
+    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    cli_main.main(
+        [
+            "research",
+            "--provider",
+            "mt5",
+            "--symbol",
+            "XAUUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2026-04-20",
+            "--to",
+            "2026-04-22",
+        ]
+    )
+
+    output = capsys.readouterr().out
+    assert "Candidate Edge" in output
+    assert "close > previous_close" in output
+    assert "Edge Score" in output
+
+
+def test_research_command_renders_candidate_edge_selection_summary(monkeypatch, capsys) -> None:
+    class DummyReport:
+        rows = (
+            DiscoveryReportRow(
+                hypothesis_name="close > open",
+                occurrences=10.0,
+                average_return=0.001,
+                average_return_1=0.0,
+                average_return_5=-0.000030892,
+                average_return_10=0.0001985628647,
+                average_return_20=0.000435917183,
+                confirmed=True,
+            ),
+        )
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+
+        def execute_discovery(self, query, session, validation_query=None):
             return DiscoveryReport(
                 rows=DummyReport.rows,
+                knowledge=Knowledge(statement="selected-knowledge"),
                 selection_summary=type(
                     "Summary",
                     (),
@@ -213,3 +274,94 @@ def test_research_command_renders_candidate_edge_selection_summary(monkeypatch, 
     assert "Rejected:" in output
     assert "min_occurrences" in output
     assert "min_average_return_abs" in output
+
+
+def test_research_command_renders_final_summary(monkeypatch, capsys) -> None:
+    class DummyReport:
+        rows = (
+            DiscoveryReportRow(
+                hypothesis_name="close > open",
+                occurrences=10.0,
+                average_return=0.001,
+                average_return_1=0.0,
+                average_return_5=-0.000030892,
+                average_return_10=0.0001985628647,
+                average_return_20=0.000435917183,
+                confirmed=True,
+            ),
+            DiscoveryReportRow(
+                hypothesis_name="close > previous_close",
+                occurrences=12.0,
+                average_return=0.002,
+                average_return_1=0.0,
+                average_return_5=0.0,
+                average_return_10=0.0,
+                average_return_20=0.0,
+                confirmed=False,
+            ),
+        )
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+
+        def execute_discovery(self, query, session, validation_query=None):
+            return DiscoveryReport(
+                rows=DummyReport.rows,
+                knowledge=Knowledge(statement="selected-knowledge"),
+                selection_summary=type(
+                    "Summary",
+                    (),
+                    {
+                        "generated_count": 3,
+                        "rejected_count": 1,
+                        "selected_count": 2,
+                        "rejections": (),
+                    },
+                )(),
+                summary=type(
+                    "SummaryData",
+                    (),
+                    {
+                        "hypotheses_generated": 2,
+                        "knowledge_generated": 1,
+                        "candidate_edges": 2,
+                        "candidate_edges_confirmed": 1,
+                        "candidate_edges_rejected": 1,
+                        "confirmation_rate": 50.0,
+                    },
+                )(),
+            )
+
+    monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
+    monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
+    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    cli_main.main(
+        [
+            "research",
+            "--provider",
+            "mt5",
+            "--symbol",
+            "XAUUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2026-04-20",
+            "--to",
+            "2026-04-22",
+        ]
+    )
+
+    output = capsys.readouterr().out
+    assert "Final Summary" in output
+    assert "Hypotheses generated: 2" in output
+    assert "Knowledge generated: 1" in output
+    assert "Candidate Edge: 2" in output
+    assert "Confirmed: 1" in output
+    assert "Rejected: 1" in output
+    assert "Confirmation rate: 50.00%" in output

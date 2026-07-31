@@ -57,3 +57,30 @@ def test_candidate_edge_selection_filters_on_occurrences_and_return() -> None:
     assert selected == []
     assert len(discarded) == 1
     assert "min_occurrences" in discarded[0].reason
+
+
+def test_candidate_edge_selection_uses_dataset_size_for_large_samples() -> None:
+    evaluator = ResearchEvaluator()
+    service = CandidateEdgeSelectionService(
+        CandidateEdgeSelectionConfig(
+            min_occurrences=1,
+            min_average_return_abs=0.0,
+        )
+    )
+
+    evidence = Evidence(
+        measurements={
+            "bars_processed": 1000.0,
+            "hypothesis_occurrences": 1,
+            "hypothesis_average_return": 0.000001,
+        }
+    )
+
+    knowledge = evaluator.evaluate(evidence)
+    assert knowledge is not None
+
+    selected, discarded = service.select([knowledge])
+
+    assert selected == []
+    assert len(discarded) == 1
+    assert discarded[0].reason in {"min_occurrences", "min_average_return_abs"}

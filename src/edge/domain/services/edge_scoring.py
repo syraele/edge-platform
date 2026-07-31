@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import log1p
 
 from .discovery_report import DiscoveryReportRow
 
@@ -17,12 +18,27 @@ class EdgeScoringService:
     """Assign a comparable score to discovery rows for ranking purposes."""
 
     def score_row(self, row: DiscoveryReportRow) -> float:
+        occurrence_term = log1p(max(row.occurrences, 0.0)) * 0.10
+        return_term = (
+            (row.average_return_10 * 1000.0)
+            + (row.average_return_5 * 200.0)
+            + (row.average_return_1 * 50.0)
+            + (row.average_return * 10.0)
+        )
+        win_rate_term = row.win_rate * 1.2
+        expectancy_term = row.expectancy * 6.0
+        profit_factor_term = max(row.profit_factor - 1.0, 0.0) * 1.0
+        payoff_term = row.payoff * 0.9
+        drawdown_penalty = row.drawdown * 2.5
+
         return (
-            row.occurrences
-            + (row.average_return_10 * 1000.0)
-            + (row.average_return_5 * 100.0)
-            + (row.average_return_1 * 10.0)
-            + (row.average_return * 1.0)
+            occurrence_term
+            + return_term
+            + win_rate_term
+            + expectancy_term
+            + profit_factor_term
+            + payoff_term
+            - drawdown_penalty
         )
 
     def rank_rows(self, rows: tuple[DiscoveryReportRow, ...] | list[DiscoveryReportRow]) -> tuple[RankedEdge, ...]:

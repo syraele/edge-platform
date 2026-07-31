@@ -61,7 +61,16 @@ class FilesystemCsvDatasetProvider(DatasetProvider):
         )
 
     def _resolve_path(self, query: DatasetQuery) -> Path:
+        is_validation = False
+        if query.provider_id is not None and "validation" in query.provider_id.lower():
+            is_validation = True
+        if query.source is not None and "validation" in query.source.lower():
+            is_validation = True
+
+        suffix = "-validation" if is_validation else ""
         candidates = [
+            self.base_path / f"{query.symbol.lower()}-{query.timeframe.lower()}{suffix}.csv",
+            self.base_path / f"{query.symbol.upper()}-{query.timeframe.upper()}{suffix}.csv",
             self.base_path / f"{query.symbol.lower()}-{query.timeframe.lower()}.csv",
             self.base_path / f"{query.symbol.upper()}-{query.timeframe.upper()}.csv",
             self.base_path / "sample.csv",
