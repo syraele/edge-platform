@@ -4,6 +4,11 @@ EDGE_ENGINE
 Domain Services
 """
 
+from .baseline_comparison import (
+    BaselineComparisonConfig,
+    BaselineComparisonResult,
+    BaselineComparisonService,
+)
 from .candidate_edge_selection import (
     CandidateEdgeSelectionConfig,
     CandidateEdgeSelectionResult,
@@ -19,6 +24,9 @@ from .market_description_builder import MarketDescriptionBuilder
 from .research_evaluator import ResearchEvaluator
 
 __all__ = [
+    "BaselineComparisonConfig",
+    "BaselineComparisonResult",
+    "BaselineComparisonService",
     "CandidateEdgeSelectionConfig",
     "CandidateEdgeSelectionResult",
     "CandidateEdgeSelectionService",

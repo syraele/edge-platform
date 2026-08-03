@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import json
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Sequence
 
 from edge.application.research.pipeline import ResearchPipeline
 from edge.application.research.runner import ExperimentRunner
 from edge.application.research.session import ResearchSession
 from edge.data import DatasetProviderRegistry, DatasetQuery
-from edge.data.providers.mt5_provider import Mt5DatasetProvider
+from edge.data.providers.filesystem_csv_provider import FilesystemCsvDatasetProvider
+from edge.data.providers.local_dataset_registry import LocalDatasetRegistry
 from edge.domain.services import ExperimentExecutor, ResearchEvaluator
 from edge.domain.services.edge_classifier import EdgeClassifier
 from edge.domain.services.edge_scoring import EdgeScoringService
@@ -31,7 +34,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     research_parser = subparsers.add_parser("research")
-    research_parser.add_argument("--provider", default="mt5")
+    research_parser.add_argument("--provider", default="filesystem-csv")
     research_parser.add_argument("--symbol", required=True)
     research_parser.add_argument("--timeframe", required=True)
     research_parser.add_argument("--from", dest="start", required=True)
@@ -41,6 +44,15 @@ def build_parser() -> argparse.ArgumentParser:
     research_parser.add_argument("--validation-timeframe")
     research_parser.add_argument("--validation-from", dest="validation_start")
     research_parser.add_argument("--validation-to", dest="validation_end")
+    research_parser.add_argument("--validation-only", action="store_true")
+
+    dataset_parser = subparsers.add_parser("dataset")
+    dataset_subparsers = dataset_parser.add_subparsers(dest="dataset_command", required=True)
+
+    verify_parser = dataset_subparsers.add_parser("verify")
+    verify_parser.add_argument("--path", required=True)
+
+    dataset_subparsers.add_parser("list")
 
     return parser
 
@@ -286,16 +298,29 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    if args.command == "dataset":
+        if args.dataset_command == "verify":
+            registry = LocalDatasetRegistry(base_path=Path(args.path))
+            result = registry.verify(args.path)
+            print(json.dumps(result, indent=2, sort_keys=True))
+            return 0
+
+        if args.dataset_command == "list":
+            registry = LocalDatasetRegistry(base_path=Path("data/datasets"))
+            datasets = registry.list_datasets()
+            for entry in datasets:
+                print(entry)
+            return 0
+
+        parser.error("unsupported dataset command")
+        return 1
+
     if args.command != "research":
         parser.error("unsupported command")
         return 1
 
-    if args.provider != "mt5":
-        parser.error("only the mt5 provider is currently supported")
-        return 1
-
     registry = DatasetProviderRegistry()
-    registry.register(Mt5DatasetProvider())
+    registry.register(FilesystemCsvDatasetProvider(base_path=Path("data/datasets")))
 
     pipeline = ResearchPipeline(
         runner=ExperimentRunner(ExperimentExecutor()),
@@ -319,6 +344,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             start=_parse_date(args.validation_start) if args.validation_start else None,
             end=_parse_date(args.validation_end) if args.validation_end else None,
             provider_id=args.validation_provider or args.provider,
+        )
+    elif args.validation_start or args.validation_end:
+        validation_query = DatasetQuery(
+            symbol=args.symbol,
+            timeframe=args.timeframe,
+            start=_parse_date(args.validation_start) if args.validation_start else None,
+            end=_parse_date(args.validation_end) if args.validation_end else None,
+            provider_id=args.provider,
         )
 
     report = pipeline.execute_discovery(query, ResearchSession(), validation_query=validation_query)

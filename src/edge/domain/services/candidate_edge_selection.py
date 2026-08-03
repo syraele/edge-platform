@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import Mapping
 
 from edge.domain.knowledge import Knowledge
+from .baseline_comparison import BaselineComparisonConfig, BaselineComparisonService
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,8 +36,15 @@ class CandidateEdgeSelectionResult:
 class CandidateEdgeSelectionService:
     """Filter knowledge using only metrics already present in evidence."""
 
-    def __init__(self, config: CandidateEdgeSelectionConfig | None = None) -> None:
+    def __init__(
+        self,
+        config: CandidateEdgeSelectionConfig | None = None,
+        baseline_comparison_service: BaselineComparisonService | None = None,
+    ) -> None:
         self._config = config or CandidateEdgeSelectionConfig()
+        self._baseline_comparison_service = baseline_comparison_service or BaselineComparisonService(
+            BaselineComparisonConfig()
+        )
 
     def select(self, knowledge_items: list[Knowledge]) -> tuple[list[Knowledge], list[CandidateEdgeSelectionResult]]:
         selected: list[Knowledge] = []
@@ -85,6 +93,14 @@ class CandidateEdgeSelectionService:
                 knowledge=knowledge,
                 is_selected=False,
                 reason="min_occurrences",
+            )
+
+        baseline_result = self._baseline_comparison_service.compare(metadata)
+        if baseline_result.reason == "baseline_not_significant":
+            return CandidateEdgeSelectionResult(
+                knowledge=knowledge,
+                is_selected=False,
+                reason=baseline_result.reason,
             )
 
         dynamic_min_return = self._config.min_average_return_abs

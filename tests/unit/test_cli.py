@@ -1,4 +1,6 @@
+import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 import edge.cli.main as cli_main
 from edge.domain.knowledge import Knowledge
@@ -12,6 +14,220 @@ class DummyRegistry:
 
     def register(self, provider) -> None:
         self.registered.append(provider)
+
+
+def test_research_command_uses_filesystem_provider_by_default(monkeypatch, capsys) -> None:
+    recorded = {}
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+            self.calls = []
+
+        def execute_discovery(self, query, session, validation_query=None):
+            self.calls.append((query, session, validation_query))
+            return "report"
+
+    def fake_pipeline(**kwargs):
+        recorded["kwargs"] = kwargs
+        return DummyPipeline(**kwargs)
+
+    monkeypatch.setattr(cli_main, "ResearchPipeline", fake_pipeline)
+    monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    exit_code = cli_main.main(
+        [
+            "research",
+            "--symbol",
+            "XAUUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2026-04-20",
+            "--to",
+            "2026-04-22",
+        ]
+    )
+
+    assert exit_code == 0
+    assert capsys.readouterr().out.strip() == "report"
+    assert recorded["kwargs"]["registry"].registered[0] is not None
+
+
+def test_dataset_verify_command_reports_manifest_metadata(tmp_path: Path, monkeypatch, capsys) -> None:
+    dataset_dir = tmp_path / "eurusd" / "m1" / "v2026-08-03"
+    dataset_dir.mkdir(parents=True)
+    manifest = {
+        "dataset_id": "eurusd-m1-v2026-08-03",
+        "symbol": "EURUSD",
+        "timeframe": "M1",
+        "version": "v2026-08-03",
+        "source": "mt5-import",
+        "file": "bars.csv",
+        "bars_count": 2,
+        "range_start": "2024-01-01T00:00:00+00:00",
+        "range_end": "2024-01-01T01:00:00+00:00",
+    }
+    (dataset_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    (dataset_dir / "bars.csv").write_text(
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T00:00:00,1.1000,1.1010,1.0990,1.1005,100\n"
+        "2024-01-01T01:00:00,1.2000,1.2050,1.1950,1.2012,110\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(cli_main, "Path", lambda *args, **kwargs: tmp_path / Path(*args))
+
+    cli_main.main(["dataset", "verify", "--path", str(dataset_dir)])
+
+    output = capsys.readouterr().out
+    assert "dataset_id" in output
+    assert "eurusd-m1-v2026-08-03" in output
+    assert "bars_count" in output
+    assert "2" in output
+
+
+def test_dataset_list_command_lists_available_datasets(tmp_path: Path, monkeypatch, capsys) -> None:
+    dataset_dir = tmp_path / "data" / "datasets" / "eurusd" / "m1" / "v2026-08-03"
+    dataset_dir.mkdir(parents=True)
+    (dataset_dir / "manifest.json").write_text(
+        json.dumps(
+            {
+                "dataset_id": "eurusd-m1-v2026-08-03",
+                "symbol": "EURUSD",
+                "timeframe": "M1",
+                "version": "v2026-08-03",
+                "source": "mt5-import",
+                "file": "bars.csv",
+                "bars_count": 1,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (dataset_dir / "bars.csv").write_text(
+        "timestamp,open,high,low,close,volume\n2024-01-01T00:00:00,1.1,1.2,1.0,1.15,100\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.chdir(tmp_path)
+
+    cli_main.main(["dataset", "list"])
+
+    output = capsys.readouterr().out
+    assert "EURUSD" in output
+    assert "M1" in output
+    assert "v2026-08-03" in output
+
+
+def test_research_command_loads_manifest_backed_dataset_end_to_end(tmp_path: Path, monkeypatch, capsys) -> None:
+    dataset_dir = tmp_path / "data" / "datasets" / "eurusd" / "m1" / "v2026-08-03"
+    dataset_dir.mkdir(parents=True)
+    (dataset_dir / "manifest.json").write_text(
+        json.dumps(
+            {
+                "dataset_id": "eurusd-m1-v2026-08-03",
+                "symbol": "EURUSD",
+                "timeframe": "M1",
+                "version": "v2026-08-03",
+                "source": "mt5-import",
+                "file": "bars.csv",
+                "bars_count": 1,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (dataset_dir / "bars.csv").write_text(
+        "timestamp,open,high,low,close,volume\n2024-01-01T00:00:00,1.1,1.2,1.0,1.15,100\n",
+        encoding="utf-8",
+    )
+
+    recorded = {}
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+
+        def execute_discovery(self, query, session, validation_query=None):
+            loaded = self.kwargs["registry"].load(query)
+            recorded["symbol"] = loaded.dataset.metadata.symbol
+            return "report"
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    exit_code = cli_main.main(
+        [
+            "research",
+            "--symbol",
+            "EURUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2024-01-01",
+            "--to",
+            "2024-01-02",
+        ]
+    )
+
+    assert exit_code == 0
+    assert recorded["symbol"] == "EURUSD"
+    assert capsys.readouterr().out.strip() == "report"
+
+
+def test_research_command_defaults_validation_query_to_primary_dataset(monkeypatch, capsys) -> None:
+    recorded = {}
+
+    class DummyPipeline:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = kwargs
+            self.calls = []
+
+        def execute_discovery(self, query, session, validation_query=None):
+            recorded["query"] = query
+            recorded["validation_query"] = validation_query
+            return "report"
+
+    monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
+    monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
+    monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
+    monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
+    monkeypatch.setattr(cli_main, "ResearchSession", lambda: object())
+
+    exit_code = cli_main.main(
+        [
+            "research",
+            "--symbol",
+            "EURUSD",
+            "--timeframe",
+            "M1",
+            "--from",
+            "2024-01-01",
+            "--to",
+            "2024-01-02",
+            "--validation-from",
+            "2024-01-03",
+            "--validation-to",
+            "2024-01-04",
+        ]
+    )
+
+    assert exit_code == 0
+    assert recorded["validation_query"].symbol == "EURUSD"
+    assert recorded["validation_query"].timeframe == "M1"
+    assert recorded["validation_query"].provider_id == "filesystem-csv"
+    assert recorded["validation_query"].start == datetime(2024, 1, 3, tzinfo=UTC)
+    assert recorded["validation_query"].end == datetime(2024, 1, 4, tzinfo=UTC)
 
 
 def test_research_command_builds_query_and_runs_pipeline(monkeypatch, capsys) -> None:
@@ -32,7 +248,7 @@ def test_research_command_builds_query_and_runs_pipeline(monkeypatch, capsys) ->
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", fake_pipeline)
     monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
-    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
     monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
     monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
     monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
@@ -97,7 +313,7 @@ def test_research_command_renders_human_readable_report(monkeypatch, capsys) -> 
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
     monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
-    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
     monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
     monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
     monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
@@ -168,7 +384,7 @@ def test_research_command_renders_explicit_candidate_edge(monkeypatch, capsys) -
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
     monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
-    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
     monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
     monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
     monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
@@ -244,7 +460,7 @@ def test_research_command_renders_candidate_edge_selection_summary(monkeypatch, 
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
     monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
-    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
     monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
     monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
     monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())
@@ -335,7 +551,7 @@ def test_research_command_renders_final_summary(monkeypatch, capsys) -> None:
 
     monkeypatch.setattr(cli_main, "ResearchPipeline", lambda **kwargs: DummyPipeline(**kwargs))
     monkeypatch.setattr(cli_main, "DatasetProviderRegistry", DummyRegistry)
-    monkeypatch.setattr(cli_main, "Mt5DatasetProvider", lambda: object())
+    monkeypatch.setattr(cli_main, "FilesystemCsvDatasetProvider", lambda base_path=None: object())
     monkeypatch.setattr(cli_main, "ExperimentRunner", lambda executor: executor)
     monkeypatch.setattr(cli_main, "ExperimentExecutor", lambda: object())
     monkeypatch.setattr(cli_main, "ResearchEvaluator", lambda: object())

@@ -15,6 +15,7 @@ from edge.data.models.bar import Bar
 from edge.data.models.dataset_metadata import DatasetMetadata
 
 from .base import DatasetProvider
+from .local_dataset_registry import LocalDatasetRegistry
 from .query import DatasetQuery
 
 
@@ -29,6 +30,7 @@ class FilesystemCsvDatasetProvider(DatasetProvider):
 
     def __init__(self, base_path: str | Path | None = None) -> None:
         self.base_path = Path(base_path or ".")
+        self._registry = LocalDatasetRegistry(self.base_path)
 
     def supports(self, query: DatasetQuery) -> bool:
         return query.symbol in self.supported_symbols
@@ -40,9 +42,10 @@ class FilesystemCsvDatasetProvider(DatasetProvider):
         with csv_path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
             for row in reader:
+                timestamp = self._parse_timestamp(row["timestamp"])
                 bars.append(
                     Bar(
-                        timestamp=datetime.fromisoformat(row["timestamp"]),
+                        timestamp=timestamp,
                         open=float(row["open"]),
                         high=float(row["high"]),
                         low=float(row["low"]),
@@ -67,6 +70,12 @@ class FilesystemCsvDatasetProvider(DatasetProvider):
         if query.source is not None and "validation" in query.source.lower():
             is_validation = True
 
+        try:
+            dataset_dir, manifest = self._registry.resolve(query.symbol, query.timeframe)
+            return dataset_dir / manifest.file
+        except FileNotFoundError:
+            pass
+
         suffix = "-validation" if is_validation else ""
         candidates = [
             self.base_path / f"{query.symbol.lower()}-{query.timeframe.lower()}{suffix}.csv",
@@ -81,3 +90,11 @@ class FilesystemCsvDatasetProvider(DatasetProvider):
                 return candidate
 
         return candidates[0]
+
+    @staticmethod
+    def _parse_timestamp(value: str) -> datetime:
+        normalized = value.replace("Z", "+00:00")
+        parsed = datetime.fromisoformat(normalized)
+        if parsed.tzinfo is None:
+            return parsed.replace(tzinfo=UTC)
+        return parsed.astimezone(UTC)
