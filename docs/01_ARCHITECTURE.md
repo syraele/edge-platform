@@ -1,8 +1,8 @@
 # EDGE_ENGINE Architecture
 
-Version: 2.1
+Version: 2.2
 
-Status: Current implementation aligned with the repository
+Status: Approved for Foundation v2 and KF-004
 
 ---
 
@@ -66,8 +66,8 @@ These components are responsible for loading market data into the repository’s
 
 The repository exposes a working command-line entrypoint:
 
-```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
+```powershell
+.\.venv\Scripts\python.exe -m edge research --provider filesystem-csv --symbol EURUSD --timeframe M1 --from 2024-01-01T00:00:00 --to 2024-01-01T01:00:00 --validation-from 2024-01-01T00:00:00 --validation-to 2024-01-01T01:00:00
 ```
 
 The CLI builds a dataset query, runs the pipeline, and renders a human-readable discovery report ranked by edge score.
@@ -83,6 +83,7 @@ The current implementation remains consistent with the following principles:
 * Deterministic execution where possible
 * Testability
 * Clear separation between orchestration and business rules
+* Clear separation of responsibilities across hypothesis, evidence, knowledge, consolidation, candidate-edge qualification, and validation
 
 ---
 
@@ -95,6 +96,10 @@ The repository currently demonstrates the following concrete flow:
 3. The provider registry resolves a dataset provider.
 4. The hypothesis factory generates primitive and compound hypotheses.
 5. The experiment executor evaluates the hypotheses against the dataset.
-6. The discovery report is ranked and printed for human analysis.
+6. Evidence is transformed into Knowledge through the research evaluator.
+7. Knowledge is consolidated into representative Canonical Knowledge clusters.
+8. Candidate-edge qualification selects the most valuable representatives for reporting and promotion.
+9. Validation confirms the promoted candidates on a separate dataset context.
+10. The discovery report is ranked and printed for human analysis.
 
-This flow is the implementation currently present in the repository and is the basis for the documented roadmap. The current repository state also includes candidate-edge selection reporting aligned with the Knowledge-based selection step, and the relevant regression suite is passing.
+This flow is the implementation basis for the documented roadmap. The approved architecture preserves the Domain Model unchanged and introduces Canonical Knowledge as an application-level consolidation concept rather than a duplicate of Knowledge.

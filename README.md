@@ -6,11 +6,11 @@ A domain-driven research engine for building, validating, and evolving quantitat
 
 ## Overview
 
-EDGE_ENGINE is a research platform for turning historical market data into reproducible evidence, validated hypotheses, and reusable quantitative knowledge.
+EDGE_ENGINE is a research platform for turning historical market data into reproducible evidence, validated hypotheses, reusable quantitative knowledge, and recognized market phenomena.
 
-The repository currently contains a working end-to-end discovery workflow that can run research from the command line, evaluate primitive and compound hypotheses, rank results with edge scoring, and render a human-readable discovery report.
+The repository currently contains a verified end-to-end discovery workflow that can run research from the command line, evaluate primitive and compound hypotheses, rank results with edge scoring, and render a human-readable discovery report.
 
-EDGE_ENGINE is not a trading platform or an automated trading system. Its current purpose is the construction and preservation of quantitative knowledge.
+EDGE_ENGINE is not a trading platform or an automated trading system. Its current purpose is the construction, preservation, and consolidation of quantitative research understanding.
 
 ---
 
@@ -19,8 +19,8 @@ EDGE_ENGINE is not a trading platform or an automated trading system. Its curren
 The repository currently implements the following capabilities:
 
 * A working CLI entrypoint via `python -m edge research ...`
-* An MT5 dataset provider for real market data ingestion
-* A filesystem CSV dataset provider for local test data
+* A filesystem CSV dataset provider for local, reproducible research execution
+* A dataset registry and manifest-backed local dataset resolution flow
 * A primitive catalog and primitive discovery engine
 * A combination engine for level 1 compound hypotheses
 * Compound hypothesis evaluation in the experiment executor
@@ -33,10 +33,10 @@ The repository currently implements the following capabilities:
 
 ## Quick Start
 
-Run discovery against real MT5 data:
+Run the official local benchmark workflow:
 
-```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
+```powershell
+.\.venv\Scripts\python.exe -m edge research --provider filesystem-csv --symbol EURUSD --timeframe M1 --from 2024-01-01T00:00:00 --to 2024-01-01T01:00:00 --validation-from 2024-01-01T00:00:00 --validation-to 2024-01-01T01:00:00
 ```
 
 The command executes the discovery pipeline and prints a ranked report for human review.
@@ -68,6 +68,8 @@ The repository documentation is organized as follows:
 * [docs/02_RESEARCH_MODEL.md](docs/02_RESEARCH_MODEL.md) — research methodology
 * [docs/03_ROADMAP.md](docs/03_ROADMAP.md) — current roadmap and next milestone
 * [docs/04_DOMAIN_MODEL.md](docs/04_DOMAIN_MODEL.md) — domain concepts
+* [docs/10_MARKET_PHENOMENA.md](docs/10_MARKET_PHENOMENA.md) — foundational theory of market phenomena
+* [docs/11_DISCOVERY_THEORY.md](docs/11_DISCOVERY_THEORY.md) — theory of discovery for the Intelligence phase
 
 ---
 

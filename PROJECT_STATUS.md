@@ -1,24 +1,24 @@
 # EDGE_ENGINE Project Status
 
-Version: v1.1.1-alpha
+Version: v1.2.0-alpha
 
 Status: Stable
 
-Last Updated: 2026-07-31
+Last Updated: 2026-08-03
 
 ---
 
 ## Current Phase
 
-**Discovery Research**
+**Foundation / Research closure**
 
 ## Current Milestone
 
-**EDGE-003**
+**Foundation / Research stabilization**
 
 ## Last Completed Milestone
 
-**EDGE-002**
+**Discovery Research baseline verified**
 
 ## Architecture Version
 
@@ -34,27 +34,27 @@ Last Updated: 2026-07-31
 
 ## Current Objective
 
-**Preserve the corrected discovery-report candidate-edge selection flow and keep the repository in a validated, clean state.**
+**Preserve a stable, documented, and verified repository state before the start of the Intelligence phase.**
 
 ## Last Completed Step
 
-**Candidate-edge selection reporting was aligned with Knowledge-based selection and verified through regression tests.**
+**The Foundation/Research workflow was verified end to end, including local dataset resolution, discovery execution, candidate-edge selection, and documentation alignment.**
 
 ## Next Step
 
-**Continue the roadmap work from the validated discovery pipeline baseline.**
+**Prepare the Intelligence phase from the validated Foundation/Research baseline.**
 
 ## Test Status
 
-**Regression is green**
+**Full regression suite is green**
 
 ## Last Regression
 
-**37 passed, 1 warning**
+**183 passed, 0 failed, 2 warnings**
 
 ## Documentation Status
 
-**Research status and milestone documentation synchronized after cleanup and validation**
+**Foundation, research model, roadmap, and foundational theory documents are aligned with the current official flow.**
 
 ## Repository Health
 
@@ -62,7 +62,7 @@ Last Updated: 2026-07-31
 
 ## Notes
 
-The repository is stable, temporary experiment artifacts were removed, and the current discovery workflow remains validated.
+The repository is stable, the official local benchmark was executed successfully, and the Foundation/Research phase is now documented and ready for the next milestone.
 
 ---
 
@@ -83,9 +83,9 @@ The repository is stable, temporary experiment artifacts were removed, and the c
 
 # Next Action
 
-Resume implementation from the candidate-edge selection issue documented in docs/19_RESTART_CHECKPOINT.md.
+Begin the Intelligence phase only from the validated Foundation/Research baseline.
 
-The current focus is to correct the flow so that the final candidate-edge count is derived from the Knowledge selection result rather than from the raw hypothesis rows.
+The current focus is to preserve the approved conceptual foundation and move forward only through documented milestones.
 
 ---
 
@@ -95,9 +95,9 @@ When starting a new conversation:
 
 1. Read PROJECT_STATUS.md.
 2. Read PROJECT_BOOTSTRAP.md.
-3. Read 11_DEVELOPMENT_WORKFLOW.md.
+3. Read docs/11_DEVELOPMENT_WORKFLOW.md.
 4. Read FOUNDATION_BLUEPRINT.md.
-5. Read 03_ROADMAP.md.
+5. Read docs/03_ROADMAP.md.
 6. Read the active Milestone Specification.
 7. Review the affected repository area.
 8. Produce an Implementation Plan.
@@ -110,7 +110,7 @@ When starting a new conversation:
 
 Current objective:
 
-Preserve the completed roadmap baseline and open new work only through approved governance.
+Preserve the completed Foundation/Research baseline and open new work only through approved governance.
 
 Continue development following the documented workflow.
 
@@ -121,6 +121,4 @@ The roadmap is authoritative.
 The repository is the single source of truth.
 
 Implementation is not allowed without an approved Milestone Specification.
-
-The repository is the single source of truth.
 

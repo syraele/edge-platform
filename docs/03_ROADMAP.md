@@ -2,7 +2,7 @@
 
 ## Current Status
 
-The repository is currently in the Discovery Research phase. The implemented workflow is stable and validated on real MT5 data.
+The Foundation / Research phase is now complete and verified. The repository is stable, documented, and ready to serve as the baseline for the next Intelligence phase.
 
 ---
 
@@ -18,13 +18,13 @@ The architectural foundation, documentation structure, and domain boundaries are
 
 **COMPLETE**
 
-The repository includes both an MT5 provider and a filesystem CSV provider.
+The repository includes a manifest-backed local dataset registry and a filesystem CSV provider for reproducible local research execution.
 
 ### Research Pipeline
 
 **COMPLETE**
 
-The application layer orchestrates dataset loading, hypothesis execution, evidence collection, and report generation.
+The application layer orchestrates dataset loading, hypothesis execution, evidence collection, validation, and report generation.
 
 ### Discovery Engine
 
@@ -38,20 +38,21 @@ The current implementation includes:
 * Compound Hypothesis Evaluation
 * Edge Scoring
 * Human Discovery Report
+* Candidate-edge selection reporting aligned with Knowledge-based selection results
 
 ### CLI
 
 **COMPLETE**
 
-The CLI entrypoint is operational and can run:
+The CLI entrypoint is operational and can run the official local benchmark:
 
-```bash
-python -m edge research --provider mt5 --symbol XAUUSD --timeframe M1 --from 2026-04-01 --to 2026-04-30
+```powershell
+.\.venv\Scripts\python.exe -m edge research --provider filesystem-csv --symbol EURUSD --timeframe M1 --from 2024-01-01T00:00:00 --to 2024-01-01T01:00:00 --validation-from 2024-01-01T00:00:00 --validation-to 2024-01-01T01:00:00
 ```
 
 ---
 
-## Completed Milestones
+## Foundation / Research Milestones
 
 ### STEP-001 — Architectural Principles Frozen
 
@@ -65,19 +66,11 @@ This milestone freezes the enduring architectural principles that govern future 
 
 This milestone freezes the official development workflow for all future milestones.
 
----
-
-## Completed Milestones
-
 ### STEP-002 — Core Domain Language
 
 **COMPLETE**
 
 This milestone establishes the official domain language that governs future domain modeling.
-
----
-
-## Completed Milestones
 
 ### STEP-003 — Knowledge Lifecycle
 
@@ -85,19 +78,11 @@ This milestone establishes the official domain language that governs future doma
 
 This milestone defines the official lifecycle of Knowledge within the platform.
 
----
-
-## Completed Milestones
-
 ### STEP-004 — Knowledge Aggregate Specification
 
 **COMPLETE**
 
 This milestone defines the official domain specification for the Knowledge Aggregate.
-
----
-
-## Completed Milestones
 
 ### STEP-005 — Knowledge Value Objects
 
@@ -105,19 +90,11 @@ This milestone defines the official domain specification for the Knowledge Aggre
 
 This milestone defines the official domain specification for the Value Objects belonging to the Knowledge Aggregate.
 
----
-
-## Completed Milestones
-
 ### STEP-006 — Knowledge Repository Contract
 
 **COMPLETE**
 
 This milestone defines the official domain contract for the Knowledge Repository.
-
----
-
-## Completed Milestones
 
 ### STEP-006 — Domain Map
 
@@ -127,32 +104,24 @@ This milestone defines the official domain map and aggregate boundaries for EDGE
 
 ---
 
-## Milestone Status
+## Current Milestone Status
 
-### EDGE-001
-
-**COMPLETED**
-
-Candidate Edge Selection is implemented and integrated into the Discovery Report.
-
-### EDGE-002
+### Foundation / Research
 
 **COMPLETED**
 
-The discovery flow now exposes quantitative metrics derived from real trade sequences:
+The repository now represents a stable Foundation / Research baseline with verified documentation and regression coverage.
 
-- Win Rate
-- Expectancy
-- Profit Factor
-- Payoff
-- Drawdown
+### KF-004 — Knowledge Consolidation
 
-### EDGE-003
+**PLANNED**
 
-**CURRENT**
+The next milestone will introduce knowledge-consolidation capabilities that:
 
-Introduce a multi-criteria ranking system for research evaluation.
+* group redundant Knowledge items;
+* identify representative canonical knowledge;
+* preserve variants as metadata;
+* enable candidate-edge qualification from compact knowledge clusters;
+* do not modify the Domain Model or Foundation v2.
 
-### Immediate corrective task
-
-The current implementation must now be corrected so that the final Candidate Edge count is derived from the Knowledge selection result, not from the raw hypothesis rows.
+The Intelligence phase will begin only after the Foundation / Research baseline remains stable and documented.

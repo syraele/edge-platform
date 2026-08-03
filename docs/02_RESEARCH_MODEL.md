@@ -31,24 +31,30 @@ Knowledge is considered the primary outcome of the research process.
 Every research activity follows the same conceptual process.
 
 ```text
-Observation
+Historical Dataset
         ↓
-Research Hypothesis
-        ↓
-Experiment Design
-        ↓
-Experiment Execution
+Hypothesis
         ↓
 Evidence
         ↓
 Knowledge
         ↓
-Edge
+Knowledge Consolidation
+        ↓
+Canonical Knowledge
+        ↓
+Candidate Edge Qualification
+        ↓
+Candidate Edge
+        ↓
+Validation
+        ↓
+Validated Edge
 ```
 
 No stage may be skipped.
 
-Knowledge can only emerge from validated evidence.
+Knowledge can only emerge from validated evidence, and redundant knowledge is consolidated into a compact representation before candidate-edge qualification.
 
 ---
 
@@ -61,17 +67,23 @@ Each validated discovery becomes the starting point for new observations and hyp
 Research therefore evolves as a continuous cycle rather than a linear workflow.
 
 ```text
-Knowledge
+Validated Edge
       ↓
 Observation
       ↓
 Hypothesis
       ↓
-Experiment
-      ↓
 Evidence
       ↓
 Knowledge
+      ↓
+Knowledge Consolidation
+      ↓
+Canonical Knowledge
+      ↓
+Candidate Edge Qualification
+      ↓
+Validated Edge
 ```
 
 ---
@@ -80,12 +92,14 @@ Knowledge
 
 The research process produces the following conceptual artifacts.
 
-* Market Observation
+* Historical Dataset
 * Research Hypothesis
 * Experiment
 * Evidence
 * Knowledge
-* Edge
+* Canonical Knowledge
+* Candidate Edge
+* Validated Edge
 
 Their structure is defined in the Domain Model.
 

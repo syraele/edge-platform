@@ -42,8 +42,9 @@ class PrimitiveDiscoveryEngine:
         return hypotheses
 
     def _contextual_hypotheses(self, market_description: MarketDescription) -> list[str]:
-        bars = market_description.dataset.bars
-        if len(bars) < 2:
+        dataset = getattr(market_description, "dataset", None)
+        bars = getattr(dataset, "bars", None)
+        if not bars or len(bars) < 2:
             return []
 
         last_bar = bars[-1]
