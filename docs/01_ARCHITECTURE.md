@@ -56,7 +56,7 @@ The pipeline accepts a dataset query, resolves providers, executes hypotheses, a
 
 The infrastructure layer provides data access implementations:
 
-* Mt5DatasetProvider
+* Mt5DatasetConnector
 * FilesystemCsvDatasetProvider
 * DatasetProviderRegistry
 
@@ -71,6 +71,8 @@ The repository exposes a working command-line entrypoint:
 ```
 
 The CLI builds a dataset query, runs the pipeline, and renders a human-readable discovery report ranked by edge score.
+
+The current import layer is connector-oriented rather than research-oriented. The MT5 connector is an acquisition component that imports M1 bars into the local dataset registry, validates the requested range, rejects unsupported timeframes, and raises explicit errors when MT5 history is unavailable, the symbol is invalid, or the connection fails.
 
 ---
 

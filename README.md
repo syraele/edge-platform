@@ -21,6 +21,7 @@ The repository currently implements the following capabilities:
 * A working CLI entrypoint via `python -m edge research ...`
 * A filesystem CSV dataset provider for local, reproducible research execution
 * A dataset registry and manifest-backed local dataset resolution flow
+* An MT5 import connector that writes canonical M1 datasets into the local registry and validates input ranges and source availability
 * A primitive catalog and primitive discovery engine
 * A combination engine for level 1 compound hypotheses
 * Compound hypothesis evaluation in the experiment executor
@@ -40,6 +41,14 @@ Run the official local benchmark workflow:
 ```
 
 The command executes the discovery pipeline and prints a ranked report for human review.
+
+For the import-oriented MT5 connector, the current CLI usage is:
+
+```powershell
+.\.venv\Scripts\python.exe .\src\edge\data\connectors\mt5_connector.py --symbol XAUUSD --from 2026-07-01 --to 2026-07-31 --version jul2026 --output-root .\tmp-cli-demo
+```
+
+The connector currently supports only M1 and validates that `--from` is not greater than `--to`. It also raises explicit errors when the requested history is unavailable, the symbol does not exist, or MT5 cannot connect.
 
 ---
 

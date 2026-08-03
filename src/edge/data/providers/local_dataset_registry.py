@@ -20,6 +20,8 @@ class DatasetManifest:
     range_start: str | None = None
     range_end: str | None = None
     schema_version: str = "1.0"
+    created_at: str | None = None
+    checksum: str | None = None
 
     @classmethod
     def from_mapping(cls, payload: dict[str, Any]) -> "DatasetManifest":
@@ -34,6 +36,8 @@ class DatasetManifest:
             range_start=payload.get("range_start"),
             range_end=payload.get("range_end"),
             schema_version=str(payload.get("schema_version", "1.0")),
+            created_at=payload.get("created_at"),
+            checksum=payload.get("checksum"),
         )
 
 
@@ -88,6 +92,8 @@ class LocalDatasetRegistry:
             "range_start": manifest.range_start,
             "range_end": manifest.range_end,
             "schema_version": manifest.schema_version,
+            "created_at": manifest.created_at,
+            "checksum": manifest.checksum,
         }
 
     def list_datasets(self) -> list[str]:

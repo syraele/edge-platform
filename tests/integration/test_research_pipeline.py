@@ -16,6 +16,7 @@ from edge.application.research.session import (
     SessionStatus,
 )
 from edge.data import DatasetProviderRegistry, DatasetQuery
+from edge.data.connectors.first_poc import FirstDatasetConnectorProofOfConcept
 from edge.data.providers.filesystem_csv_provider import FilesystemCsvDatasetProvider
 from edge.data.dataset.historical_dataset import HistoricalDataset
 from edge.data.models.bar import Bar
@@ -264,6 +265,48 @@ def test_research_pipeline_runs_validation_on_separate_dataset(tmp_path: Path) -
     assert hasattr(first_row, "validation_average_return")
     assert first_row.validation_occurrences >= 0.0
     assert isinstance(first_row.confirmed, bool)
+
+
+def test_research_pipeline_loads_connector_imported_dataset_from_registry(tmp_path: Path) -> None:
+    payload = (
+        "timestamp,open,high,low,close,volume\n"
+        "2024-01-01T00:00:00,1.1000,1.1010,1.0990,1.1005,100\n"
+        "2024-01-01T01:00:00,1.2000,1.2050,1.1950,1.2012,110\n"
+    )
+
+    connector = FirstDatasetConnectorProofOfConcept(output_root=tmp_path)
+    connector.import_dataset(
+        symbol="EURUSD",
+        timeframe="M1",
+        version="v2026-08-03",
+        source_name="sample-csv",
+        raw_payload=payload,
+    )
+
+    provider_registry = DatasetProviderRegistry()
+    provider_registry.register(FilesystemCsvDatasetProvider(base_path=tmp_path))
+
+    pipeline = ResearchPipeline(
+        runner=ExperimentRunner(ExperimentExecutor()),
+        evaluator=ResearchEvaluator(),
+        registry=provider_registry,
+    )
+
+    report = pipeline.execute_discovery(
+        DatasetQuery(symbol="EURUSD", timeframe="M1", source="filesystem-csv")
+    )
+
+    assert report.knowledge is not None
+    assert report.knowledge.statement == "Evidence successfully validated."
+    assert len(report.rows) >= 1
+    assert report.rows[0].hypothesis_name in {
+        "close > open",
+        "close < open",
+        "close > previous_close",
+        "close < previous_close",
+        "high > previous_high",
+        "low < previous_low",
+    }
 
 
 class StaticOptimizationRunner:
